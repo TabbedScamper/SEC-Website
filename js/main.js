@@ -80,9 +80,12 @@
         // Parse "35+", "1,200+", "24 / 7" — extract the leading number if any
         const m = txt.match(/^([\d,]+)/);
         if (m) {
+            // Preserve the source formatting: if the user wrote "1988" (no
+            // comma) we render without one; "1,200" keeps thousands commas.
+            const useCommas = m[1].includes(',');
             const n = parseInt(m[1].replace(/,/g, ''), 10);
             if (n > 0) {
-                numericTargets.set(el, { target: n, suffix: txt.slice(m[0].length) });
+                numericTargets.set(el, { target: n, suffix: txt.slice(m[0].length), useCommas });
                 el.textContent = '0' + (txt.slice(m[0].length));
             }
         }
@@ -92,14 +95,14 @@
         const statsIO = new IntersectionObserver((entries) => {
             entries.forEach(e => {
                 if (!e.isIntersecting) return;
-                numericTargets.forEach(({ target, suffix }, el) => {
+                numericTargets.forEach(({ target, suffix, useCommas }, el) => {
                     const dur = 1100; // ms
                     const start = performance.now();
                     const tick = (now) => {
                         const t = Math.min((now - start) / dur, 1);
                         const eased = 1 - Math.pow(1 - t, 3);
                         const cur = Math.round(target * eased);
-                        el.textContent = cur.toLocaleString() + suffix;
+                        el.textContent = (useCommas ? cur.toLocaleString() : String(cur)) + suffix;
                         if (t < 1) requestAnimationFrame(tick);
                     };
                     requestAnimationFrame(tick);
