@@ -1,0 +1,33 @@
+/* ============================================
+   SEC — animation layer
+   Reveal-on-scroll + section transitions
+   ============================================ */
+
+/* Off-screen → in-view fade-rise */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+[data-reveal="left"] { transform: translateX(-28px); }
+[data-reveal="left"].is-visible { transform: translateX(0); }
+[data-reveal="right"] { transform: translateX(28px); }
+[data-reveal="right"].is-visible { transform: translateX(0); }
+
+/* Staggered children — set --delay in JS */
+[data-reveal][style*="--delay"] {
+    transition-delay: var(--delay);
+}
+
+/* Hover lift micro-interaction (used on cards already, here as a fallback) */
+.lift-on-hover { transition: transform 0.3s ease; }
+.lift-on-hover:hover { transform: translateY(-4px); }
+
+/* Number count-up support */
+.stat-num.counting { color: var(--sec-red-soft); }

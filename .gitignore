@@ -1,0 +1,21 @@
+# Windows
+nul
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Dropbox sync temp files
+*.tmp.*
+~$*
+.dropbox
+.dropbox.cache/
+
+# Editor / OS junk
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# Local build/preview snapshots (kept outside the repo)
+preview_*.png

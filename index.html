@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Southern Electric & Controls — premier electrical installation and building automation contractor. ICE LLC subsidiary handles controls and Honeywell Niagara 4 building automation.">
+    <title>Southern Electric &amp; Controls | Electrical Installation &amp; Building Automation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<!-- Loading screen -->
+<div class="loading-screen" id="loadingScreen">
+    <img src="assets/images/logos/sec-logo.png" alt="Southern Electric &amp; Controls" class="loading-logo">
+</div>
+
+<!-- Header -->
+<header class="header" id="header">
+    <div class="header-inner">
+        <div class="logo">
+            <a href="#hero" aria-label="Southern Electric &amp; Controls home">
+                <img src="assets/images/logos/sec-logo.png" alt="Southern Electric &amp; Controls" class="logo-img logo-img--sec">
+            </a>
+            <span class="logo-divider"></span>
+            <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" aria-label="Industrial Controls &amp; Electrical (opens in new tab)">
+                <img src="assets/images/logos/UpdatedICELogo-removebg-preview.png" alt="Industrial Controls &amp; Electrical" class="logo-img logo-img--ice">
+            </a>
+        </div>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                <li><a href="#companies" class="nav-link">Companies</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#automation" class="nav-link">Building Automation</a></li>
+                <li><a href="#design-group" class="nav-link">Design Group</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#contact" class="nav-link nav-link--cta">Contact</a></li>
+            </ul>
+        </nav>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+
+<!-- Mobile nav overlay -->
+<div class="nav-overlay" id="navOverlay"></div>
+<nav class="mobile-nav" id="mobileNav">
+    <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#companies">Companies</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#automation">Building Automation</a></li>
+        <li><a href="#design-group">Design Group</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<!-- ───── HERO ───── -->
+<!--
+   Full-width banner strip with `aspect-ratio: 1920/500`.  EVERYTHING inside
+   (gradient, logo, video) scales together, so the logo stays at the same
+   proportional position at every viewport width.
+   Choreography:
+     1. truck.mp4 autoplays on top of a static logo + gradient composition
+     2. on `ended` the video fades smoothly to 0 (3.5s)
+     3. after 0.8s the .hero gets `.is-revealed`, which:
+        - slides the logo from center to the right edge of the banner
+        - slides the text in from off-screen left to its resting position
+-->
+<section id="hero" class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-strip" id="heroStrip">
+        <div class="hero-banner-bg" aria-hidden="true"></div>
+        <div class="hero-logo-wrap" id="heroLogoWrap">
+            <img src="Images/Logo%20Updated.png" alt="" class="hero-logo" id="heroLogo">
+        </div>
+        <video class="hero-video" id="heroVideo"
+               autoplay muted playsinline preload="auto"
+               poster="Images/end-screen.png">
+            <source src="truck.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="hero-content container">
+        <div class="hero-eyebrow"><span class="dot"></span> Electrical &amp; Controls Contractor</div>
+        <h1 class="hero-title">
+            Power and intelligence,<br>
+            <span class="accent">built into every building.</span>
+        </h1>
+        <p class="hero-lead">
+            Southern Electric &amp; Controls delivers complete electrical installation,
+            switchgear, and building automation — under one company, with one
+            accountable team from design through commissioning.
+        </p>
+        <div class="hero-cta">
+            <a href="#services" class="btn btn--primary">Explore our services</a>
+            <a href="#contact" class="btn btn--ghost">Start a project →</a>
+        </div>
+    </div>
+    <a href="#companies" class="scroll-cue" aria-label="Scroll">
+        <span>Scroll</span>
+        <span class="scroll-cue-bar"></span>
+    </a>
+</section>
+
+<!-- ───── TWO-COMPANY INTRO ───── -->
+<section id="companies" class="companies">
+    <div class="container">
+        <div class="section-eyebrow">One team. Endless talents.</div>
+        <h2 class="section-title">Electrical, controls, design, and estimating &mdash; coordinated under one accountable team.</h2>
+
+        <div class="company-grid">
+            <article class="company-card company-card--sec">
+                <div class="company-mark">SEC</div>
+                <h3 class="company-name">Southern Electric &amp; Controls</h3>
+                <p class="company-tag">Installation &amp; Electrical Contractor</p>
+                <ul class="company-bullets">
+                    <li>Industrial &amp; commercial electrical installation</li>
+                    <li>Distribution, switchgear, and motor controls</li>
+                    <li>Service, maintenance, and arc-flash compliance</li>
+                    <li>Hospitals, distribution centers, manufacturing</li>
+                </ul>
+                <a href="#services" class="company-link">See SEC services →</a>
+            </article>
+
+            <article class="company-card company-card--ice">
+                <div class="company-mark">ICE</div>
+                <h3 class="company-name">Industrial Controls &amp; Electrical</h3>
+                <p class="company-tag">Building Automation &amp; Controls — a Southern Electric company</p>
+                <ul class="company-bullets">
+                    <li>Honeywell Niagara 4 building automation</li>
+                    <li>HVAC controls, lighting controls, integration</li>
+                    <li>System programming &amp; commissioning</li>
+                    <li>Award-winning Honeywell partner</li>
+                </ul>
+                <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" class="company-link">Visit ICE Electric →</a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ───── SERVICES ───── -->
+<section id="services" class="services">
+    <div class="container">
+        <div class="section-eyebrow">What we do</div>
+        <h2 class="section-title">Full-scope electrical &amp; controls — from preconstruction to commissioning.</h2>
+
+        <div class="service-grid">
+            <article class="service-card">
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M13 2 L5 14 H11 L9 22 L19 9 H13 Z" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3>Electrical Installation</h3>
+                <p>Industrial and commercial electrical from greenfield through tenant fit-out.
+                   Conduit, feeders, branch circuits, devices, and lighting.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="3" y="4" width="18" height="16" rx="1"/>
+                        <line x1="8" y1="4" x2="8" y2="20"/>
+                        <line x1="16" y1="4" x2="16" y2="20"/>
+                        <line x1="11" y1="9" x2="13" y2="9"/>
+                        <line x1="11" y1="13" x2="13" y2="13"/>
+                        <line x1="11" y1="17" x2="13" y2="17"/>
+                    </svg>
+                </div>
+                <h3>Switchgear &amp; Distribution</h3>
+                <p>Service entrance, MDPs, panelboards, transformers, and motor control centers
+                   sized, installed, and energized to spec.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M3 12h3l3-8 3 16 3-8h6"/>
+                    </svg>
+                </div>
+                <h3>Building Automation</h3>
+                <p>Honeywell Niagara 4 controls for HVAC, lighting, and energy management.
+                   Programming, integration, and commissioning by certified technicians.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M12 2 v3 M12 19 v3 M2 12 h3 M19 12 h3 M5 5 l2 2 M17 17 l2 2 M5 19 l2 -2 M17 7 l2 -2"/>
+                        <circle cx="12" cy="12" r="4"/>
+                    </svg>
+                </div>
+                <h3>Preventive Maintenance</h3>
+                <p>Scheduled maintenance programs that catch issues before they shut down
+                   production — switchgear PMs, infrared scans, motor surveys, panel checks.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M4 20 h16 M6 16 V8 M10 16 V4 M14 16 V8 M18 16 V12"/>
+                    </svg>
+                </div>
+                <h3>Energy &amp; Lighting</h3>
+                <p>Lighting retrofits, controls integration, and energy-conservation projects
+                   with measurable kWh reduction.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M12 2 L3 7 v6 c0 5 4 8 9 9 5-1 9-4 9-9 V7 z"/>
+                        <path d="M9 12 l2 2 4-4" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3>Code, Compliance &amp; Safety</h3>
+                <p>NEC, NFPA 70E, OSHA. Arc-flash labeling, equipment grounding, and
+                   project-specific safety plans for every job.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M3 7 L12 2 L21 7 L12 12 L3 7 Z" stroke-linejoin="round"/>
+                        <path d="M3 7 V17 L12 22 L12 12" stroke-linejoin="round"/>
+                        <path d="M21 7 V17 L12 22"/>
+                    </svg>
+                </div>
+                <h3>BIM &amp; Revit Modeling</h3>
+                <p>Coordinated 3D MEP and electrical models from our in-house Southern
+                   Design Group &mdash; clash detection and fabrication support before
+                   crews mobilize.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path d="M3 17 L17 3 L21 7 L7 21 Z" stroke-linejoin="round"/>
+                        <path d="M14 6 L18 10"/>
+                        <path d="M5 19 L9 15"/>
+                    </svg>
+                </div>
+                <h3>CAD Drafting</h3>
+                <p>AutoCAD shop drawings, riser diagrams, panel schedules, and one-line
+                   diagrams &mdash; drawing-ready documentation produced in-house by SDG.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <rect x="4" y="3" width="14" height="18" rx="1"/>
+                        <path d="M8 3 V21"/>
+                        <path d="M11 8 L15 8 M11 12 L15 12 M11 16 L14 16"/>
+                    </svg>
+                </div>
+                <h3>Design Documentation</h3>
+                <p>Red-line revisions, as-builts, RFIs, and submittal packages.
+                   Southern Design Group keeps every project's drawing set current
+                   from kickoff through closeout.</p>
+            </article>
+
+            <article class="service-card">
+                <div class="service-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M14.5 9 H10.5 a2 2 0 0 0 0 4 h3 a2 2 0 0 1 0 4 h-4" stroke-linecap="round"/>
+                        <path d="M12 6.5 V8 M12 16 V17.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h3>Estimating &amp; Takeoffs</h3>
+                <p>Electrical and controls bid estimating, material takeoffs, and
+                   detailed pricing analysis &mdash; vendor-current numbers for
+                   design-build and hard-bid projects.</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ───── INDUSTRIES STRIP ───── -->
+<section class="industries">
+    <div class="container">
+        <div class="industries-eyebrow">Industries we serve</div>
+        <div class="industries-strip">
+            <span>Manufacturing</span>
+            <span>Distribution</span>
+            <span>Healthcare</span>
+            <span>Food Processing</span>
+            <span>Automotive</span>
+            <span>Education</span>
+            <span>Co-Generation</span>
+            <span>Sports Lighting</span>
+            <span>Commercial</span>
+            <span>Industrial</span>
+            <span>Corporate Offices</span>
+            <span>Automation</span>
+        </div>
+    </div>
+</section>
+
+<!-- ───── BUILDING AUTOMATION SPOTLIGHT ───── -->
+<section id="automation" class="automation">
+    <div class="automation-bg"></div>
+    <div class="container automation-inner">
+        <div class="automation-text">
+            <div class="section-eyebrow section-eyebrow--light">ICE Building Automation</div>
+            <h2 class="section-title section-title--light">
+                A Honeywell-certified partner running on Niagara 4.
+            </h2>
+            <p>
+                Our ICE team designs, programs, and commissions building automation
+                systems for warehouses, offices, hospitals, and distribution centers.
+                We standardize on Honeywell Niagara 4 and TR-100 series sensors
+                for repeatable, supportable installations.
+            </p>
+            <ul class="automation-bullets">
+                <li><strong>Honeywell Niagara 4</strong> — certified programmers on staff</li>
+                <li><strong>TR-100 series</strong> — current sensor standard across new builds</li>
+                <li><strong>Award-winning partner</strong> — recognized by Honeywell for project execution</li>
+                <li><strong>In-house training</strong> — Niagara 4 training on Tridium framework</li>
+            </ul>
+            <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Talk to our controls team</a>
+        </div>
+        <div class="automation-badge">
+            <div class="badge-ring">
+                <div class="badge-content">
+                    <img src="assets/images/logos/Honeywell-Logo.png" alt="Honeywell" class="badge-logo">
+                    <div class="badge-num">Niagara 4</div>
+                    <div class="badge-line">Certified Partner</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ───── SOUTHERN DESIGN GROUP SPOTLIGHT ───── -->
+<section id="design-group" class="design-group">
+    <div class="design-group-visual">
+        <img src="Images/SDG/Example-1.png" alt="" class="design-group-bim" data-reveal>
+        <img src="Images/Logo-SDG.png" alt="Southern Design Group" class="design-group-logo" data-reveal style="--delay: 0.25s;">
+    </div>
+    <div class="container design-group-inner">
+        <div class="design-group-text" data-reveal="right">
+            <div class="section-eyebrow">Southern Design Group</div>
+            <h2 class="section-title">Drafting, BIM, and design support &mdash; in-house.</h2>
+            <p>
+                Southern Design Group is our drafting and BIM partner.
+                From conceptual layouts to coordinated 3D models, SDG keeps every
+                project drawing-ready before crews hit the field.
+            </p>
+            <ul class="design-group-bullets">
+                <li><strong>Revit modeling</strong> &mdash; coordinated MEP &amp; electrical BIM</li>
+                <li><strong>AutoCAD drafting</strong> &mdash; shop drawings, riser diagrams, panel schedules</li>
+                <li><strong>BIM coordination</strong> &mdash; clash detection, fabrication support</li>
+                <li><strong>Document editing</strong> &mdash; red-line revisions, as-builts, submittals</li>
+            </ul>
+            <a href="#contact" class="btn btn--primary">Request drafting support</a>
+        </div>
+    </div>
+</section>
+
+<!-- ───── STATS ───── -->
+<section id="stats" class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-num">1988</div>
+                <div class="stat-label">founded</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">300+</div>
+                <div class="stat-label">craft workforce capacity</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num stat-num--sm">UL 508A</div>
+                <div class="stat-label">listed panel shop</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num stat-num--sm">35,000<span style="font-size:0.55em;">V</span></div>
+                <div class="stat-label">distribution capability</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num stat-num--sm">N4</div>
+                <div class="stat-label">Honeywell Niagara certified</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num stat-num--sm">Multi-State</div>
+                <div class="stat-label">licensed contractor</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ───── PROJECTS ───── -->
+<section id="projects" class="projects">
+    <div class="container">
+        <div class="section-eyebrow">Recent work</div>
+        <h2 class="section-title">Where our crews are.</h2>
+
+        <div class="project-grid">
+            <article class="project-card">
+                <div class="project-img" style="background-image: url('assets/images/projects/industrial/walmart-gray-1-e1753291372130.png');">
+                    <span class="project-tag">Industrial</span>
+                </div>
+                <h3>Walmart Distribution Center</h3>
+                <p>Niagara 4 building automation, Honeywell sensors, and full commissioning across office and warehouse zones at a 1M+ sq-ft distribution center.</p>
+            </article>
+
+            <article class="project-card">
+                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-autozone-2-e1753290080400.png');">
+                    <span class="project-tag">Industrial</span>
+                </div>
+                <h3>AutoZone Distribution Center</h3>
+                <p>Complete electrical install for a full-scale distribution center: switchgear, feeders, branch wiring, and material handling power.</p>
+            </article>
+
+            <article class="project-card">
+                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-ermco-1-e1753290005447.png');">
+                    <span class="project-tag">Manufacturing</span>
+                </div>
+                <h3>ERMCO Transformer Manufacturing</h3>
+                <p>Long-term industrial electrical partner: production-line power, control upgrades, and ongoing service for one of the country's largest transformer builders.</p>
+            </article>
+
+            <article class="project-card">
+                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-fedex-1-e1753291202150.png');">
+                    <span class="project-tag">Industrial</span>
+                </div>
+                <h3>FedEx Ground Distribution Centers</h3>
+                <p>Conveyor power, lighting, building automation, and commissioning across multi-site FedEx Ground hubs.</p>
+            </article>
+
+            <article class="project-card">
+                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-hexpol-1-e1753291319891.png');">
+                    <span class="project-tag">Manufacturing</span>
+                </div>
+                <h3>Hexpol Compounding</h3>
+                <p>Process electrical, motor controls, and plant-wide automation integration for a polymer compounding facility.</p>
+            </article>
+
+            <article class="project-card">
+                <div class="project-img" style="background-image: url('assets/images/projects/sec/nissan-dechard_orig-r833xw2hnqyqen7dvdn2ljhw2835pll1jyysdbf98o.jpg');">
+                    <span class="project-tag">Automotive</span>
+                </div>
+                <h3>Nissan — Decherd Powertrain Plant</h3>
+                <p>Critical-process electrical and controls work supporting Nissan's North American engine manufacturing operations.</p>
+            </article>
+        </div>
+
+        <a href="#contact" class="projects-cta">See more projects →</a>
+    </div>
+</section>
+
+<!-- ───── ABOUT ───── -->
+<section id="about" class="about">
+    <div class="container about-inner">
+        <div class="about-text">
+            <div class="section-eyebrow">About us</div>
+            <h2 class="section-title">Built on three things: skill, accountability, and follow-through.</h2>
+            <p>
+                Southern Electric &amp; Controls is a family-built electrical and controls
+                contractor serving the Mid-South. Our ICE division handles building
+                automation; our SEC division handles installation. Same leadership.
+                Same standards. Same commitment to getting your project online — on time.
+            </p>
+            <p>
+                Whether you need an industrial electrical install, a hospital fit-out, or
+                a complete Niagara 4 building automation system, you'll work with one
+                accountable team from your first call through final commissioning.
+            </p>
+        </div>
+        <div class="about-callouts">
+            <div class="callout">
+                <div class="callout-num">1</div>
+                <h4>Family-built</h4>
+                <p>Local ownership, decades-long crew tenure, and accountability at every level.</p>
+            </div>
+            <div class="callout">
+                <div class="callout-num">2</div>
+                <h4>One team, endless talents</h4>
+                <p>Electrical, controls, building automation, BIM, drafting, and estimating &mdash; every discipline under one roof, no coordination tax.</p>
+            </div>
+            <div class="callout">
+                <div class="callout-num">3</div>
+                <h4>Safety culture</h4>
+                <p>NFPA 70E, OSHA, and project-specific safety plans on every site.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ───── CONTACT ───── -->
+<section id="contact" class="contact">
+    <div class="container">
+        <div class="contact-header">
+            <div class="section-eyebrow">Get in touch</div>
+            <h2 class="section-title">Start a project, request service, or just say hi.</h2>
+            <p>Tell us what you're building and our team will follow up shortly.</p>
+        </div>
+
+        <div class="contact-grid">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h3>Contact Information</h3>
+                <ul class="contact-details">
+                    <li>
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <div>
+                            <strong>Address</strong><br>
+                            Southern Electric &amp; Controls, LLC<br>
+                            44 Volunteer Blvd<br>
+                            Jackson, TN 38305
+                        </div>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                        </svg>
+                        <div>
+                            <strong>Phone</strong><br>
+                            <a href="tel:+17316605980">(731) 660-5980</a><br>
+                            Fax (731) 660-9158
+                        </div>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <div>
+                            <strong>Email</strong><br>
+                            <a href="mailto:info@southern-electric.com">info@southern-electric.com</a>
+                        </div>
+                    </li>
+                </ul>
+                <a href="assets/brochure/sec_contractor_brochure.pdf" class="brochure-link" download>
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                    </svg>
+                    Download Capabilities Brochure (PDF)
+                </a>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-wrapper">
+                <!--
+                FORMSPREE SETUP:
+                1. Create a free account at formspree.io
+                2. Create a new form and copy your form ID
+                3. Replace {your-form-id} below with your actual form ID
+                -->
+                <form class="contact-form" action="https://formspree.io/f/{your-form-id}" method="POST" data-ajax="true">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(731) 555-1234">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="Project Inquiry" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Tell us about your project..." required></textarea>
+                    </div>
+
+                    <!-- Honeypot for spam prevention -->
+                    <input type="text" name="_gotcha" style="display:none">
+
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-text">Send Message</span>
+                        <span class="spinner"></span>
+                    </button>
+
+                    <div class="form-feedback"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<!-- ───── FOOTER ───── -->
+<footer class="footer">
+    <div class="container footer-inner">
+        <div class="footer-left">
+            <div class="logo logo--footer">
+                <a href="#hero" aria-label="Southern Electric &amp; Controls home">
+                    <img src="assets/images/logos/sec-logo.png" alt="Southern Electric &amp; Controls" class="logo-img logo-img--sec">
+                </a>
+                <span class="logo-divider"></span>
+                <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" aria-label="Industrial Controls &amp; Electrical (opens in new tab)">
+                    <img src="assets/images/logos/UpdatedICELogo-removebg-preview.png" alt="Industrial Controls &amp; Electrical" class="logo-img logo-img--ice">
+                </a>
+            </div>
+            <p class="footer-tagline">Commercial · Design-Build · Industrial &mdash; one team, one accountable contractor.<br>44 Volunteer Blvd, Jackson, TN 38305 · (731) 660-5980</p>
+        </div>
+        <div class="footer-right">
+            <div class="footer-col">
+                <h5>Company</h5>
+                <ul>
+                    <li><a href="#companies">SEC &amp; ICE</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Services</h5>
+                <ul>
+                    <li><a href="#services">Electrical install</a></li>
+                    <li><a href="#automation">Building automation</a></li>
+                    <li><a href="#services">Preventive maintenance</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Contact</h5>
+                <ul>
+                    <li><a href="#contact">Locations</a></li>
+                    <li><a href="mailto:info@southern-electric.com">Email us</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>&copy; <span id="year">2026</span> Southern Electric &amp; Controls. All rights reserved.</span>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

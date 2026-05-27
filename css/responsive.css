@@ -1,0 +1,166 @@
+/* ============================================
+   SEC — responsive breakpoints
+   Tablet < 1024, mobile < 720, narrow mobile < 480
+   ============================================ */
+
+@media (max-width: 1100px) {
+    .container { padding: 0 1.6rem; }
+    :root { --section-pad: 90px; }
+
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .stats-grid .stat:nth-child(n+4) { border-top: 1px solid var(--border); }
+
+    .automation-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .automation-badge { order: -1; }
+
+    /* Stack the SDG section; visual goes back to in-flow positioning so it
+       can stack above the text.  Background vignette stays the same — it
+       adapts to the taller stacked layout naturally. */
+    .design-group-visual {
+        position: relative;
+        top: auto; bottom: auto; left: auto;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto 3rem;
+        aspect-ratio: 1 / 1;
+    }
+    .design-group-bim {
+        height: auto;
+        width: 100%;
+        max-width: none;
+    }
+    .design-group-inner {
+        display: block;
+    }
+    .design-group-text {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+
+    .footer-inner { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+@media (max-width: 880px) {
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+    .project-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-header { margin-bottom: 2.5rem; }
+    .contact-form-wrapper { padding: 1.75rem; }
+    .company-grid { grid-template-columns: 1fr; gap: 1.4rem; }
+
+    /* Stack hero vertically — banner stays full-width on top (at its
+       scaled aspect-ratio height), text falls into normal flow below.
+       The text slide-in animation still triggers via `.is-revealed`. */
+    .hero {
+        padding-top: var(--header-h);
+    }
+    .hero-strip {
+        /* keeps aspect-ratio 1920/500; scales with viewport width */
+    }
+    .hero-content {
+        position: relative;
+        top: auto;
+        left: auto;
+        bottom: auto;
+        width: 100%;
+        max-width: 100%;
+        padding: 2rem 1.6rem 3rem;
+    }
+    /* On mobile the logo doesn't slide right (text is below it, not beside) */
+    .hero.is-revealed .hero-logo-wrap {
+        transform: translate(-50%, -50%);
+    }
+    /* Larger / readable typography on mobile since vertical space is unlimited */
+    .hero-eyebrow { font-size: 0.75rem; margin-bottom: 1rem; }
+    .hero-title   { font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.15; margin-bottom: 1rem; }
+    .hero-lead    { font-size: 1rem; margin-bottom: 1.5rem; }
+    .hero-cta .btn { font-size: 0.95rem; padding: 0.7rem 1.2rem; }
+    .scroll-cue { display: none; }
+}
+
+@media (max-width: 720px) {
+    :root {
+        --header-h: 72px;
+        --section-pad: 70px;
+    }
+
+    /* Hide desktop nav, show hamburger */
+    .nav { display: none; }
+    .menu-toggle { display: flex; }
+
+    /* Mobile nav overlay */
+    .nav-overlay {
+        display: block;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(6px);
+        z-index: 998;
+        opacity: 0; visibility: hidden;
+        transition: all var(--t-smooth);
+    }
+    .nav-overlay.is-open { opacity: 1; visibility: visible; }
+
+    .mobile-nav {
+        display: block;
+        position: fixed;
+        top: 0; right: 0;
+        width: min(82%, 320px);
+        height: 100vh;
+        background: var(--bg-darker);
+        border-left: 1px solid var(--border);
+        padding: calc(var(--header-h) + 1rem) 2rem 2rem;
+        z-index: 999;
+        transform: translateX(100%);
+        transition: transform var(--t-smooth);
+    }
+    .mobile-nav.is-open { transform: translateX(0); }
+    .mobile-nav ul { list-style: none; }
+    .mobile-nav li { border-bottom: 1px solid var(--border); }
+    .mobile-nav a {
+        display: block;
+        padding: 1.1rem 0;
+        font-size: 1.05rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text);
+    }
+    .mobile-nav a:hover { color: var(--sec-red-soft); }
+
+    /* Hamburger animate-to-X when open */
+    .menu-toggle.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-toggle.is-open span:nth-child(2) { opacity: 0; }
+    .menu-toggle.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    .hero-content { padding: 3rem 0 4rem; }
+    .hero-cta { flex-direction: column; align-items: flex-start; }
+    .hero-cta .btn { width: 100%; justify-content: center; }
+
+    .service-grid { grid-template-columns: 1fr; }
+    .project-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .footer-right { grid-template-columns: 1fr; gap: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    .logo-name { display: none; }
+    .logo-divider { display: none; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .badge-ring { width: 220px; height: 220px; }
+    .badge-num { font-size: 1.8rem; }
+    h1 { font-size: 2rem; }
+    .hero-lead { font-size: 1rem; }
+}
+
+/* Honor reduce-motion preference */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    [data-reveal] { opacity: 1; transform: none; }
+}
