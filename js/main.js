@@ -120,13 +120,21 @@
     //          If the browser blocks autoplay, mark finished immediately so
     //          the static composition shows as a graceful fallback. */
     const heroVideo = document.getElementById('heroVideo');
+    const heroDrone = document.getElementById('heroDrone');
     const heroEl    = document.getElementById('hero');
     const revealHero = () => heroEl?.classList.add('is-revealed');
-    const HERO_TRIM_END_SECONDS = 3;  // cut the last N seconds of truck.mp4
+    const HERO_TRIM_END_SECONDS = 3;  // cut the last N seconds of truck2.mp4
     const finishHeroVideo = () => {
         if (!heroVideo || heroVideo.classList.contains('is-finished')) return;
         heroVideo.classList.add('is-finished');
         heroVideo.pause();
+        // Hand off to the looping drone background that sits behind the logo.
+        if (heroDrone) {
+            const dronePlay = heroDrone.play();
+            if (dronePlay && typeof dronePlay.catch === 'function') {
+                dronePlay.catch(() => {});
+            }
+        }
         revealHero();
     };
     if (heroVideo) {

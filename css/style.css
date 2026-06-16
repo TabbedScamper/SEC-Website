@@ -277,6 +277,18 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     z-index: 0;
 }
 
+/* Layer 1b — Banner-Drone.mp4 loops as the moving background, painting above
+   the static gradient (same z-index, later in the DOM) but behind the logo.
+   Hidden under truck2.mp4 (Layer 3) until that fades out on `ended`. */
+.hero-drone {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    pointer-events: none;
+    background: #0a0a0d;
+}
+
 /* Layer 2 — logo lives inside a wrapper so the state-driven slide (center →
    right) and the scroll-driven shift/scale don't fight each other on the
    transform property.  Wrapper handles state, inner <img> handles scroll. */
@@ -302,11 +314,11 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     will-change: opacity, transform;
 }
 
-/* Layer 3 — truck.mp4 fills the strip at its native aspect (no cropping
-   needed since the strip aspect matches the video).  Disappears INSTANTLY
-   on `ended` so the slide-in doesn't double-expose with a fading video.
-   The static gradient + logo underneath is identical to the video's last
-   frame, so the swap reads as a clean handoff. */
+/* Layer 3 — truck2.mp4 fills the strip at its native aspect (no cropping
+   needed since the strip aspect matches the video).  On `ended` it FADES out
+   over 1.2s, revealing the looping drone background (Layer 1b) that's already
+   playing underneath — a smooth crossfade rather than a hard cut.  The
+   `visibility` flip is delayed to the end of the fade so it doesn't snap. */
 .hero-video {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
@@ -315,6 +327,7 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     opacity: 1;
     pointer-events: none;
     background: #0a0a0d;
+    transition: opacity 1.2s ease, visibility 0s linear 1.2s;
 }
 .hero-video.is-finished {
     opacity: 0;

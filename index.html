@@ -75,23 +75,29 @@
    (gradient, logo, video) scales together, so the logo stays at the same
    proportional position at every viewport width.
    Choreography:
-     1. truck.mp4 autoplays on top of a static logo + gradient composition
-     2. on `ended` the video fades smoothly to 0 (3.5s)
-     3. after 0.8s the .hero gets `.is-revealed`, which:
+     1. truck2.mp4 autoplays on top of the logo + a looping drone background
+     2. on `ended` truck2 disappears instantly, revealing the drone loop
+     3. the .hero gets `.is-revealed`, which:
         - slides the logo from center to the right edge of the banner
         - slides the text in from off-screen left to its resting position
+     4. Banner-Drone.mp4 keeps looping as the moving background behind the logo
 -->
 <section id="hero" class="hero">
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-strip" id="heroStrip">
         <div class="hero-banner-bg" aria-hidden="true"></div>
+        <video class="hero-drone" id="heroDrone" aria-hidden="true"
+               muted loop playsinline preload="auto"
+               poster="Images/end-screen.png">
+            <source src="Banner-Drone.mp4" type="video/mp4">
+        </video>
         <div class="hero-logo-wrap" id="heroLogoWrap">
             <img src="Images/Logo%20Updated.png" alt="" class="hero-logo" id="heroLogo">
         </div>
         <video class="hero-video" id="heroVideo"
                autoplay muted playsinline preload="auto"
                poster="Images/end-screen.png">
-            <source src="truck.mp4" type="video/mp4">
+            <source src="truck2.mp4" type="video/mp4">
         </video>
     </div>
     <div class="hero-content container">
