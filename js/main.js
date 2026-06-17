@@ -139,16 +139,19 @@
                                          // instant hand-off lands on the final frame
     const finishHeroVideo = () => {
         if (!heroVideo || heroVideo.classList.contains('is-finished')) return;
-        heroVideo.classList.add('is-finished');
+        heroVideo.classList.add('is-finished');   // intro fades to black
         heroVideo.pause();
-        // Hand off to the looping drone background that sits behind the logo.
+        revealHero();                             // logo settles into place on black
+        // The drone loop is already playing underneath but hidden; once the intro
+        // has faded to black, fade it in from black behind the logo (then it loops
+        // with no further fades).
         if (heroDrone) {
             const dronePlay = heroDrone.play();
             if (dronePlay && typeof dronePlay.catch === 'function') {
                 dronePlay.catch(() => {});
             }
+            setTimeout(() => heroDrone.classList.add('is-in'), 1000);
         }
-        revealHero();
     };
     if (heroVideo) {
         heroVideo.addEventListener('ended', finishHeroVideo);

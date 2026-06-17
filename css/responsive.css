@@ -158,21 +158,28 @@
    eyebrow + title + lead OVERLAY the lower video, and the buttons fall just
    below it. Placed last so it wins over the 720/480 hero rules above. */
 @media (max-width: 600px) {
-    /* Solid black behind everything (incl. the button area below the video),
-       and hide the red page gradient so it never shows during the intro. */
-    .hero { position: relative; background: #000; }
+    /* The area below the video (the button band) starts BLACK during the intro
+       and fades to WHITE together with the intro's fade-to-white, so it ends as
+       a clean white CTA band. The red page gradient is hidden either way. */
+    .hero { position: relative; background: #000; transition: background 0.9s ease; }
+    .hero.is-revealed { background: #fff; }
     .hero-bg { display: none; }
     .hero-strip { aspect-ratio: 1080 / 1350; }
 
-    /* Scrim over the lower video so the overlaid paragraph stays readable. */
+    /* The lower video fades to WHITE so the black paragraph reads and the area
+       blends seamlessly into the white button band below.  Hidden during the
+       intro (so the truck isn't washed) — fades in with the reveal. */
     .hero-strip::after {
         content: '';
         position: absolute; inset: 0;
         z-index: 3; pointer-events: none;
         background: linear-gradient(to bottom,
-            transparent 38%, rgba(10,10,13,0.45) 58%,
-            rgba(10,10,13,0.85) 80%, rgba(10,10,13,0.96) 100%);
+            transparent 44%, rgba(255,255,255,0.55) 62%,
+            rgba(255,255,255,0.92) 82%, #fff 100%);
+        opacity: 0;
+        transition: opacity 0.6s ease 0.35s;
     }
+    .hero.is-revealed .hero-strip::after { opacity: 1; }
 
     /* Bigger logo — only shrinks a little and rises, since just the paragraph
        sits inside the video now (the buttons moved below it). */
@@ -209,24 +216,29 @@
         text-align: center;
         z-index: 4;
     }
-    .hero-eyebrow { justify-content: center; margin-bottom: 0.5rem; font-size: 0.7rem; }
+    /* Black paragraph text on the white fade */
+    .hero-eyebrow { justify-content: center; margin-bottom: 0.5rem; font-size: 0.7rem; color: #555; }
     .hero-title {
         font-size: clamp(1.35rem, 6vw, 2rem); margin-bottom: 0.5rem;
-        text-shadow: 0 2px 14px rgba(0,0,0,0.8);
+        color: #111; text-shadow: none;
     }
+    .hero-title .accent { color: var(--sec-red); }
     .hero-lead {
         font-size: 0.92rem; line-height: 1.5;
         margin: 0 auto; max-width: 42ch;
-        text-shadow: 0 1px 10px rgba(0,0,0,0.85);
+        color: #333; text-shadow: none;
     }
 
-    /* Buttons: below the video, on a solid black background */
+    /* Buttons sit on the hero background (black during intro → white at rest);
+       black outlines/text read on the final white. */
     .hero-cta {
         flex-direction: column; align-items: stretch; gap: 0.6rem;
-        padding: 1.2rem 1.4rem 2.4rem;
-        background: #000;
+        padding: 1.4rem 1.4rem 2.4rem;
+        background: transparent;
     }
     .hero-cta .btn { width: 100%; justify-content: center; }
+    .hero-cta .btn--ghost { border-color: #1a1a1a; color: #111; }
+    .hero-cta .btn--ghost:hover { border-color: var(--sec-red); color: var(--sec-red); }
 }
 
 /* Honor reduce-motion preference */

@@ -281,7 +281,7 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
    fades to 0, this is what's underneath at the exact same height. */
 .hero-banner-bg {
     position: absolute; inset: 0;
-    background: url('../Images/Gradient.png') center center / 100% 100% no-repeat;
+    background: #fff;   /* white base — the intro fades to this (logo on white) before the drone loop fades in */
     z-index: 0;
 }
 
@@ -294,8 +294,13 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     object-fit: cover;
     z-index: 0;
     pointer-events: none;
-    background: #0a0a0d;
+    background: #fff;
+    /* Starts hidden. After the intro fades to white, this fades in from white
+       behind the logo and then loops with no further fades. */
+    opacity: 0;
+    transition: opacity 1.2s ease;
 }
+.hero-drone.is-in { opacity: 1; }
 
 /* Layer 2 — logo lives inside a wrapper so the state-driven slide (center →
    right) and the scroll-driven shift/scale don't fight each other on the
@@ -324,8 +329,10 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
 
 /* Layer 3 — truck2.mp4 fills the strip at its native aspect (no cropping
    needed since the strip aspect matches the video).  When the intro finishes
-   it is hidden INSTANTLY (no fade) so the logo doesn't appear to fade while it
-   animates — it cuts straight to the looping drone background underneath. */
+   it FADES TO WHITE (the drone underneath is still hidden), revealing the logo
+   on white; the drone loop then fades in from white behind the logo.  Because
+   the hand-off goes through solid white — never two moving videos at once — the
+   background doesn't flicker and the logo stays the focus. */
 .hero-video {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
@@ -333,7 +340,8 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     z-index: 2;
     opacity: 1;
     pointer-events: none;
-    background: #0a0a0d;
+    background: #fff;
+    transition: opacity 0.7s ease, visibility 0s linear 0.7s;
 }
 .hero-video.is-finished {
     opacity: 0;
@@ -364,8 +372,10 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     margin: 0;
     transform: translateX(-110%);
     opacity: 0;
-    transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
-                opacity 1.1s ease-out 0.15s;
+    /* Delayed so the (light) text only slides in once the drone has faded in
+       behind it — during the white "logo moment" the text would be invisible. */
+    transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.5s,
+                opacity 1.1s ease-out 1.5s;
 }
 .hero.is-revealed .hero-content {
     transform: translateX(0);
