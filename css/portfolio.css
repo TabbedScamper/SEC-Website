@@ -780,36 +780,77 @@ body.sdg-studio-open { overflow: hidden; }
 .sec-list-lead { color: var(--text-muted); margin: 0 auto; }
 .sec-list-lead #secProjectCount { color: var(--sec-red-soft); font-weight: 700; }
 .sec-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem 2.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
+.sec-list-group {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-card);
+    transition: border-color var(--t-smooth);
+}
+.sec-list-group.is-open { border-color: rgba(216, 30, 38, 0.4); }
+
+/* Year header (the dropdown toggle) */
 .sec-list-year {
-    display: flex; align-items: baseline; justify-content: space-between;
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.6rem; font-weight: 700;
-    color: var(--sec-red);
-    padding-bottom: 0.6rem; margin-bottom: 0.5rem;
-    border-bottom: 2px solid var(--border);
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    padding: 1.05rem 1.5rem;
+    background: none; border: none; cursor: pointer;
+    color: var(--text); text-align: left;
+    transition: background var(--t-fast);
 }
-.sec-list-year span {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.66rem; font-weight: 600;
-    letter-spacing: 0.1em; text-transform: uppercase;
+.sec-list-year:hover { background: var(--bg-card-hover); }
+.sec-list-year-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.7rem; font-weight: 700; letter-spacing: 0.02em;
+    color: var(--sec-red);
+}
+.sec-list-year-meta { display: flex; align-items: center; gap: 1.1rem; }
+.sec-list-year-count {
+    font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--text-muted);
 }
-.sec-list-items { list-style: none; }
+.sec-list-chev { display: flex; color: var(--text-muted); transition: transform var(--t-smooth), color var(--t-smooth); }
+.sec-list-chev svg { width: 22px; height: 22px; }
+.sec-list-group.is-open .sec-list-chev { transform: rotate(180deg); color: var(--sec-red-soft); }
+
+/* Collapsible panel — grid-rows 0fr → 1fr slide */
+.sec-list-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--t-dramatic);
+}
+.sec-list-group.is-open .sec-list-panel { grid-template-rows: 1fr; }
+.sec-list-panel-inner { overflow: hidden; min-height: 0; min-width: 0; }
+
+.sec-list-items {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 1.8rem;
+    min-width: 0;
+    padding: 0.4rem 1.5rem 1.4rem;
+    border-top: 1px solid var(--border);
+}
+.sec-list-name { display: block; min-width: 0; overflow-wrap: anywhere; }
 .sec-list-items li {
     position: relative;
-    padding: 0.55rem 0 0.55rem 1.1rem;
-    font-size: 0.92rem;
+    padding: 0.5rem 0 0.5rem 1.1rem;
+    font-size: 0.9rem;
     color: var(--text-soft);
     border-bottom: 1px solid rgba(255,255,255,0.05);
     transition: color var(--t-fast), padding-left var(--t-fast);
 }
 .sec-list-items li::before {
     content: '';
-    position: absolute; left: 0; top: 1rem;
+    position: absolute; left: 0; top: 0.95rem;
     width: 5px; height: 5px; border-radius: 50%;
     background: var(--sec-red);
     transition: transform var(--t-fast);
@@ -824,15 +865,30 @@ body.sdg-studio-open { overflow: hidden; }
     .pf-lb-panel { grid-template-columns: 1fr; max-height: 90vh; }
     .pf-lb-media { max-height: 48vh; }
     .sdg-caps { grid-template-columns: repeat(2, 1fr); }
-    .sec-list { grid-template-columns: repeat(2, 1fr); }
+    .sec-list-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
+    .sec-list-items { grid-template-columns: 1fr; }
     .pf-grid { grid-template-columns: 1fr; }
     .pf-card--featured { grid-column: span 1; }
-    .pf-tabs { width: 100%; justify-content: flex-start; overflow-x: auto; }
+    /* Tabs scroll horizontally in one row so the sliding indicator stays aligned */
+    .pf-tabs {
+        width: 100%;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .pf-tabs::-webkit-scrollbar { display: none; }
+    .pf-tab { flex: 0 0 auto; }
     .sdg-caps { grid-template-columns: 1fr; }
     .sdg-stage-grid { padding: 1rem; }
-    .sec-list { grid-template-columns: 1fr; }
+    /* Accordion: tighter padding + slightly smaller year on phones */
+    .sec-list-year { padding: 0.95rem 1.1rem; }
+    .sec-list-year-num { font-size: 1.4rem; }
+    .sec-list-year-meta { gap: 0.7rem; }
+    .sec-list-items { padding: 0.3rem 1.1rem 1.1rem; }
 }
 @media (prefers-reduced-motion: reduce) {
     .pf-card, .pf-thumb, .pf-badge, .pf-view, .pf-tab-indicator, .pf-lb-panel, .pf-lb-img {

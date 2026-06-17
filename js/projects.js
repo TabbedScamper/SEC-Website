@@ -564,13 +564,35 @@ window.SEC_PROJECT_LIST = [
     });
     const years = [...byYear.keys()].sort((a, b) => b - a);
 
-    host.innerHTML = years.map(year => `
-        <div class="sec-list-group">
-            <div class="sec-list-year">${year}<span>${byYear.get(year).length} projects</span></div>
-            <ul class="sec-list-items">
-                ${byYear.get(year).map(it => `<li><span class="sec-list-name">${esc(it.name)}</span></li>`).join('')}
-            </ul>
+    // Accordion: each year is a clickable header that drops down its projects.
+    host.innerHTML = years.map((year, i) => `
+        <div class="sec-list-group${i === 0 ? ' is-open' : ''}">
+            <button class="sec-list-year" type="button" aria-expanded="${i === 0 ? 'true' : 'false'}">
+                <span class="sec-list-year-num">${year}</span>
+                <span class="sec-list-year-meta">
+                    <span class="sec-list-year-count">${byYear.get(year).length} projects</span>
+                    <span class="sec-list-chev" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    </span>
+                </span>
+            </button>
+            <div class="sec-list-panel">
+                <div class="sec-list-panel-inner">
+                    <ul class="sec-list-items">
+                        ${byYear.get(year).map(it => `<li><span class="sec-list-name">${esc(it.name)}</span></li>`).join('')}
+                    </ul>
+                </div>
+            </div>
         </div>`).join('');
+
+    host.querySelectorAll('.sec-list-year').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const group = btn.closest('.sec-list-group');
+            const open = group.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', String(open));
+        });
+    });
 
     const totalEl = document.getElementById('secProjectCount');
     if (totalEl) totalEl.textContent = list.length;
