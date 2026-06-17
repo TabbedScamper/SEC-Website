@@ -135,7 +135,8 @@
     })();
 
     const revealHero = () => heroEl?.classList.add('is-revealed');
-    const HERO_TRIM_END_SECONDS = 3;  // cut the last N seconds of truck2.mp4
+    const HERO_TRIM_END_SECONDS = 0.25;  // cut just before the natural end so the
+                                         // instant hand-off lands on the final frame
     const finishHeroVideo = () => {
         if (!heroVideo || heroVideo.classList.contains('is-finished')) return;
         heroVideo.classList.add('is-finished');

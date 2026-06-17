@@ -158,7 +158,10 @@
    eyebrow + title + lead OVERLAY the lower video, and the buttons fall just
    below it. Placed last so it wins over the 720/480 hero rules above. */
 @media (max-width: 600px) {
-    .hero { position: relative; }
+    /* Solid black behind everything (incl. the button area below the video),
+       and hide the red page gradient so it never shows during the intro. */
+    .hero { position: relative; background: #000; }
+    .hero-bg { display: none; }
     .hero-strip { aspect-ratio: 1080 / 1350; }
 
     /* Scrim over the lower video so the overlaid paragraph stays readable. */
@@ -217,10 +220,11 @@
         text-shadow: 0 1px 10px rgba(0,0,0,0.85);
     }
 
-    /* Buttons: below the video, on the dark page background */
+    /* Buttons: below the video, on a solid black background */
     .hero-cta {
         flex-direction: column; align-items: stretch; gap: 0.6rem;
-        padding: 1rem 1.4rem 2.4rem;
+        padding: 1.2rem 1.4rem 2.4rem;
+        background: #000;
     }
     .hero-cta .btn { width: 100%; justify-content: center; }
 }
