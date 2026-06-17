@@ -80,6 +80,13 @@
     .scroll-cue { display: none; }
 }
 
+/* Phones: hero uses the 4:5 (1080×1350) mobile video crop instead of the
+   wide 1920×500 strip. js/main.js swaps the <video> sources to match. */
+@media (max-width: 600px) {
+    .hero-strip { aspect-ratio: 1080 / 1350; }
+    .hero-logo-wrap { width: 58%; }
+}
+
 @media (max-width: 720px) {
     :root {
         --header-h: 72px;

@@ -122,6 +122,18 @@
     const heroVideo = document.getElementById('heroVideo');
     const heroDrone = document.getElementById('heroDrone');
     const heroEl    = document.getElementById('hero');
+
+    // Pick the matching hero sources (4:5 mobile vs 1920×500 desktop) before
+    // anything loads, so the browser only downloads the one that's used.
+    (() => {
+        const useMobile = window.matchMedia('(max-width: 600px)').matches;
+        [heroVideo, heroDrone].forEach((v) => {
+            if (!v) return;
+            const src = (useMobile && v.dataset.mobileSrc) ? v.dataset.mobileSrc : v.dataset.desktopSrc;
+            if (src && !v.querySelector('source') && v.src !== src) v.src = src;
+        });
+    })();
+
     const revealHero = () => heroEl?.classList.add('is-revealed');
     const HERO_TRIM_END_SECONDS = 3;  // cut the last N seconds of truck2.mp4
     const finishHeroVideo = () => {
