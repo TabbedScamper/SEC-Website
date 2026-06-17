@@ -161,58 +161,56 @@
     .hero { position: relative; }
     .hero-strip { aspect-ratio: 1080 / 1350; }
 
-    /* Scrim over the lower video so the overlaid title/lead stay readable,
-       fading seamlessly into the page background at the bottom. */
+    /* Scrim over the lower video so the overlaid text stays readable. */
     .hero-strip::after {
         content: '';
         position: absolute; inset: 0;
         z-index: 3; pointer-events: none;
         background: linear-gradient(to bottom,
-            transparent 44%, rgba(10,10,13,0.5) 62%,
-            rgba(10,10,13,0.9) 82%, #0a0a0d 100%);
+            transparent 30%, rgba(10,10,13,0.45) 50%,
+            rgba(10,10,13,0.85) 74%, rgba(10,10,13,0.96) 100%);
     }
 
     /* Logo: full size + centered to start (matches the video's end frame),
-       then shrinks and rises into the upper third on reveal. */
+       then shrinks and rises into the upper area on reveal. */
     .hero-logo-wrap {
-        width: 74%;
+        width: 72%;
         top: 50%;
         transition: top 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
                     transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
     }
     .hero.is-revealed .hero-logo-wrap {
-        top: 28%;
-        transform: translate(-50%, -50%) scale(0.6);
+        top: 20%;
+        transform: translate(-50%, -50%) scale(0.46);
     }
 
-    /* Eyebrow + title + lead overlay the lower video (pulled up over it);
-       the buttons sit below, on the dark page background. */
+    /* All hero text is anchored to the BOTTOM of the video so it can never run
+       off the bottom edge; it stacks upward from there inside the scrim. */
     .hero-content {
-        position: relative;
-        left: auto; right: auto; top: auto; bottom: auto;
+        position: absolute;
+        left: 0; right: 0; bottom: 0; top: auto;
         width: 100%; max-width: 100%;
-        margin-top: -42vw;
         z-index: 4;
-        padding: 0 1.5rem 2.6rem;
+        padding: 0 1.3rem 5vw;
         text-align: center;
         opacity: 0;
-        transform: translateY(22px);
+        transform: translateY(20px);
         transition: opacity 0.8s ease 0.4s,
                     transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
     }
     .hero.is-revealed .hero-content { opacity: 1; transform: translateY(0); }
-    .hero-eyebrow { justify-content: center; margin-bottom: 0.7rem; }
+    .hero-eyebrow { justify-content: center; margin-bottom: 0.5rem; font-size: 0.7rem; }
     .hero-title {
-        font-size: clamp(1.4rem, 6.4vw, 2.1rem); margin-bottom: 0.7rem;
-        text-shadow: 0 2px 14px rgba(0,0,0,0.7);
+        font-size: clamp(1.3rem, 5.8vw, 1.9rem); margin-bottom: 0.5rem;
+        text-shadow: 0 2px 14px rgba(0,0,0,0.8);
     }
     .hero-lead {
-        font-size: 0.96rem; line-height: 1.55;
-        margin: 0 auto 1.7rem; max-width: 40ch;
-        text-shadow: 0 1px 10px rgba(0,0,0,0.75);
+        font-size: 0.9rem; line-height: 1.45;
+        margin: 0 auto 1rem; max-width: 44ch;
+        text-shadow: 0 1px 10px rgba(0,0,0,0.85);
     }
-    .hero-cta { flex-direction: column; align-items: stretch; gap: 0.7rem; }
-    .hero-cta .btn { width: 100%; justify-content: center; }
+    .hero-cta { flex-direction: column; align-items: stretch; gap: 0.55rem; }
+    .hero-cta .btn { width: 100%; justify-content: center; padding: 0.65rem 1rem; }
 }
 
 /* Honor reduce-motion preference */
