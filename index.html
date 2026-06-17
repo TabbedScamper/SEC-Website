@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/portfolio.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
@@ -354,29 +355,69 @@
 
 <!-- ───── SOUTHERN DESIGN GROUP SPOTLIGHT ───── -->
 <section id="design-group" class="design-group">
-    <div class="design-group-visual">
-        <img src="Images/SDG/Example-1.png" alt="" class="design-group-bim" data-reveal>
-        <img src="Images/Logo-SDG.png" alt="Southern Design Group" class="design-group-logo" data-reveal style="--delay: 0.25s;">
-    </div>
-    <div class="container design-group-inner">
-        <div class="design-group-text" data-reveal="right">
-            <div class="section-eyebrow">Southern Design Group</div>
-            <h2 class="section-title">Drafting, BIM, and design support &mdash; in-house.</h2>
-            <p>
-                Southern Design Group is our drafting and BIM partner.
-                From conceptual layouts to coordinated 3D models, SDG keeps every
-                project drawing-ready before crews hit the field.
-            </p>
-            <ul class="design-group-bullets">
-                <li><strong>Revit modeling</strong> &mdash; coordinated MEP &amp; electrical BIM</li>
-                <li><strong>AutoCAD drafting</strong> &mdash; shop drawings, riser diagrams, panel schedules</li>
-                <li><strong>BIM coordination</strong> &mdash; clash detection, fabrication support</li>
-                <li><strong>Document editing</strong> &mdash; red-line revisions, as-builts, submittals</li>
-            </ul>
-            <a href="#contact" class="btn btn--primary">Request drafting support</a>
+    <div class="design-group-intro">
+        <div class="design-group-visual">
+            <img src="Images/SDG/Example-1.png" alt="" class="design-group-bim" data-reveal>
+            <img src="Images/Logo-SDG.png" alt="Southern Design Group" class="design-group-logo" data-reveal style="--delay: 0.25s;">
+        </div>
+        <div class="container design-group-inner">
+            <div class="design-group-text" data-reveal="right">
+                <div class="section-eyebrow">Southern Design Group</div>
+                <h2 class="section-title">Drafting, BIM, and design support &mdash; in-house.</h2>
+                <p>
+                    Southern Design Group is the in-house design division of Southern
+                    Electric &amp; Controls &mdash; alongside our ICE controls division.
+                    From conceptual layouts to coordinated 3D models, SDG keeps every
+                    project drawing-ready &mdash; and turns out 3D, game, video, and web
+                    work of its own.
+                </p>
+                <ul class="design-group-bullets">
+                    <li><strong>Revit modeling</strong> &mdash; coordinated MEP &amp; electrical BIM</li>
+                    <li><strong>AutoCAD drafting</strong> &mdash; shop drawings, riser diagrams, panel schedules</li>
+                    <li><strong>3D &amp; visualization</strong> &mdash; vehicle modeling, renders, animation</li>
+                    <li><strong>Media &amp; web</strong> &mdash; video editing and custom website builds</li>
+                </ul>
+                <div class="design-group-cta">
+                    <button class="sdg-studio-trigger" id="sdgStudioOpen" type="button" aria-haspopup="dialog">
+                        <span class="sdg-studio-trigger-text">
+                            <span class="sdg-studio-trigger-eyebrow">Enter the Design Studio</span>
+                            <span class="sdg-studio-trigger-title">See What SDG Can Do</span>
+                        </span>
+                        <span class="sdg-studio-trigger-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        </span>
+                    </button>
+                    <a href="#contact" class="design-group-cta-link">Request design support &rarr;</a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- ───── SDG STUDIO OVERLAY ─────
+     Fades in from the "See What SDG Can Do" button (Rockstar / JM2 style).
+     Holds the skill-discipline showcase; js/sdg-creations.js populates it. -->
+<div class="sdg-studio" id="sdgStudioOverlay" role="dialog" aria-modal="true" aria-label="Southern Design Group — Studio" aria-hidden="true">
+    <button class="sdg-studio-close" id="sdgStudioClose" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Back to site
+    </button>
+    <div class="container sdg-studio-inner">
+        <div class="sdg-showcase-head">
+            <div class="section-eyebrow section-eyebrow--light">Skills &amp; creations</div>
+            <h2 class="sdg-showcase-title">The disciplines behind Southern Design Group.</h2>
+            <p class="sdg-showcase-lead">SDG is the in-house creative division of Southern Electric &amp; Controls. Pick a discipline to slide open the work — every piece lists the tools and skills it was built with.</p>
+        </div>
+
+        <div class="sdg-caps" id="sdgCaps"></div>
+
+        <div class="sdg-stage" id="sdgStage">
+            <div class="sdg-stage-inner">
+                <div class="pf-grid sdg-stage-grid"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ───── STATS ───── -->
 <section id="stats" class="stats">
@@ -411,64 +452,58 @@
 </section>
 
 <!-- ───── PROJECTS ───── -->
-<section id="projects" class="projects">
+<!--
+   Data-driven gallery. Every project lives in js/projects.js — add a
+   project there and the sub-tabs, grid, hover-logo and lightbox all
+   rebuild automatically. No markup edits needed to add work.
+-->
+<section id="projects" class="projects projects--showcase">
     <div class="container">
-        <div class="section-eyebrow">Recent work</div>
-        <h2 class="section-title">Where our crews are.</h2>
-
-        <div class="project-grid">
-            <article class="project-card">
-                <div class="project-img" style="background-image: url('assets/images/projects/industrial/walmart-gray-1-e1753291372130.png');">
-                    <span class="project-tag">Industrial</span>
-                </div>
-                <h3>Walmart Distribution Center</h3>
-                <p>Niagara 4 building automation, Honeywell sensors, and full commissioning across office and warehouse zones at a 1M+ sq-ft distribution center.</p>
-            </article>
-
-            <article class="project-card">
-                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-autozone-2-e1753290080400.png');">
-                    <span class="project-tag">Industrial</span>
-                </div>
-                <h3>AutoZone Distribution Center</h3>
-                <p>Complete electrical install for a full-scale distribution center: switchgear, feeders, branch wiring, and material handling power.</p>
-            </article>
-
-            <article class="project-card">
-                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-ermco-1-e1753290005447.png');">
-                    <span class="project-tag">Manufacturing</span>
-                </div>
-                <h3>ERMCO Transformer Manufacturing</h3>
-                <p>Long-term industrial electrical partner: production-line power, control upgrades, and ongoing service for one of the country's largest transformer builders.</p>
-            </article>
-
-            <article class="project-card">
-                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-fedex-1-e1753291202150.png');">
-                    <span class="project-tag">Industrial</span>
-                </div>
-                <h3>FedEx Ground Distribution Centers</h3>
-                <p>Conveyor power, lighting, building automation, and commissioning across multi-site FedEx Ground hubs.</p>
-            </article>
-
-            <article class="project-card">
-                <div class="project-img" style="background-image: url('assets/images/projects/industrial/wide-hexpol-1-e1753291319891.png');">
-                    <span class="project-tag">Manufacturing</span>
-                </div>
-                <h3>Hexpol Compounding</h3>
-                <p>Process electrical, motor controls, and plant-wide automation integration for a polymer compounding facility.</p>
-            </article>
-
-            <article class="project-card">
-                <div class="project-img" style="background-image: url('assets/images/projects/sec/nissan-dechard_orig-r833xw2hnqyqen7dvdn2ljhw2835pll1jyysdbf98o.jpg');">
-                    <span class="project-tag">Automotive</span>
-                </div>
-                <h3>Nissan — Decherd Powertrain Plant</h3>
-                <p>Critical-process electrical and controls work supporting Nissan's North American engine manufacturing operations.</p>
-            </article>
+        <div class="portfolio-head">
+            <div>
+                <div class="section-eyebrow">Recent work</div>
+                <h2 class="section-title">Brands that count on Southern Electric.</h2>
+            </div>
+            <p class="portfolio-head-lead">
+                Electrical installation and Honeywell building automation for distribution
+                centers, plants, and retail across the Mid-South. Hover a project to reveal
+                the client — tap to see photos and details.
+            </p>
         </div>
 
-        <a href="#contact" class="projects-cta">See more projects →</a>
+        <div class="pf-tabs" id="pfTabs" role="tablist" aria-label="Filter projects by category"></div>
+
+        <div class="pf-grid" id="pfGrid"></div>
+
+        <!-- Full project index — simple list of every job by year (js/projects.js) -->
+        <div class="sec-list-head">
+            <div class="section-eyebrow">The full list</div>
+            <h3 class="sec-list-title">Every project, by year.</h3>
+            <p class="sec-list-lead"><span id="secProjectCount">0</span>+ awarded projects across the Mid-South &mdash; and counting.</p>
+        </div>
+        <div class="sec-list" id="secProjectList"></div>
+
+        <a href="#contact" class="projects-cta">Start a project &rarr;</a>
     </div>
 </section>
+
+<!-- Project lightbox -->
+<div class="pf-lightbox" id="pfLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Project detail">
+    <div class="pf-lb-backdrop"></div>
+    <div class="pf-lb-panel">
+        <button class="pf-lb-close" type="button" aria-label="Close">&times;</button>
+        <div class="pf-lb-media">
+            <img class="pf-lb-img" src="" alt="">
+        </div>
+        <div class="pf-lb-info">
+            <div class="pf-lb-cat"></div>
+            <h3 class="pf-lb-title"></h3>
+            <div class="pf-lb-client"></div>
+            <p class="pf-lb-desc"></p>
+            <div class="pf-lb-thumbs"></div>
+        </div>
+    </div>
+</div>
 
 <!-- ───── ABOUT ───── -->
 <section id="about" class="about">
@@ -658,6 +693,8 @@
     </div>
 </footer>
 
+<script src="js/projects.js"></script>
+<script src="js/sdg-creations.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
