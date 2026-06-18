@@ -74,6 +74,17 @@ window.PROJECTS = [
         description: 'Complete electrical install for a full-scale distribution center: switchgear, feeders, branch wiring, and material-handling power.',
     },
     {
+        title: 'Dollar Tree — Ocala Distribution Center',
+        category: 'Electrical',
+        client: 'Dollar Tree',
+        clientLogo: 'assets/images/logos/clients/dollar-tree.svg',
+        poster: 'assets/images/projects/sec/dollar-tree-ocala-1.jpg',
+        gallery: [
+            'assets/images/projects/sec/dollar-tree-ocala-1.jpg',
+        ],
+        description: 'Electrical and systems work for the combined Dollar Tree and Family Dollar distribution center in Ocala, Florida — one of the region’s largest retail distribution hubs.',
+    },
+    {
         title: 'Nissan — Decherd Powertrain Plant',
         category: 'Electrical',
         client: 'Nissan',
@@ -92,6 +103,7 @@ window.PROJECTS = [
         title: 'ERMCO Transformer Manufacturing',
         category: 'Industrial',
         client: 'ERMCO',
+        clientLogo: 'assets/images/logos/clients/ermco.gif',
         poster: 'assets/images/projects/industrial/wide-ermco-1-e1753290005447.png',
         description: "Long-term industrial electrical partner: production-line power, control upgrades, the Titan office building (mechanical & electrical), and ongoing service for one of the country's largest transformer builders.",
     },
@@ -101,13 +113,6 @@ window.PROJECTS = [
         client: 'Amazon',
         clientLogo: 'assets/images/logos/clients/amazon.svg',
         description: 'Receptacle and power work supporting an Amazon facility — installed to spec on a tight operational schedule.',
-    },
-    {
-        title: 'Hexpol Compounding',
-        category: 'Industrial',
-        client: 'Hexpol',
-        poster: 'assets/images/projects/industrial/wide-hexpol-1-e1753291319891.png',
-        description: 'Process electrical, motor controls, and plant-wide automation integration for a polymer compounding facility.',
     },
 ];
 
