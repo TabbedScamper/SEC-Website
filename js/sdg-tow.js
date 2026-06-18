@@ -205,8 +205,14 @@
         }
         requestAnimationFrame(frame);
 
-        // Safety net: make sure the studio opens even if a frame loop stalls.
-        window.setTimeout(() => { if (!towed) { towed = true; openStudio(); window.SDGTruck && window.SDGTruck.driveOff(); } }, SHOOT + SHRINK + 260);
-        window.setTimeout(() => { if (document.body.contains(canvas)) cleanup(); }, SHOOT + SHRINK + PULL + 600);
+        // Safety net: make sure the studio ends up open even if the frame loop
+        // stalls (snap it fully in and release the truck).
+        window.setTimeout(() => {
+            if (towed) return;
+            towed = true;
+            openStudio(); finishStudio();
+            window.SDGTruck && window.SDGTruck.endTow();
+        }, SHOOT + SHRINK + PULL + 200);
+        window.setTimeout(() => { if (document.body.contains(canvas)) cleanup(); }, SHOOT + SHRINK + PULL + 700);
     }
 })();
