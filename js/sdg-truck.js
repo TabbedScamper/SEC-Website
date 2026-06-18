@@ -120,4 +120,28 @@
             run();
         }
     }
+
+    // ---- public hook for the tow sequence (js/sdg-tow.js) ----
+    const reset = () => {
+        stopSmoke();
+        fx.classList.remove('is-driving', 'is-leaving');
+        arrived = false;
+        truck.removeAttribute('src');   // hidden; a later hover reloads + drives it in fresh
+    };
+    window.SDGTruck = {
+        // Drive the parked truck off to the left (the studio is towed in as it
+        // leaves). Returns true if it actually drove, false if nothing was parked.
+        driveOff() {
+            if (!arrived && !fx.classList.contains('is-driving')) { reset(); return false; }
+            stopSmoke();
+            setAnim();                  // wheels spin as it pulls away
+            fx.classList.add('is-leaving');
+            const onEnd = () => {
+                truck.removeEventListener('animationend', onEnd);
+                reset();                // fresh state so a later hover re-drives it in
+            };
+            truck.addEventListener('animationend', onEnd);
+            return true;
+        },
+    };
 })();
