@@ -136,12 +136,16 @@
             stopSmoke();
             setAnim();                                        // wheels spin as it pulls
             fx.classList.remove('is-driving', 'is-leaving');  // release CSS control of transform
+            // pin opacity + transform inline — without is-driving the base rule's
+            // opacity:0 (entrance state) would otherwise make the truck vanish.
+            truck.style.opacity = '1';
             truck.style.transform = 'translateX(-78%) translateX(0) rotate(0deg)';  // hold parked
             return truck;
         },
-        // Done towing: clear the inline transform and reset so a later hover
+        // Done towing: clear the inline styles and reset so a later hover
         // re-drives the truck in fresh.
         endTow() {
+            truck.style.opacity = '';
             truck.style.transform = '';
             reset();
         },

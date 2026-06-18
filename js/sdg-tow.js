@@ -95,14 +95,12 @@
         const pts = [];
         for (let i = 0; i < N; i++) pts.push({ x: A.x, y: A.y, px: A.x, py: A.y });
 
-        const SHOOT = 520, SHRINK = 360, PULL = 1500;   // SHRINK > shake so they don't overlap
+        const SHOOT = 520, PULL = 1700;
+        const TAKEUP_T = 0.22;                          // first chunk of the pull = take up slack
+        const D1 = Math.min(130, span * 0.16);          // forward nudge that pulls the rope taut
         const ease = k => 1 - Math.pow(1 - k, 3);
+        const easeOut = k => 1 - (1 - k) * (1 - k);     // decelerate (truck slows as rope goes taut)
         const lerp = (a, b, k) => a + (b - a) * k;
-
-        // Slow to start, then accelerating off-screen to the left (ease-in).
-        // Both the studio and the truck are driven by this single value, so they
-        // move at the SAME rate and the gap (rope length) stays constant.
-        const pullEase = (k) => Math.pow(Math.max(0, Math.min(1, k)), 2.4);
 
         let anchored = false, head = T;
         const headDuring = (k) => {            // high arc up-and-over A -> T while shooting
@@ -152,7 +150,7 @@
         }
 
         const t0 = performance.now();
-        let phase = 'shoot', shrinkT0 = 0, pullT0 = 0, towed = false, towTruck = null;
+        let phase = 'shoot', pullT0 = 0, towed = false, towTruck = null;
 
         function shake() {
             document.body.classList.add('page-shake');
@@ -171,13 +169,7 @@
             if (phase === 'shoot') {
                 head = headDuring(t / SHOOT);
                 integrate(); constrain(); draw(1);
-                if (t >= SHOOT) { anchored = true; head = T; phase = 'shrink'; shrinkT0 = now; shake(); }
-            } else if (phase === 'shrink') {
-                const k = Math.min(1, (now - shrinkT0) / SHRINK);
-                seg = lerp(slackSeg, tautSeg, k);     // rope tightens / bundle shrinks
-                head = T;
-                integrate(); constrain(); draw(1);
-                if (k >= 1) { phase = 'pull'; pullT0 = now; }
+                if (t >= SHOOT) { anchored = true; head = T; phase = 'pull'; pullT0 = now; shake(); }
             } else if (phase === 'pull') {
                 const k = Math.min(1, (now - pullT0) / PULL);
                 if (!towed) {                          // kick the haul on the first pull frame
@@ -185,16 +177,42 @@
                     openStudio();
                     towTruck = window.SDGTruck ? window.SDGTruck.beginTow() : null;
                 }
-                const pp = pullEase(k);                // shared progress -> equal rates, constant gap
-                // Studio slides in from the right; truck + rope drive off-screen
-                // left by the same amount (no fade), carrying it in on a tight rope.
-                overlay.style.transform = `translateX(${(1 - pp) * 100}%)`;
+
+                let truckOff, studioFrac, straight;
+                if (k < TAKEUP_T) {
+                    // Truck drives forward (left), decelerating, until the slack
+                    // is gone and the rope snaps taut. Studio stays off-screen.
+                    const tu = k / TAKEUP_T;
+                    truckOff = easeOut(tu) * D1;
+                    studioFrac = 1;
+                    straight = false;
+                    seg = lerp(slackSeg, tautSeg, tu); // rope visibly tightens
+                } else {
+                    // Taut now: slow to start under the studio's weight, then
+                    // accelerate, hauling it in to cover the screen. Truck and
+                    // studio move the same amount -> constant gap / tight rope.
+                    const h = (k - TAKEUP_T) / (1 - TAKEUP_T);
+                    const hp = Math.pow(h, 1.9);
+                    truckOff = D1 + hp * W;
+                    studioFrac = 1 - hp;
+                    straight = true;
+                }
+
+                overlay.style.transform = `translateX(${studioFrac * 100}%)`;
                 if (towTruck) towTruck.style.transform =
-                    `translateX(-78%) translateX(0) translate(${-pp * W}px, 0) rotate(${-pp * 3}deg)`;
-                head = { x: (1 - pp) * W, y: T.y };     // hooked to the studio's leading edge
-                const d = Math.hypot(head.x - A.x, head.y - A.y);
-                seg = (d / (N - 1)) * 0.97;             // just under distance -> tight/straight
-                integrate(); constrain(); draw(1);      // no fade
+                    `translateX(-78%) translateX(0) translate(${-truckOff}px, 0) rotate(${-(truckOff / W) * 4}deg)`;
+                head = { x: studioFrac * W, y: T.y };
+
+                if (straight) {                        // lay the rope dead-straight = tight
+                    for (let i = 0; i < N; i++) {
+                        const f = i / (N - 1);
+                        pts[i].x = lerp(A.x, head.x, f); pts[i].y = lerp(A.y, head.y, f);
+                        pts[i].px = pts[i].x; pts[i].py = pts[i].y;
+                    }
+                    draw(1);
+                } else {
+                    integrate(); constrain(); draw(1);
+                }
                 if (k >= 1) {
                     finishStudio();
                     window.SDGTruck && window.SDGTruck.endTow();
@@ -212,7 +230,7 @@
             towed = true;
             openStudio(); finishStudio();
             window.SDGTruck && window.SDGTruck.endTow();
-        }, SHOOT + SHRINK + PULL + 200);
-        window.setTimeout(() => { if (document.body.contains(canvas)) cleanup(); }, SHOOT + SHRINK + PULL + 700);
+        }, SHOOT + PULL + 200);
+        window.setTimeout(() => { if (document.body.contains(canvas)) cleanup(); }, SHOOT + PULL + 700);
     }
 })();
