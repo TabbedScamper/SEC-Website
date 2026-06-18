@@ -139,7 +139,7 @@ window.SDG_CREATIONS = [
                 ],
                 link: {
                     label: 'View in GTA V',
-                    url: 'https://www.gta5-mods.com/vehicles/wip-jeep-kaiser-m715-trevors-real-life-truck',
+                    url: 'https://www.gta5-mods.com/vehicles/jeep-kaiser-m715-trevors-real-life-truck-legacy-enhanced',
                 },
                 quote: {
                     text: 'This is awesome. Much better than the Bodhi.',
