@@ -131,6 +131,10 @@
     filter: saturate(1.05) brightness(1);
 }
 .pf-thumb.is-animated { object-fit: contain; filter: none; background: #0c0c11; }
+/* Illustrations / digital art: show the whole piece, no crop, no dimming */
+.pf-thumb--contain { object-fit: contain; filter: none; background: #0c0c11; padding: 6%; }
+.pf-card:hover .pf-thumb--contain,
+.pf-card:focus-visible .pf-thumb--contain { filter: none; }
 
 .pf-shade {
     position: absolute; inset: 0;

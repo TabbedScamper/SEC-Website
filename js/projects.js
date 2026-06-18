@@ -139,7 +139,7 @@ window.PF = (() => {
             : '';
 
         const mediaBlock = hasPhoto ? `
-                <img class="pf-thumb" src="${esc(p.poster)}" alt="${esc(p.title)}" loading="lazy"
+                <img class="pf-thumb${p.fit === 'contain' ? ' pf-thumb--contain' : ''}" src="${esc(p.poster)}" alt="${esc(p.title)}" loading="lazy"
                      ${p.hover ? `data-hover="${esc(p.hover)}"` : ''}>
                 <span class="pf-shade" aria-hidden="true"></span>
                 ${p.year ? `<span class="pf-year">${esc(p.year)}</span>` : ''}

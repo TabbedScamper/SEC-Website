@@ -123,6 +123,36 @@ window.SDG_CREATIONS = [
         ],
     },
     {
+        capability: 'Digital Art',
+        icon: 'art',
+        blurb: 'Vector vehicle illustration and brand-livery design.',
+        items: [
+            {
+                title: 'Southern Electric Super Baja',
+                category: 'Vector Illustration · Livery',
+                client: 'Southern Electric & Controls',
+                clientLogo: 'assets/images/logos/sec-logo.png',
+                poster: 'assets/images/projects/sdg/art-shelby.png',
+                hover:  'assets/images/projects/sdg/art-shelby-motion.gif',
+                fit: 'contain',
+                skills: ['Vector Illustration', 'Automotive Art', 'Brand Livery', 'Color & Shading'],
+                gallery: ['assets/images/projects/sdg/art-shelby.png'],
+                featured: true,
+                description: 'Vector illustration of the Shelby Super Baja F-250 in the Southern Electric design-build livery — the same truck modeled in 3D, reimagined as brand artwork. Hover the card to see it in motion.',
+            },
+            {
+                title: 'Barry’s Truck — Vintage Dodge',
+                category: 'Vector Illustration',
+                client: 'Commission',
+                poster: 'assets/images/projects/sdg/art-barry.png',
+                fit: 'contain',
+                skills: ['Vector Illustration', 'Automotive Art', 'Color & Shading'],
+                gallery: ['assets/images/projects/sdg/art-barry.png'],
+                description: 'A hand-built vector illustration of a classic late-’60s Dodge D-Series pickup — every panel, reflection, and trim piece drawn by hand.',
+            },
+        ],
+    },
+    {
         capability: 'Web Development',
         icon: 'web',
         blurb: 'Fast, modern, framework-free custom websites.',
@@ -168,6 +198,7 @@ window.SDG_CREATIONS = [
         game: '<rect x="2" y="7" width="20" height="10" rx="5" fill="none"/><path d="M6.5 10.5v3M5 12h3" fill="none"/><circle cx="16" cy="11.4" r="0.9" fill="currentColor" stroke="none"/><circle cx="18" cy="13.4" r="0.9" fill="currentColor" stroke="none"/>',
         camera:'<path d="M4 8h3l1.5-2h7L17 8h3v11H4z" fill="none"/><circle cx="12" cy="13" r="3.2" fill="none"/>',
         pen:  '<path d="M4 20l4-1L19 8a2 2 0 0 0 0-3l-.9-.9a2 2 0 0 0-3 0L4 15z" fill="none"/>',
+        art:  '<path d="M12 3a9 9 0 1 0 0 18c.85 0 1.4-.7 1.4-1.5 0-.4-.18-.73-.4-1-.2-.27-.4-.6-.4-1 0-.83.67-1.5 1.5-1.5H15a4 4 0 0 0 4-4c0-3.9-3.13-7-7-7Z" fill="none"/><circle cx="7.5" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="10" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="11" r="1" fill="currentColor" stroke="none"/>',
     };
 
     let activeIdx = -1;
