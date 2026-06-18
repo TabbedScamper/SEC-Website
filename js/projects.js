@@ -30,6 +30,10 @@ window.PROJECTS = [
         category: 'Electrical',
         client: 'PepsiCo',
         clientLogo: 'assets/images/logos/clients/pepsi.svg',
+        poster: 'assets/images/projects/sec/pepsico-warehouse-1.jpg',
+        gallery: [
+            'assets/images/projects/sec/pepsico-warehouse-1.jpg',
+        ],
         description: 'A long-running PepsiCo partner across multiple plants — lighting and high-bay retrofits, air-compressor power, EV chargers, exhaust fans, pallet-inverter and rack lighting, and data-rack receptacles.',
     },
     {
