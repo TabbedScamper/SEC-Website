@@ -97,6 +97,10 @@ window.PROJECTS = [
         category: 'Electrical',
         client: 'Nike',
         clientLogo: 'assets/images/logos/clients/nike.svg',
+        poster: 'assets/images/projects/sec/nike-adapt-1.jpg',
+        gallery: [
+            'assets/images/projects/sec/nike-adapt-1.jpg',
+        ],
         description: 'Electrical for a Nike Adapt restroom expansion — branch wiring, lighting, and devices on a fast-tracked fit-out.',
     },
     {
