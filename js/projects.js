@@ -120,6 +120,56 @@ window.PF = (() => {
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, c => (
         { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+    /* ---------- Live mod stats (downloads + likes from GTA5-Mods) ----------
+       Static site + no CORS on gta5-mods, so we read each mod page through a
+       CORS proxy on load and sum across releases. The card already shows the
+       last-known numbers; this just refreshes them and flips on a live pulse. */
+    async function liveStats(card, urls) {
+        // Public CORS proxies are individually flaky, so try a few in order
+        // until one returns parseable mod HTML. If all fail the card simply
+        // keeps the baked-in fallback numbers (and no live pulse).
+        const PROXIES = [
+            (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+            (u) => `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(u)}`,
+            (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
+        ];
+        const fetchOne = async (url) => {
+            for (const wrap of PROXIES) {
+                const ctrl = new AbortController();
+                const timer = setTimeout(() => ctrl.abort(), 9000);
+                try {
+                    const r = await fetch(wrap(url), { signal: ctrl.signal });
+                    if (!r.ok) continue;
+                    const html = await r.text();
+                    const d = html.match(/num-downloads">([\d,]+)\s+downloads/i);
+                    if (!d) continue; // proxy returned an error page / blocked
+                    const l = html.match(/num-likes">([\d,]+)/i);
+                    return {
+                        downloads: parseInt(d[1].replace(/,/g, ''), 10),
+                        likes: l ? parseInt(l[1].replace(/,/g, ''), 10) : null,
+                    };
+                } catch (e) {
+                    /* try the next proxy */
+                } finally {
+                    clearTimeout(timer);
+                }
+            }
+            return null;
+        };
+        const results = await Promise.all(urls.map(fetchOne));
+        let downloads = 0, likes = 0, ok = false;
+        results.forEach(r => {
+            if (r && r.downloads != null) { downloads += r.downloads; ok = true; }
+            if (r && r.likes != null)     { likes += r.likes; }
+        });
+        if (!ok) return;
+        const dlEl = card.querySelector('.pf-stat-dl');
+        const likeEl = card.querySelector('.pf-stat-likes');
+        if (dlEl) dlEl.textContent = downloads.toLocaleString();
+        if (likeEl && likes) likeEl.textContent = likes.toLocaleString();
+        card.querySelector('.pf-stats')?.classList.add('is-live');
+    }
+
     /* ---------- Card builder (used by both grids) ---------- */
     function buildCard(p, onOpen, opts = {}) {
         const hasPhoto = !!p.poster;
@@ -149,6 +199,10 @@ window.PF = (() => {
                 </span>
                 ${p.youtube ? '<span class="pf-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>' : ''}
                 <span class="pf-view">${p.youtube ? 'Watch' : 'View project'} <i>&rarr;</i></span>
+                ${p.stats ? `<div class="pf-stats" aria-label="downloads and likes">
+                    <span class="pf-stat" title="Downloads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><b class="pf-stat-dl">${Number(p.stats.downloads || 0).toLocaleString()}</b></span>
+                    <span class="pf-stat" title="Likes"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.5C.9 9.6 2.3 6 5.6 6c2 0 3.3 1.2 4.4 2.6C11.1 7.2 12.4 6 14.4 6c3.3 0 4.7 3.6 2.9 6.5C14.7 16.7 12 21 12 21Z"/></svg><b class="pf-stat-likes">${Number(p.stats.likes || 0).toLocaleString()}</b></span>
+                </div>` : ''}
             ` : `
                 <div class="pf-thumb pf-thumb--logo">
                     ${p.clientLogo
@@ -192,6 +246,11 @@ window.PF = (() => {
         card.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
         });
+
+        // Refresh download/like counts live once the card is in the DOM.
+        if (p.stats && Array.isArray(p.stats.urls) && p.stats.urls.length) {
+            liveStats(card, p.stats.urls);
+        }
         return card;
     }
 

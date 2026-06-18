@@ -116,12 +116,19 @@ window.SDG_CREATIONS = [
                     label: 'View in GTA V',
                     url: 'https://www.gta5-mods.com/vehicles/2023-ford-shelby-f-250-super-baja-75th-anniversary-edition-replace-enhanced',
                 },
+                // Live download + like counts (refreshed from GTA5-Mods on load,
+                // these are the last-known fallback values).
+                stats: {
+                    downloads: 18353,
+                    likes: 104,
+                    urls: ['https://www.gta5-mods.com/vehicles/2023-ford-shelby-f-250-super-baja-75th-anniversary-edition-replace-enhanced'],
+                },
                 featured: true,
                 quote: {
                     text: 'Awesome mod! Great work and can’t wait to see what you do in the future.',
                     author: 'DrafterTechie · GTA5-Mods',
                 },
-                description: 'Full ground-up 3D model of the Shelby Super Baja F-250 — body, drivetrain, suspension, and a custom drift-rig animation, modeled, rigged and rendered in 3ds Max, automated with Python/MAXScript, and integrated into GTA V with custom C# tooling. 18,000+ downloads. Drag the slider to go from wireframe to final render.',
+                description: 'Full ground-up 3D model of the Shelby Super Baja F-250 — body, drivetrain, suspension, and a custom drift-rig animation, modeled, rigged and rendered in 3ds Max, automated with Python/MAXScript, and integrated into GTA V with custom C# tooling. Drag the slider to go from wireframe to final render.',
             },
             {
                 title: 'Jeep Kaiser M715 — Trevor’s Truck',
@@ -141,11 +148,20 @@ window.SDG_CREATIONS = [
                     label: 'View in GTA V',
                     url: 'https://www.gta5-mods.com/vehicles/jeep-kaiser-m715-trevors-real-life-truck-legacy-enhanced',
                 },
+                // Combined live counts across both releases (legacy/enhanced + WIP).
+                stats: {
+                    downloads: 12640,
+                    likes: 179,
+                    urls: [
+                        'https://www.gta5-mods.com/vehicles/jeep-kaiser-m715-trevors-real-life-truck-legacy-enhanced',
+                        'https://www.gta5-mods.com/vehicles/wip-jeep-kaiser-m715-trevors-real-life-truck',
+                    ],
+                },
                 quote: {
                     text: 'This is awesome. Much better than the Bodhi.',
                     author: 'Bet Nimrod · GTA5-Mods',
                 },
-                description: 'A real-world build of Trevor’s in-game truck — a game-ready Jeep Kaiser M715 with lowered tuner and extreme off-road variants and full customization. Modeled and detailed in 3ds Max and ZBrush, textured in Substance Painter, and packaged for GTA V. 12,000+ downloads.',
+                description: 'A real-world build of Trevor’s in-game truck — a game-ready Jeep Kaiser M715 with lowered tuner and extreme off-road variants and full customization. Modeled and detailed in 3ds Max and ZBrush, textured in Substance Painter, and packaged for GTA V.',
             },
             {
                 title: 'Battlefield 6 — Undead Ground Zero',

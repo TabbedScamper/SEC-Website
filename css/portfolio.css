@@ -238,6 +238,49 @@
 .pf-card:focus-visible .pf-view { opacity: 1; transform: translateY(0); }
 .pf-card:hover .pf-view i { transform: translateX(5px); }
 
+/* ---------- Live download / like stats overlay (GTA5-Mods) ---------- */
+.pf-stats {
+    position: absolute;
+    right: 0.85rem; bottom: 0.85rem; z-index: 4;
+    display: flex; align-items: center; gap: 0.4rem;
+    pointer-events: none;
+}
+.pf-stat {
+    display: inline-flex; align-items: center; gap: 0.34rem;
+    padding: 0.32rem 0.62rem;
+    border-radius: 999px;
+    background: rgba(10, 10, 13, 0.72);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #fff;
+    line-height: 1;
+}
+.pf-stat svg { width: 13px; height: 13px; display: block; }
+.pf-stat:first-child svg { color: var(--sec-red-soft); }
+.pf-stat:last-child  svg { color: #ff5b6b; }
+.pf-stat b { font-weight: 600; }
+/* tabular figures so the digits don't jump when the live count updates */
+.pf-stat-dl, .pf-stat-likes { font-variant-numeric: tabular-nums; }
+
+/* Green "live" pulse appears once the counts refresh from GTA5-Mods. */
+.pf-stats.is-live::before {
+    content: '';
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #36d399;
+    box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.55);
+    animation: pfLivePulse 1.9s ease-out infinite;
+}
+@keyframes pfLivePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0.5); }
+    70%  { box-shadow: 0 0 0 7px rgba(54, 211, 153, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(54, 211, 153, 0); }
+}
+
 /* ---------- Card body ---------- */
 .pf-card-body { padding: 1.15rem 1.25rem 1.35rem; }
 .pf-card-cat {
