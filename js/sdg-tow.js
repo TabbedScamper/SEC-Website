@@ -65,10 +65,29 @@
         canvas.width = W * DPR; canvas.height = H * DPR;
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
-        // anchor behind the truck's tailgate (button's left), target high on the right
-        const A = { x: rect.left + rect.width * 0.05, y: rect.top + rect.height * 0.45 };
-        const T = { x: W * 0.99,                       y: Math.max(50, rect.top - 90) };
-        const tailX = rect.left + rect.width * 0.20;   // tailgate edge: rope is hidden left of this
+        // The rope is tied behind the truck and arcs up to the right. The anchor
+        // and the tailgate-occlusion edge are read from the truck's live position
+        // each frame, so the start stays attached as the truck moves.
+        const truckEl = document.querySelector('.sdg-truck');
+        const truckBox = () => {
+            if (!truckEl) return null;
+            const r = truckEl.getBoundingClientRect();
+            return (r.width > 10 && r.height > 10) ? r : null;
+        };
+        const anchorAt = () => {
+            const r = truckBox();
+            return r ? { x: r.left + r.width * 0.30, y: r.top + r.height * 0.42 }
+                     : { x: rect.left + rect.width * 0.05, y: rect.top + rect.height * 0.45 };
+        };
+        const tailEdge = () => {
+            const r = truckBox();
+            return r ? r.left + r.width * 0.78 : rect.left + rect.width * 0.20;
+        };
+
+        const a0 = anchorAt();
+        const A = { x: a0.x, y: a0.y };
+        const T = { x: W * 0.99, y: Math.max(50, rect.top - 90) };
+        let tailX = tailEdge();   // rope is hidden left of this (behind the truck)
 
         const N = 46;
         const span = Math.hypot(T.x - A.x, T.y - A.y);
@@ -131,7 +150,7 @@
         }
 
         const t0 = performance.now();
-        let phase = 'shoot', shrinkT0 = 0, pullT0 = 0, Ax0 = A.x, towed = false;
+        let phase = 'shoot', shrinkT0 = 0, pullT0 = 0, towed = false;
 
         function shake() {
             document.body.classList.add('page-shake');
@@ -144,6 +163,9 @@
 
         function frame(now) {
             const t = now - t0;
+            const a = anchorAt(); A.x = a.x; A.y = a.y;   // rope start follows the truck
+            tailX = tailEdge();
+
             if (phase === 'shoot') {
                 head = headDuring(t / SHOOT);
                 integrate(); constrain(); draw(1);
@@ -161,10 +183,14 @@
                     openStudio();
                     window.SDGTruck && window.SDGTruck.driveOff();
                 }
-                A.x = Ax0 - k * (W * 0.55);            // truck hauls the rope off-screen left
-                head = T;
-                integrate(); constrain(); draw(1 - k); // fade as the studio covers it
-                if (k >= 1) { cleanup(); return; }
+                // The hook stays connected to the studio's leading (left) edge as
+                // it's hauled in, and the rope is held taut between truck and edge.
+                const sr = overlay.getBoundingClientRect();
+                head = { x: sr.left, y: T.y };
+                const d = Math.hypot(head.x - A.x, head.y - A.y);
+                seg = (d / (N - 1)) * 0.97;            // slightly under distance -> tight/straight
+                integrate(); constrain(); draw(1);
+                if (k >= 1 || sr.left <= A.x + 4) { cleanup(); return; }
             }
             requestAnimationFrame(frame);
         }

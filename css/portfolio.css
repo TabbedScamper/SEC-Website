@@ -747,8 +747,13 @@ body.sdg-studio-open { overflow: hidden; }
     pointer-events: none;
     z-index: 1450;
 }
-/* Camera shake when the rope's hook connects. */
-body.page-shake { animation: sdgPageShake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both; }
+/* Camera shake when the rope's hook connects. Shake the body's CHILDREN —
+   transforming <body> itself would make every position:fixed element (the
+   header, the rope canvas) re-anchor to the scrolled-out document origin and
+   vanish. The studio overlay is excluded (it's about to slide in). */
+body.page-shake > *:not(#sdgStudioOverlay) {
+    animation: sdgPageShake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
 @keyframes sdgPageShake {
     10%, 90% { transform: translate(-2px, 1px); }
     20%, 80% { transform: translate(3px, -2px); }
