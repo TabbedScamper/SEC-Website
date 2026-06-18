@@ -145,7 +145,7 @@ window.SDG_CREATIONS = [
                     text: 'This is awesome. Much better than the Bodhi.',
                     author: 'Bet Nimrod · GTA5-Mods',
                 },
-                description: 'A real-world build of Trevor’s in-game truck — a game-ready Jeep Kaiser M715 with lowered tuner and extreme off-road variants and full customization. Modeled and detailed in 3ds Max and ZBrush, textured in Substance Painter, and packaged for GTA V. 8,500+ downloads.',
+                description: 'A real-world build of Trevor’s in-game truck — a game-ready Jeep Kaiser M715 with lowered tuner and extreme off-road variants and full customization. Modeled and detailed in 3ds Max and ZBrush, textured in Substance Painter, and packaged for GTA V. 12,000+ downloads.',
             },
             {
                 title: 'Battlefield 6 — Undead Ground Zero',
