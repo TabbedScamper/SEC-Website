@@ -134,6 +134,7 @@
         beginTow() {
             if (!arrived && !fx.classList.contains('is-driving')) return null;
             stopSmoke();
+            fx.querySelectorAll('.sdg-puff').forEach(p => p.remove());   // no leftover smoke during the tow
             setAnim();                                        // wheels spin as it pulls
             fx.classList.remove('is-driving', 'is-leaving');  // release CSS control of transform
             // pin opacity + transform inline — without is-driving the base rule's

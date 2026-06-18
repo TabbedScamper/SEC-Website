@@ -71,20 +71,17 @@
             const r = truckEl.getBoundingClientRect();
             return (r.width > 10 && r.height > 10) ? r : null;
         };
+        // Tie the rope off at the truck's tailgate (its rear / right side); the
+        // truck body in the layer above hides this start.
         const anchorAt = () => {
             const r = truckBox();
-            return r ? { x: r.left + r.width * 0.30, y: r.top + r.height * 0.42 }
-                     : { x: rect.left + rect.width * 0.05, y: rect.top + rect.height * 0.45 };
-        };
-        const tailEdge = () => {
-            const r = truckBox();
-            return r ? r.left + r.width * 0.78 : rect.left + rect.width * 0.20;
+            return r ? { x: r.left + r.width * 0.82, y: r.top + r.height * 0.55 }
+                     : { x: rect.left + rect.width * 0.20, y: rect.top + rect.height * 0.55 };
         };
 
         const a0 = anchorAt();
         const A = { x: a0.x, y: a0.y };
         const T = { x: W * 0.99, y: Math.max(50, rect.top - 90) };
-        let tailX = tailEdge();   // rope is hidden left of this (behind the truck)
 
         const N = 46;
         const span = Math.hypot(T.x - A.x, T.y - A.y);
@@ -155,7 +152,7 @@
         let towLayer = null, truckHome = null;
         if (towTruck) {
             const tr = towTruck.getBoundingClientRect();
-            truckHome = { parent: towTruck.parentNode, next: towTruck.nextSibling };
+            truckHome = towTruck.parentNode;        // the .sdg-truck-fx on the button
             towLayer = document.createElement('div');
             towLayer.className = 'sdg-truck-layer';
             document.body.appendChild(towLayer);
@@ -179,7 +176,7 @@
         function restore() {                 // put the truck back on the button
             if (towTruck && truckHome) {
                 ['position', 'left', 'top', 'bottom', 'width', 'height'].forEach(p => { towTruck.style[p] = ''; });
-                truckHome.parent.insertBefore(towTruck, truckHome.next);
+                truckHome.appendChild(towTruck);
                 truckHome = null;
             }
             if (towLayer) { towLayer.remove(); towLayer = null; }
