@@ -528,24 +528,49 @@ window.PF = (() => {
         let shown = 0;
         cards.forEach(card => {
             const match = cat === 'All' || card.dataset.category === cat;
+            card.classList.remove('is-in');
             if (match) {
                 card.classList.remove('is-hidden');
-                card.style.setProperty('--stagger', `${shown * 0.06}s`);
-                card.classList.remove('is-in');
-                void card.offsetWidth;
-                card.classList.add('is-in');
+                // Re-reveal on scroll so the logos pop up again as you reach
+                // them; in-view cards re-pop immediately when the observer fires.
+                if (revealObserver) {
+                    revealObserver.observe(card);
+                } else {
+                    card.style.setProperty('--stagger', `${shown * 0.06}s`);
+                    card.classList.add('is-in');
+                }
                 shown++;
             } else {
                 card.classList.add('is-hidden');
-                card.classList.remove('is-in');
+                if (revealObserver) revealObserver.unobserve(card);
             }
         });
     }
 
-    cards.forEach((c, i) => {
-        c.style.setProperty('--stagger', `${i * 0.06}s`);
-        c.classList.add('is-in');
-    });
+    // Reveal each card as it scrolls into view so the company logos "pop up"
+    // — especially on mobile, where the 1-column stack puts most cards below
+    // the fold. Cards entering together get a small cascading stagger.
+    const revealObserver = ('IntersectionObserver' in window)
+        ? new IntersectionObserver((entries, obs) => {
+            let i = 0;
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.style.setProperty('--stagger', `${i * 0.08}s`);
+                entry.target.classList.add('is-in');
+                obs.unobserve(entry.target);
+                i++;
+            });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 })
+        : null;
+
+    if (revealObserver) {
+        cards.forEach(c => revealObserver.observe(c));
+    } else {
+        cards.forEach((c, i) => {
+            c.style.setProperty('--stagger', `${i * 0.06}s`);
+            c.classList.add('is-in');
+        });
+    }
     requestAnimationFrame(() => moveIndicator(tabButtons[0]));
     window.addEventListener('resize', () => {
         moveIndicator(tabButtons.find(b => b.classList.contains('is-active')));
