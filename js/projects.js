@@ -46,7 +46,7 @@ window.PROJECTS = [
     },
     {
         title: 'Milwaukee Tool — Geek+ Automation',
-        category: 'Industrial',
+        category: 'Electrical',
         client: 'Milwaukee Tool',
         clientLogo: 'assets/images/logos/clients/milwaukee.svg',
         poster: 'assets/images/projects/awarded/milwaukee-geek-1.jpg',
@@ -101,7 +101,7 @@ window.PROJECTS = [
     },
     {
         title: 'ERMCO Transformer Manufacturing',
-        category: 'Industrial',
+        category: 'Electrical',
         client: 'ERMCO',
         clientLogo: 'assets/images/logos/clients/ermco.gif',
         poster: 'assets/images/projects/industrial/wide-ermco-1-e1753290005447.png',
