@@ -1,10 +1,22 @@
 /* ============================================================
-   SDG TRUCK DRIVE-IN
-   The Shelby Super Baja drifts in from the right on a cloud of
-   dust and parks on top of the "See What SDG Can Do" button.
-   Plays once when the CTA scrolls into view, and replays on
-   hover / focus of the button. Purely decorative — the truck
-   layer is pointer-events:none so the button stays clickable.
+   SDG TRUCK BURNOUT
+   The Shelby Super Baja is an interactive accent on the
+   "See What SDG Can Do" button.
+
+   Desktop (hover-capable):
+     • hover  -> truck drifts in from the right, parks just left
+       of the button, and pours a continuous grey/white burnout
+       of tire smoke over the button (wheels spin via the WebP).
+     • leave  -> stop making smoke (the live puffs finish and
+       dissipate) and freeze the truck in place (swap to a still
+       frame so the wheels stop).
+
+   Mobile / no-hover:
+     • the truck simply slides in once when the button scrolls
+       into view, gives a quick puff, and freezes.
+
+   Decorative only — the layer is pointer-events:none so the
+   button stays clickable. Honors prefers-reduced-motion.
    ============================================================ */
 (() => {
     'use strict';
@@ -14,53 +26,98 @@
     if (!cta || !btn) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+    const ANIM  = 'assets/images/projects/sdg/truck-drive.webp';
+    const STILL = 'assets/images/projects/sdg/truck-still.webp';
+    const DRIVE_MS = 1400;   // keep in sync with the CSS drive-in duration
+
     const fx = document.createElement('div');
     fx.className = 'sdg-truck-fx';
     fx.setAttribute('aria-hidden', 'true');
-    fx.innerHTML =
-        '<span class="sdg-dust sdg-dust--1"></span>' +
-        '<span class="sdg-dust sdg-dust--2"></span>' +
-        '<span class="sdg-dust sdg-dust--3"></span>' +
-        '<span class="sdg-dust sdg-dust--4"></span>' +
-        '<img class="sdg-truck" alt="" draggable="false">';
+    fx.innerHTML = '<img class="sdg-truck" alt="" draggable="false">';
     btn.appendChild(fx);
-
-    // Load the (1.3 MB) animated truck only when it's first needed.
     const truck = fx.querySelector('.sdg-truck');
-    const ensureLoaded = () => {
-        if (!truck.src) truck.src = 'assets/images/projects/sdg/truck-drive.webp';
+
+    const setAnim  = () => { if (truck.getAttribute('src') !== ANIM)  truck.src = ANIM; };
+    const setStill = () => { if (truck.getAttribute('src') !== STILL) truck.src = STILL; };
+
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    // ---- tire smoke: spawn self-removing puffs across the button ----
+    let smokeTimer = null;
+    const spawnPuff = () => {
+        const p = document.createElement('span');
+        p.className = 'sdg-puff';
+        const size = rand(70, 120);                  // small at birth; grows via --sc
+        p.style.left = rand(2, 16) + '%';            // born at the rear tire (button's left)
+        p.style.bottom = rand(-10, 0) + 'px';        // tire contact patch
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.setProperty('--dx', rand(70, 150) + 'px');   // billow out to the right
+        p.style.setProperty('--sc', rand(1.8, 2.6));         // and grow big
+        p.style.animationDuration = rand(1.1, 1.6) + 's';
+        p.addEventListener('animationend', () => p.remove());
+        fx.appendChild(p);
+    };
+    const startSmoke = () => {
+        if (smokeTimer) return;
+        spawnPuff(); spawnPuff();
+        smokeTimer = window.setInterval(spawnPuff, 110);
+    };
+    const stopSmoke = () => {            // live puffs finish + fade on their own
+        window.clearInterval(smokeTimer);
+        smokeTimer = null;
     };
 
-    let busy = false;
-    const play = () => {
-        if (busy) return;
-        ensureLoaded();
-        busy = true;
-        fx.classList.remove('is-driving');
-        void fx.offsetWidth;          // restart the animation
+    let arrived = false;
+    const driveIn = () => {
+        if (fx.classList.contains('is-driving')) return;
         fx.classList.add('is-driving');
-        // free it up once the drift settles so hover can replay it
-        setTimeout(() => { busy = false; }, 1900);
+        window.setTimeout(() => { arrived = true; }, DRIVE_MS);
     };
 
-    // Drive in the first time the CTA scrolls into view.
-    let played = false;
-    if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries, obs) => {
-            entries.forEach(e => {
-                if (e.isIntersecting && !played) {
-                    played = true;
-                    play();
-                    obs.disconnect();
-                }
-            });
-        }, { threshold: 0.45 });
-        io.observe(cta);
-    } else {
-        play();
-    }
+    const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    // Replay on demand.
-    btn.addEventListener('mouseenter', play);
-    btn.addEventListener('focus', play);
+    if (hoverCapable) {
+        let hovering = false;
+        const enter = () => {
+            hovering = true;
+            setAnim();                  // wheels spin again
+            if (arrived || fx.classList.contains('is-driving')) {
+                if (arrived) startSmoke();           // already parked -> burnout now
+                else window.setTimeout(() => { if (hovering) startSmoke(); }, DRIVE_MS);
+            } else {
+                driveIn();
+                window.setTimeout(() => { if (hovering) startSmoke(); }, DRIVE_MS);
+            }
+        };
+        const leave = () => {
+            hovering = false;
+            stopSmoke();
+            setStill();                 // freeze the truck (stop the wheels)
+        };
+        btn.addEventListener('mouseenter', enter);
+        btn.addEventListener('mouseleave', leave);
+        btn.addEventListener('focus', enter);
+        btn.addEventListener('blur', leave);
+    } else {
+        // No hover: slide in once on scroll-into-view, quick puff, then freeze.
+        let played = false;
+        const run = () => {
+            if (played) return;
+            played = true;
+            setAnim();
+            driveIn();
+            window.setTimeout(startSmoke, DRIVE_MS - 350);
+            window.setTimeout(stopSmoke,  DRIVE_MS + 350);
+            window.setTimeout(setStill,   DRIVE_MS + 250);   // freeze at the stop
+        };
+        if ('IntersectionObserver' in window) {
+            const io = new IntersectionObserver((entries, obs) => {
+                entries.forEach(e => { if (e.isIntersecting) { run(); obs.disconnect(); } });
+            }, { threshold: 0.5 });
+            io.observe(cta);
+        } else {
+            run();
+        }
+    }
 })();

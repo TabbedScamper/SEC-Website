@@ -627,54 +627,60 @@
 .sdg-studio-trigger { position: relative; }
 .sdg-truck-fx {
     position: absolute;
-    left: 0; right: 0;
-    bottom: 100%;           /* rest on the button's top edge */
-    height: 150px;
+    inset: 0;               /* overlays the button; the truck overflows it */
     pointer-events: none;
     z-index: 6;
 }
 .sdg-truck {
     position: absolute;
-    left: 50%; bottom: -8px;
-    width: clamp(180px, 92%, 250px);
-    transform: translateX(-50%) translateX(380%) rotate(10deg);
+    left: 0; bottom: 1px;          /* wheels ~ button bottom, anchored to the left edge */
+    width: clamp(170px, 82%, 240px);
+    transform: translateX(-78%) translateX(380%) rotate(10deg);
     opacity: 0;
     will-change: transform, opacity;
     filter: drop-shadow(0 14px 10px rgba(0, 0, 0, 0.32));
+    z-index: 3;                     /* in front of the smoke */
 }
 .sdg-truck-fx.is-driving .sdg-truck {
-    animation: sdgTruckDrift 1.85s cubic-bezier(0.18, 0.72, 0.28, 1) forwards;
+    animation: sdgTruckDrift 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
+/* Monotonic decelerate into the park — never travels back past the spot,
+   so it reads as braking to a stop rather than reversing. */
 @keyframes sdgTruckDrift {
-    0%   { opacity: 0; transform: translateX(-50%) translateX(380%) rotate(11deg); }
-    14%  { opacity: 1; }
-    66%  { transform: translateX(-50%) translateX(-18%) rotate(-7deg); }  /* drift past, leaning */
-    83%  { transform: translateX(-50%) translateX(6%)  rotate(3deg);  }   /* counter-rotate */
-    100% { opacity: 1; transform: translateX(-50%) translateX(0) rotate(0deg); }  /* parked */
+    0%   { opacity: 0; transform: translateX(-78%) translateX(380%) rotate(9deg); }  /* off-screen right */
+    12%  { opacity: 1; }
+    70%  { transform: translateX(-78%) translateX(26%) rotate(4deg); }   /* still sliding left, leaning */
+    100% { opacity: 1; transform: translateX(-78%) translateX(0) rotate(0deg); }  /* parked left of button */
 }
 
-/* Cartoon dust puffs (each is a cluster of circles via box-shadow) that
-   kick up behind the truck and dissipate. */
-.sdg-dust {
-    position: absolute; bottom: 6px;
-    width: 26px; height: 26px; border-radius: 50%;
-    background: #c8ba9f;
-    opacity: 0; transform: scale(0.3);
-    box-shadow:
-        18px  6px 0 -2px #cabda6,
-       -15px  9px 0 -4px #d0c3ad,
-         3px -11px 0 -5px #d6c9b3,
-        32px  3px 0 -8px #beb097;
+/* Grey/white tire smoke. Each puff is spawned by JS (js/sdg-truck.js) while
+   the button is hovered, so the burnout pours continuously and the cloud
+   keeps building over the button; when hover ends we just stop spawning and
+   the live puffs finish their rise and dissipate on their own. */
+.sdg-puff {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 45% 45%,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(206, 210, 216, 0.90) 32%,
+        rgba(166, 172, 180, 0.55) 60%,
+        rgba(150, 156, 165, 0) 78%);
+    filter: blur(6px);
+    pointer-events: none;
+    z-index: 2;                 /* behind the truck, in front of the button */
+    opacity: 0;
+    transform: translate(-50%, 6px) scale(0.14);
+    animation-name: sdgPuff;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
 }
-.sdg-truck-fx.is-driving .sdg-dust { animation: sdgDust 1.15s ease-out forwards; }
-.sdg-dust--1 { right: 16%; animation-delay: 0.42s; }
-.sdg-dust--2 { right: 30%; animation-delay: 0.58s; }
-.sdg-dust--3 { right: 46%; animation-delay: 0.76s; }
-.sdg-dust--4 { right: 60%; animation-delay: 0.94s; transform: scale(0.25); }
-@keyframes sdgDust {
-    0%   { opacity: 0;    transform: scale(0.3) translateY(0); }
-    28%  { opacity: 0.85; }
-    100% { opacity: 0;    transform: scale(1.55) translateY(-16px); }
+/* Starts small at the rear tire, then billows up and out to the right
+   across the button (each puff drifts by --dx and grows to --sc). */
+@keyframes sdgPuff {
+    0%   { opacity: 0;    transform: translate(-50%, 8px) scale(0.14); }
+    16%  { opacity: 0.95; }
+    60%  { opacity: 0.72; }
+    100% { opacity: 0;    transform: translate(calc(-50% + var(--dx, 90px)), -26px) scale(var(--sc, 2)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
