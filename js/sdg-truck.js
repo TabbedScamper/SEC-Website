@@ -140,7 +140,7 @@
             // pin opacity + transform inline — without is-driving the base rule's
             // opacity:0 (entrance state) would otherwise make the truck vanish.
             truck.style.opacity = '1';
-            truck.style.transform = 'translateX(-78%) translateX(0) rotate(0deg)';  // hold parked
+            truck.style.transform = 'translateX(var(--tpark)) translateX(0) rotate(0deg)';  // hold parked (mobile-aware)
             return truck;
         },
         // Done towing: clear the inline styles and reset so a later hover
@@ -149,6 +149,14 @@
             truck.style.opacity = '';
             truck.style.transform = '';
             reset();
+        },
+        // Re-drive the truck in and freeze (touch devices, after the studio is
+        // closed — there's no hover to bring it back).
+        comeBack() {
+            if (fx.classList.contains('is-driving')) return;
+            setAnim();
+            driveIn();
+            window.setTimeout(setStill, DRIVE_MS + 250);   // freeze at the stop
         },
     };
 })();

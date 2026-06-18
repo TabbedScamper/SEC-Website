@@ -20,6 +20,18 @@
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const canCanvas = !!document.createElement('canvas').getContext;
+    const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    // On touch (no hover), bring the truck back when the studio is closed —
+    // there's no hover to re-drive it in.
+    if (!hoverCapable) {
+        let wasOpen = overlay.classList.contains('is-open');
+        new MutationObserver(() => {
+            const open = overlay.classList.contains('is-open');
+            if (wasOpen && !open) window.SDGTruck && window.SDGTruck.comeBack && window.SDGTruck.comeBack();
+            wasOpen = open;
+        }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+    }
 
     // Make the studio visible and start it off the right edge; the rope loop
     // drives its translateX each frame (is-towing disables the transition).

@@ -634,8 +634,9 @@
 .sdg-truck {
     position: absolute;
     left: 0; bottom: 1px;          /* wheels ~ button bottom, anchored to the left edge */
+    --tpark: -78%;                 /* horizontal park offset (overridden on mobile) */
     width: clamp(170px, 82%, 240px);
-    transform: translateX(-78%) translateX(380%) rotate(10deg);
+    transform: translateX(var(--tpark)) translateX(380%) rotate(10deg);
     opacity: 0;
     will-change: transform, opacity;
     filter: drop-shadow(0 14px 10px rgba(0, 0, 0, 0.32));
@@ -647,10 +648,20 @@
 /* Monotonic decelerate into the park — never travels back past the spot,
    so it reads as braking to a stop rather than reversing. */
 @keyframes sdgTruckDrift {
-    0%   { opacity: 0; transform: translateX(-78%) translateX(380%) rotate(9deg); }  /* off-screen right */
+    0%   { opacity: 0; transform: translateX(var(--tpark)) translateX(380%) rotate(9deg); }  /* off-screen right */
     12%  { opacity: 1; }
-    70%  { transform: translateX(-78%) translateX(26%) rotate(4deg); }   /* still sliding left, leaning */
-    100% { opacity: 1; transform: translateX(-78%) translateX(0) rotate(0deg); }  /* parked left of button */
+    70%  { transform: translateX(var(--tpark)) translateX(26%) rotate(4deg); }   /* still sliding left, leaning */
+    100% { opacity: 1; transform: translateX(var(--tpark)) translateX(0) rotate(0deg); }  /* parked */
+}
+/* Mobile: no room to the left of the button, so park the truck centered on
+   the button's top edge and shrink it so the truck and button both fit. */
+@media (max-width: 600px) {
+    .sdg-truck {
+        --tpark: -50%;
+        left: 50%;
+        bottom: calc(100% - 16px);
+        width: clamp(120px, 62%, 158px);
+    }
 }
 /* Drive off to the left when the studio is towed in (placed after the drive-in
    rule so it wins on click). */
