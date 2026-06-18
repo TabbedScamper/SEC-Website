@@ -129,20 +129,21 @@
         truck.removeAttribute('src');   // hidden; a later hover reloads + drives it in fresh
     };
     window.SDGTruck = {
-        // Drive the parked truck off to the left (the studio is towed in as it
-        // leaves). Returns true if it actually drove, false if nothing was parked.
-        driveOff() {
-            if (!arrived && !fx.classList.contains('is-driving')) { reset(); return false; }
+        // Hand the parked truck to the tow sequence so it can drive it in
+        // lock-step with the studio. Returns the element, or null if not parked.
+        beginTow() {
+            if (!arrived && !fx.classList.contains('is-driving')) return null;
             stopSmoke();
-            setAnim();                  // wheels spin as it pulls away
-            fx.classList.add('is-leaving');
-            const onEnd = (e) => {
-                if (e.animationName !== 'sdgTruckLeave') return;
-                truck.removeEventListener('animationend', onEnd);
-                reset();                // fresh state so a later hover re-drives it in
-            };
-            truck.addEventListener('animationend', onEnd);
-            return true;
+            setAnim();                                        // wheels spin as it pulls
+            fx.classList.remove('is-driving', 'is-leaving');  // release CSS control of transform
+            truck.style.transform = 'translateX(-78%) translateX(0) rotate(0deg)';  // hold parked
+            return truck;
+        },
+        // Done towing: clear the inline transform and reset so a later hover
+        // re-drives the truck in fresh.
+        endTow() {
+            truck.style.transform = '';
+            reset();
         },
     };
 })();

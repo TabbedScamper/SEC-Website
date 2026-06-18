@@ -21,24 +21,21 @@
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const canCanvas = !!document.createElement('canvas').getContext;
 
-    // Open the studio with the "towed in from the right" entrance.
+    // Make the studio visible and start it off the right edge; the rope loop
+    // drives its translateX each frame (is-towing disables the transition).
     const openStudio = () => {
         document.body.classList.add('sdg-studio-open');
         overlay.setAttribute('aria-hidden', 'false');
         overlay.scrollTop = 0;
-        overlay.classList.add('is-open', 'tow-enter');
-        // Only react to the studio's OWN slide finishing — animationend bubbles,
-        // so a child's entrance animation would otherwise yank tow-enter early
-        // and snap the slide to its end.
-        const done = (e) => {
-            if (e.target !== overlay || e.animationName !== 'sdgStudioTowIn') return;
-            overlay.classList.remove('tow-enter');
-            overlay.removeEventListener('animationend', done);
-        };
-        overlay.addEventListener('animationend', done);
+        overlay.classList.add('is-open', 'is-towing');
+        overlay.style.transform = 'translateX(100%)';
         // preventScroll: focusing the fixed close button otherwise yanks the
         // document to the top and you miss the tow happening mid-page.
         closeBtn && closeBtn.focus({ preventScroll: true });
+    };
+    const finishStudio = () => {
+        overlay.style.transform = '';        // -> .is-open transform:none
+        overlay.classList.remove('is-towing');
     };
 
     let playing = false;
@@ -102,6 +99,11 @@
         const ease = k => 1 - Math.pow(1 - k, 3);
         const lerp = (a, b, k) => a + (b - a) * k;
 
+        // Slow to start, then accelerating off-screen to the left (ease-in).
+        // Both the studio and the truck are driven by this single value, so they
+        // move at the SAME rate and the gap (rope length) stays constant.
+        const pullEase = (k) => Math.pow(Math.max(0, Math.min(1, k)), 2.4);
+
         let anchored = false, head = T;
         const headDuring = (k) => {            // high arc up-and-over A -> T while shooting
             const e = ease(Math.min(1, k));
@@ -150,7 +152,7 @@
         }
 
         const t0 = performance.now();
-        let phase = 'shoot', shrinkT0 = 0, pullT0 = 0, towed = false;
+        let phase = 'shoot', shrinkT0 = 0, pullT0 = 0, towed = false, towTruck = null;
 
         function shake() {
             document.body.classList.add('page-shake');
@@ -181,16 +183,23 @@
                 if (!towed) {                          // kick the haul on the first pull frame
                     towed = true;
                     openStudio();
-                    window.SDGTruck && window.SDGTruck.driveOff();
+                    towTruck = window.SDGTruck ? window.SDGTruck.beginTow() : null;
                 }
-                // The hook stays connected to the studio's leading (left) edge as
-                // it's hauled in, and the rope is held taut between truck and edge.
-                const sr = overlay.getBoundingClientRect();
-                head = { x: sr.left, y: T.y };
+                const pp = pullEase(k);                // shared progress -> equal rates, constant gap
+                // Studio slides in from the right; truck + rope drive off-screen
+                // left by the same amount (no fade), carrying it in on a tight rope.
+                overlay.style.transform = `translateX(${(1 - pp) * 100}%)`;
+                if (towTruck) towTruck.style.transform =
+                    `translateX(-78%) translateX(0) translate(${-pp * W}px, 0) rotate(${-pp * 3}deg)`;
+                head = { x: (1 - pp) * W, y: T.y };     // hooked to the studio's leading edge
                 const d = Math.hypot(head.x - A.x, head.y - A.y);
-                seg = (d / (N - 1)) * 0.97;            // slightly under distance -> tight/straight
-                integrate(); constrain(); draw(1);
-                if (k >= 1 || sr.left <= A.x + 4) { cleanup(); return; }
+                seg = (d / (N - 1)) * 0.97;             // just under distance -> tight/straight
+                integrate(); constrain(); draw(1);      // no fade
+                if (k >= 1) {
+                    finishStudio();
+                    window.SDGTruck && window.SDGTruck.endTow();
+                    cleanup(); return;
+                }
             }
             requestAnimationFrame(frame);
         }

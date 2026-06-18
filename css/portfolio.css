@@ -720,23 +720,13 @@ body.sdg-studio-open { overflow: hidden; }
 /* "Towed in" entrance: the studio is dragged in from the right by the rope
    (js/sdg-tow.js). Only the OPEN is changed — closing still uses the
    transition above. */
-.sdg-studio.tow-enter {
+/* While being hauled in, js/sdg-tow.js drives translateX each frame (in
+   lock-step with the truck), so the transition is off and it gets its own
+   GPU layer. visibility is forced on since .is-open + this both apply. */
+.sdg-studio.is-towing {
     transition: none;
-    will-change: transform, opacity;   /* keep the heavy overlay on its own GPU layer */
-    animation: sdgStudioTowIn 1.6s linear forwards;
-}
-/* Dragged in unevenly — heave, stall, heave — like a heavy load resisting. */
-@keyframes sdgStudioTowIn {
-    0%   { opacity: 0.3; visibility: visible; transform: translateX(100%); }
-    10%  { transform: translateX(91%); }   /* hooks on, first heave */
-    20%  { transform: translateX(87%); }   /* strains */
-    34%  { transform: translateX(71%); }   /* lurch */
-    44%  { transform: translateX(67%); }   /* stall */
-    58%  { transform: translateX(46%); }   /* heave */
-    68%  { transform: translateX(42%); }   /* stall */
-    82%  { transform: translateX(17%); }   /* heave */
-    91%  { transform: translateX(12%); }   /* last strain */
-    100% { opacity: 1; visibility: visible; transform: translateX(0); }
+    visibility: visible;
+    will-change: transform;
 }
 .sdg-studio-inner { position: relative; }
 
