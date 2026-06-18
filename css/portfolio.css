@@ -737,6 +737,13 @@ body.sdg-studio-open { overflow: hidden; }
     pointer-events: none;
     z-index: 1450;
 }
+/* The truck is lifted here during the tow: above the rope canvas (so the rope
+   renders behind it) but below the studio overlay (1500). */
+.sdg-truck-layer {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1460;
+}
 /* Camera shake when the rope's hook connects. Shake the body's CHILDREN —
    transforming <body> itself would make every position:fixed element (the
    header, the rope canvas) re-anchor to the scrolled-out document origin and

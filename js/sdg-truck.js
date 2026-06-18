@@ -95,10 +95,10 @@
             stopSmoke();
             setStill();                 // freeze the truck (stop the wheels)
         };
+        // Burnout only on real mouse hover. (Not focus — closing the studio
+        // refocuses the button, which would otherwise burn out with no hover.)
         btn.addEventListener('mouseenter', enter);
         btn.addEventListener('mouseleave', leave);
-        btn.addEventListener('focus', enter);
-        btn.addEventListener('blur', leave);
     } else {
         // No hover: slide in once on scroll-into-view, quick puff, then freeze.
         let played = false;

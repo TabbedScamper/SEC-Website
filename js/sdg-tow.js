@@ -135,12 +135,10 @@
             ctx.clearRect(0, 0, W, H);
             ctx.globalAlpha = alpha;
             ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-            // Start the visible rope where it clears the tailgate, so its
-            // anchored end stays hidden behind the truck.
-            let s = 0;
-            while (s < N - 2 && pts[s].x < tailX) s++;
-            ctx.beginPath(); ctx.moveTo(pts[s].x, pts[s].y);
-            for (let i = s + 1; i < N; i++) ctx.lineTo(pts[i].x, pts[i].y);
+            // Draw the whole rope; the truck layer (above this canvas) hides the
+            // tied-off end behind the body.
+            ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < N; i++) ctx.lineTo(pts[i].x, pts[i].y);
             ctx.strokeStyle = '#5c421f'; ctx.lineWidth = 6.5; ctx.stroke();      // rope core
             ctx.strokeStyle = 'rgba(196,156,96,0.85)'; ctx.lineWidth = 2.5; ctx.stroke(); // strand highlight
             const h = pts[N - 1];                                               // hook
@@ -149,22 +147,53 @@
             ctx.globalAlpha = 1;
         }
 
+        // Hand the parked truck to the tow and lift it into a layer ABOVE the
+        // rope canvas (but below the studio), so the rope renders behind the
+        // truck and its tied-off end stays hidden behind the body — no visible
+        // segment growth/shrink at the start.
+        let towTruck = window.SDGTruck ? window.SDGTruck.beginTow() : null;
+        let towLayer = null, truckHome = null;
+        if (towTruck) {
+            const tr = towTruck.getBoundingClientRect();
+            truckHome = { parent: towTruck.parentNode, next: towTruck.nextSibling };
+            towLayer = document.createElement('div');
+            towLayer.className = 'sdg-truck-layer';
+            document.body.appendChild(towLayer);
+            towTruck.style.position = 'absolute';
+            towTruck.style.left = tr.left + 'px';
+            towTruck.style.top = tr.top + 'px';
+            towTruck.style.bottom = 'auto';
+            towTruck.style.width = tr.width + 'px';
+            towTruck.style.height = tr.height + 'px';
+            towTruck.style.transform = 'translate(0px, 0)';
+            towLayer.appendChild(towTruck);
+        }
+
         const t0 = performance.now();
-        let phase = 'shoot', pullT0 = 0, towed = false, towTruck = null;
+        let phase = 'shoot', pullT0 = 0, towed = false;
 
         function shake() {
             document.body.classList.add('page-shake');
             window.setTimeout(() => document.body.classList.remove('page-shake'), 300);
         }
+        function restore() {                 // put the truck back on the button
+            if (towTruck && truckHome) {
+                ['position', 'left', 'top', 'bottom', 'width', 'height'].forEach(p => { towTruck.style[p] = ''; });
+                truckHome.parent.insertBefore(towTruck, truckHome.next);
+                truckHome = null;
+            }
+            if (towLayer) { towLayer.remove(); towLayer = null; }
+            window.SDGTruck && window.SDGTruck.endTow();
+        }
         function cleanup() {
             canvas.remove();
+            restore();
             finish && finish();
         }
 
         function frame(now) {
             const t = now - t0;
             const a = anchorAt(); A.x = a.x; A.y = a.y;   // rope start follows the truck
-            tailX = tailEdge();
 
             if (phase === 'shoot') {
                 head = headDuring(t / SHOOT);
@@ -172,11 +201,7 @@
                 if (t >= SHOOT) { anchored = true; head = T; phase = 'pull'; pullT0 = now; shake(); }
             } else if (phase === 'pull') {
                 const k = Math.min(1, (now - pullT0) / PULL);
-                if (!towed) {                          // kick the haul on the first pull frame
-                    towed = true;
-                    openStudio();
-                    towTruck = window.SDGTruck ? window.SDGTruck.beginTow() : null;
-                }
+                if (!towed) { towed = true; openStudio(); }   // truck was handed off at start
 
                 let truckOff, studioFrac, straight;
                 if (k < TAKEUP_T) {
@@ -200,7 +225,7 @@
 
                 overlay.style.transform = `translateX(${studioFrac * 100}%)`;
                 if (towTruck) towTruck.style.transform =
-                    `translateX(-78%) translateX(0) translate(${-truckOff}px, 0) rotate(${-(truckOff / W) * 4}deg)`;
+                    `translate(${-truckOff}px, 0) rotate(${-(truckOff / W) * 4}deg)`;
                 head = { x: studioFrac * W, y: T.y };
 
                 if (straight) {                        // lay the rope dead-straight = tight
@@ -215,8 +240,7 @@
                 }
                 if (k >= 1) {
                     finishStudio();
-                    window.SDGTruck && window.SDGTruck.endTow();
-                    cleanup(); return;
+                    cleanup(); return;       // cleanup restores the truck + endTow
                 }
             }
             requestAnimationFrame(frame);
@@ -228,8 +252,7 @@
         window.setTimeout(() => {
             if (towed) return;
             towed = true;
-            openStudio(); finishStudio();
-            window.SDGTruck && window.SDGTruck.endTow();
+            openStudio(); finishStudio(); cleanup();   // cleanup restores the truck + endTow
         }, SHOOT + PULL + 200);
         window.setTimeout(() => { if (document.body.contains(canvas)) cleanup(); }, SHOOT + PULL + 700);
     }
