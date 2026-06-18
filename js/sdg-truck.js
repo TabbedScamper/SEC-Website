@@ -136,7 +136,8 @@
             stopSmoke();
             setAnim();                  // wheels spin as it pulls away
             fx.classList.add('is-leaving');
-            const onEnd = () => {
+            const onEnd = (e) => {
+                if (e.animationName !== 'sdgTruckLeave') return;
                 truck.removeEventListener('animationend', onEnd);
                 reset();                // fresh state so a later hover re-drives it in
             };

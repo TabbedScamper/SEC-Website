@@ -340,7 +340,7 @@ window.SDG_CREATIONS = [
         overlay.setAttribute('aria-hidden', 'false');
         document.body.classList.add('sdg-studio-open');
         overlay.scrollTop = 0;
-        closeBtn?.focus();
+        closeBtn?.focus({ preventScroll: true });
     };
     const close = () => {
         overlay.classList.remove('is-open');

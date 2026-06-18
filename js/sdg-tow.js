@@ -27,9 +27,18 @@
         overlay.setAttribute('aria-hidden', 'false');
         overlay.scrollTop = 0;
         overlay.classList.add('is-open', 'tow-enter');
-        const done = () => { overlay.classList.remove('tow-enter'); overlay.removeEventListener('animationend', done); };
+        // Only react to the studio's OWN slide finishing — animationend bubbles,
+        // so a child's entrance animation would otherwise yank tow-enter early
+        // and snap the slide to its end.
+        const done = (e) => {
+            if (e.target !== overlay || e.animationName !== 'sdgStudioTowIn') return;
+            overlay.classList.remove('tow-enter');
+            overlay.removeEventListener('animationend', done);
+        };
         overlay.addEventListener('animationend', done);
-        closeBtn && closeBtn.focus();
+        // preventScroll: focusing the fixed close button otherwise yanks the
+        // document to the top and you miss the tow happening mid-page.
+        closeBtn && closeBtn.focus({ preventScroll: true });
     };
 
     let playing = false;
@@ -70,7 +79,7 @@
         const pts = [];
         for (let i = 0; i < N; i++) pts.push({ x: A.x, y: A.y, px: A.x, py: A.y });
 
-        const SHOOT = 520, SHRINK = 220, PULL = 1500;
+        const SHOOT = 520, SHRINK = 360, PULL = 1500;   // SHRINK > shake so they don't overlap
         const ease = k => 1 - Math.pow(1 - k, 3);
         const lerp = (a, b, k) => a + (b - a) * k;
 
@@ -126,7 +135,7 @@
 
         function shake() {
             document.body.classList.add('page-shake');
-            window.setTimeout(() => document.body.classList.remove('page-shake'), 380);
+            window.setTimeout(() => document.body.classList.remove('page-shake'), 300);
         }
         function cleanup() {
             canvas.remove();
