@@ -45,11 +45,17 @@
     // ---- tire smoke: spawn self-removing puffs across the button ----
     let smokeTimer = null;
     const spawnPuff = () => {
+        // Born at the truck's actual rear tire (read live), so the smoke lines
+        // up whether the truck is parked left of the button (desktop) or
+        // centered on it (mobile).
+        const tr = truck.getBoundingClientRect();
+        const fr = fx.getBoundingClientRect();
+        if (!tr.width || !fr.width) return;
         const p = document.createElement('span');
         p.className = 'sdg-puff';
         const size = rand(70, 120);                  // small at birth; grows via --sc
-        p.style.left = rand(-12, 4) + '%';           // born at the rear tire (toward the back, a bit left)
-        p.style.bottom = rand(-10, 0) + 'px';        // tire contact patch
+        p.style.left = ((tr.left + tr.width * 0.78) - fr.left + rand(-10, 14)) + 'px';  // rear tire
+        p.style.bottom = (fr.bottom - (tr.top + tr.height * 0.90) + rand(-6, 4)) + 'px';
         p.style.width = size + 'px';
         p.style.height = size + 'px';
         p.style.setProperty('--dx', rand(110, 210) + 'px');  // billow further out to the right

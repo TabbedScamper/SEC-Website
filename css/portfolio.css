@@ -653,15 +653,15 @@
     70%  { transform: translateX(var(--tpark)) translateX(26%) rotate(4deg); }   /* still sliding left, leaning */
     100% { opacity: 1; transform: translateX(var(--tpark)) translateX(0) rotate(0deg); }  /* parked */
 }
-/* Mobile: no room to the left of the button, so park the truck centered on
-   the button's top edge and shrink it so the truck and button both fit. */
+/* Mobile: right-align the (slightly smaller) button so the truck can park to
+   its LEFT, just like desktop. */
 @media (max-width: 600px) {
-    .sdg-truck {
-        --tpark: -50%;
-        left: 50%;
-        bottom: calc(100% - 16px);
-        width: clamp(120px, 62%, 158px);
-    }
+    .design-group-cta { flex-direction: column; align-items: flex-end; gap: 0.8rem; }
+    .sdg-studio-trigger { padding: 0.7rem 0.9rem 0.7rem 1.1rem; }
+    .sdg-studio-trigger-title { font-size: 1rem; }
+    .sdg-studio-trigger-eyebrow { font-size: 0.56rem; }
+    .sdg-studio-trigger-icon { width: 34px; height: 34px; }
+    .sdg-truck { width: clamp(140px, 52%, 172px); }
 }
 /* Drive off to the left when the studio is towed in (placed after the drive-in
    rule so it wins on click). */
@@ -759,7 +759,10 @@ body.sdg-studio-open { overflow: hidden; }
    transforming <body> itself would make every position:fixed element (the
    header, the rope canvas) re-anchor to the scrolled-out document origin and
    vanish. The studio overlay is excluded (it's about to slide in). */
-body.page-shake > *:not(#sdgStudioOverlay) {
+/* Exclude elements that use transform to stay hidden (the mobile nav / its
+   overlay) — shaking them would override their translateX(100%) and pop them
+   into view. */
+body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav) {
     animation: sdgPageShake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 @keyframes sdgPageShake {

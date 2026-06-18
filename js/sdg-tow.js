@@ -87,8 +87,8 @@
         // truck body in the layer above hides this start.
         const anchorAt = () => {
             const r = truckBox();
-            return r ? { x: r.left + r.width * 0.82, y: r.top + r.height * 0.55 }
-                     : { x: rect.left + rect.width * 0.20, y: rect.top + rect.height * 0.55 };
+            return r ? { x: r.left + r.width * 0.70, y: r.top + r.height * 0.48 }
+                     : { x: rect.left + rect.width * 0.20, y: rect.top + rect.height * 0.5 };
         };
 
         const a0 = anchorAt();
@@ -97,7 +97,7 @@
 
         const N = 46;
         const span = Math.hypot(T.x - A.x, T.y - A.y);
-        const slackSeg = (span * 1.28) / (N - 1);   // extra length -> bundles/loops
+        const slackSeg = (span * 1.12) / (N - 1);   // a little extra length -> slight whip, not a droopy loop
         const tautSeg  = span / (N - 1);
         let seg = slackSeg;
 
@@ -122,7 +122,7 @@
                 const p = pts[i];
                 const vx = (p.x - p.px) * 0.985, vy = (p.y - p.py) * 0.985;
                 p.px = p.x; p.py = p.y;
-                p.x += vx; p.y += vy + 0.55;     // gravity
+                p.x += vx; p.y += vy + 0.38;     // gravity (light, so the rope doesn't droop in front)
             }
         }
         function constrain() {
