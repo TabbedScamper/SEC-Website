@@ -112,6 +112,10 @@ window.PROJECTS = [
         category: 'Electrical',
         client: 'Amazon',
         clientLogo: 'assets/images/logos/clients/amazon.svg',
+        poster: 'assets/images/projects/sec/amazon-warehouse-1.jpg',
+        gallery: [
+            'assets/images/projects/sec/amazon-warehouse-1.jpg',
+        ],
         description: 'Receptacle and power work supporting an Amazon facility — installed to spec on a tight operational schedule.',
     },
 ];
