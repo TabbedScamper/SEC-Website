@@ -198,7 +198,7 @@ window.SDG_CREATIONS = [
     {
         capability: 'Web Development',
         icon: 'web',
-        blurb: 'Fast, modern, framework-free custom websites.',
+        blurb: 'Fast, modern, hand-coded custom websites.',
         items: [
             {
                 title: 'Southern Electric & Controls — Website',
@@ -208,7 +208,7 @@ window.SDG_CREATIONS = [
                 year: '2026',
                 poster: 'assets/images/projects/sdg/sec-shot.png',
                 skills: ['HTML', 'CSS', 'JavaScript', 'Responsive Design', 'Git'],
-                description: 'This very site — a custom, framework-free build with a cinematic hero, building-automation spotlight, and this design showcase. Designed and coded in-house.',
+                description: 'This very site — a custom, hand-coded build with a cinematic hero, building-automation spotlight, and this design showcase. Designed and coded in-house.',
             },
             {
                 title: 'JM2 Engineering — Website',
