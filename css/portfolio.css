@@ -678,9 +678,9 @@
    across the button (each puff drifts by --dx and grows to --sc). */
 @keyframes sdgPuff {
     0%   { opacity: 0;    transform: translate(-50%, 8px) scale(0.14); }
-    16%  { opacity: 0.95; }
-    60%  { opacity: 0.72; }
-    100% { opacity: 0;    transform: translate(calc(-50% + var(--dx, 90px)), -26px) scale(var(--sc, 2)); }
+    16%  { opacity: 0.76; }
+    60%  { opacity: 0.52; }
+    100% { opacity: 0;    transform: translate(calc(-50% + var(--dx, 130px)), -26px) scale(var(--sc, 2)); }
 }
 
 @media (prefers-reduced-motion: reduce) {

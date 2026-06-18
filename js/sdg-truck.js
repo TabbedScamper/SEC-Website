@@ -48,11 +48,11 @@
         const p = document.createElement('span');
         p.className = 'sdg-puff';
         const size = rand(70, 120);                  // small at birth; grows via --sc
-        p.style.left = rand(2, 16) + '%';            // born at the rear tire (button's left)
+        p.style.left = rand(-12, 4) + '%';           // born at the rear tire (toward the back, a bit left)
         p.style.bottom = rand(-10, 0) + 'px';        // tire contact patch
         p.style.width = size + 'px';
         p.style.height = size + 'px';
-        p.style.setProperty('--dx', rand(70, 150) + 'px');   // billow out to the right
+        p.style.setProperty('--dx', rand(110, 210) + 'px');  // billow further out to the right
         p.style.setProperty('--sc', rand(1.8, 2.6));         // and grow big
         p.style.animationDuration = rand(1.1, 1.6) + 's';
         p.addEventListener('animationend', () => p.remove());
