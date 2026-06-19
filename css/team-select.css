@@ -125,14 +125,11 @@
 .ts-splash-portrait .ts-photo { width: 100%; height: 100%; object-fit: cover; filter: none; }
 @keyframes tsPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
 
-.ts-tag { font: 700 0.66rem/1 'Inter', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sec-red-soft); margin-bottom: 0.5rem; }
-.ts-name { font-family: 'Oswald', sans-serif; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 700; text-transform: uppercase; line-height: 1; margin: 0 0 0.2rem; color: #fff; }
-.ts-epithet { font-family: 'Oswald', sans-serif; font-weight: 600; font-style: italic; font-size: 1.02rem; letter-spacing: 0.02em; color: var(--sec-red-soft); margin: 0 0 0.4rem; }
+.ts-name { font-family: 'Oswald', sans-serif; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 700; text-transform: uppercase; line-height: 1; margin: 0 0 0.25rem; color: #fff; }
+.ts-epithet { font-family: 'Oswald', sans-serif; font-weight: 600; font-style: italic; font-size: 1.05rem; letter-spacing: 0.02em; color: var(--sec-red-soft); margin: 0 0 0.85rem; }
 .ts-epithet:empty { display: none; }
-.ts-title { color: var(--text-soft); font-size: 0.98rem; margin-bottom: 0.9rem; }
-.ts-meta { color: var(--text-muted); }
-.ts-bio { color: var(--text-soft); font-size: 0.92rem; line-height: 1.5; margin: 0 0 0.9rem; max-width: 44ch; }
-.ts-focus { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; max-width: 400px; }
+.ts-bio { color: var(--text-soft); font-size: 0.92rem; line-height: 1.5; margin: 0; max-width: 44ch; }
+.ts-focus { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.95rem; padding: 0; max-width: 400px; }
 .ts-focus li {
     font-family: 'Oswald', sans-serif; font-size: 0.64rem; font-weight: 600;
     letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-soft);
@@ -142,12 +139,14 @@
 }
 @keyframes tsChip { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: none; } }
 
-/* team-role signature line */
-.ts-role {
-    margin-top: 0.85rem; padding: 0.1rem 0 0.1rem 0.8rem; border-left: 2px solid var(--sec-red);
-    color: var(--text-soft); font-size: 0.86rem; font-style: italic; line-height: 1.4; max-width: 46ch;
+/* mission statement — full-width footer at the bottom of the team panel */
+.ts-mission {
+    margin-top: 2.2rem; padding-top: 1.6rem; border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem; text-align: center;
 }
-.ts-role:empty { display: none; }
+.ts-mission:empty { display: none; }
+.ts-mission-label { font: 700 0.72rem/1 'Inter', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--sec-red-soft); }
+.ts-mission-text { color: var(--text-soft); font-size: 1.08rem; font-style: italic; line-height: 1.5; max-width: 64ch; }
 
 /* shrink/fizzle then pop the whole card on each pick (red flash removed) */
 .ts-flash { display: none; }

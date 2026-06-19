@@ -80,29 +80,25 @@
             <div class="ts-splash">
                 <div class="ts-splash-media"><span class="ts-aura"></span><div class="ts-splash-portrait"></div></div>
                 <div class="ts-splash-info">
-                    <div class="ts-tag"></div>
                     <h3 class="ts-name"></h3>
                     <div class="ts-epithet"></div>
-                    <div class="ts-title"></div>
-                    <p class="ts-bio"></p>
                     <ul class="ts-focus"></ul>
-                    <div class="ts-role"></div>
+                    <p class="ts-bio"></p>
                 </div>
                 <span class="ts-flash" aria-hidden="true"></span>
             </div>
-        </div>`;
+        </div>
+        <div class="ts-mission" aria-live="polite"></div>`;
 
     const tabs   = [...root.querySelectorAll('.ts-tab')];
     const grid   = root.querySelector('.ts-grid');
     const splash = root.querySelector('.ts-splash');
     const sMedia = root.querySelector('.ts-splash-portrait');
-    const sTag   = root.querySelector('.ts-tag');
     const sName  = root.querySelector('.ts-name');
     const sEpithet = root.querySelector('.ts-epithet');
-    const sTitle = root.querySelector('.ts-title');
     const sBio   = root.querySelector('.ts-bio');
     const sFocus = root.querySelector('.ts-focus');
-    const sRole  = root.querySelector('.ts-role');
+    const sMission = root.querySelector('.ts-mission');
     const canvas = root.querySelector('.ts-fx');
     const ctx    = canvas.getContext('2d');
 
@@ -244,13 +240,13 @@
     let swapTimer = 0;
     function fillSplash(d, m) {
         sMedia.innerHTML = portrait(m);
-        sTag.textContent = d.name;
         sName.textContent = m.name;
         sEpithet.textContent = m.epithet || '';
-        sTitle.innerHTML = esc(m.title) + (m.meta ? ` <span class="ts-meta">· ${esc(m.meta)}</span>` : '');
-        sBio.textContent = m.bio || '';
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
-        sRole.textContent = m.teamRole || '';
+        sBio.textContent = m.bio || '';
+        sMission.innerHTML = m.teamRole
+            ? `<span class="ts-mission-label">Mission</span><span class="ts-mission-text">${esc(m.teamRole)}</span>`
+            : '';
     }
     function select(i, fx) {
         const d = DIVISIONS[curDiv];
