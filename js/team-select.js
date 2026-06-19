@@ -22,6 +22,8 @@
         {
             key: 'SEC', name: 'Southern Electric',
             members: [
+                // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
+                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.jpg', bio: 'Owner of Southern Electric & Controls — SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
                 { name: 'Your Name', title: 'Master Electrician', meta: '22 yrs in the field', bio: 'Runs SEC field crews on major distribution-center and plant builds — from service gear to final trim.', focus: ['Switchgear', 'Feeders', 'Material-Handling Power', 'Trim-Out'] },
                 { name: 'Your Name', title: 'Field Foreman', meta: '18 yrs', bio: 'Keeps the job on schedule and the crew safe, from rough-in to the final walk.', focus: ['Crew Lead', 'Conduit & Rough-In', 'Lighting', 'QA / QC'] },
                 { name: 'Your Name', title: 'Project Manager', meta: '16 yrs', bio: 'Owns the project from award to closeout — your single accountable point of contact.', focus: ['Scheduling', 'Submittals', 'Coordination', 'Closeout'] },
