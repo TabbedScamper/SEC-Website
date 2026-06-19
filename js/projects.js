@@ -34,7 +34,7 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/pepsico-warehouse-1.jpg',
         ],
-        description: 'A long-running PepsiCo partner across multiple plants — lighting and high-bay retrofits, air-compressor power, EV chargers, exhaust fans, pallet-inverter and rack lighting, and data-rack receptacles.',
+        description: 'A long-running PepsiCo partner across multiple plants — air-compressor power, EV chargers, exhaust fans, pallet-inverter power, and rack & warehouse lighting, plus data-rack receptacles.',
     },
     {
         title: 'Walmart — Distribution & Facilities',
@@ -46,7 +46,7 @@ window.PROJECTS = [
             'assets/images/projects/industrial/walmart-gray-1-e1753291372130.png',
             'assets/images/projects/awarded/walmart-ks-1.jpg',
         ],
-        description: 'Niagara 4 building automation and Honeywell sensors across a 1M+ sq-ft distribution center, plus rooftop air-rotation-unit controls (Siemens / Ranco) — installs and commissioning across Walmart facilities nationwide.',
+        description: 'Building automation and electrical across Walmart distribution centers — BMS and sensor installs with commissioning, rooftop RTU, air-handler and air-rotation-unit controls, plus office and warehouse power at DC sites in multiple states.',
     },
     {
         title: 'Milwaukee Tool — Geek+ Automation',
@@ -59,23 +59,15 @@ window.PROJECTS = [
             'assets/images/projects/awarded/milwaukee-geek-2.jpg',
             'assets/images/projects/awarded/milwaukee-geek-3.jpg',
         ],
-        description: 'Power and controls for a Geek+ automated storage-and-retrieval system — high-bay racking, robotic-shuttle charging stations, and panel / HMI integration at Milwaukee Tool’s distribution operation.',
+        description: 'Power for a Geek+ automated storage-and-retrieval system in Olive Branch, MS — new panelboards and feeders, charger circuits run down the racking to the shuttles, baler and elevator-control power, and plant receptacles.',
     },
     {
-        title: 'FedEx Ground Distribution Centers',
+        title: 'FedEx',
         category: 'Building Automation',
         client: 'FedEx',
         clientLogo: 'assets/images/logos/clients/fedex.svg',
         poster: 'assets/images/projects/industrial/wide-fedex-1-e1753291202150.png',
-        description: 'Conveyor power, lighting, building automation, and commissioning across multi-site FedEx Ground hubs.',
-    },
-    {
-        title: 'AutoZone Distribution Center',
-        category: 'Electrical',
-        client: 'AutoZone',
-        clientLogo: 'assets/images/logos/clients/autozone.png',
-        poster: 'assets/images/projects/industrial/wide-autozone-2-e1753290080400.png',
-        description: 'Complete electrical install for a full-scale distribution center: switchgear, feeders, branch wiring, and material-handling power.',
+        description: 'Electrical and facility work for FedEx.',
     },
     {
         title: 'Dollar Tree — Ocala Distribution Center',
@@ -86,15 +78,15 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/dollar-tree-ocala-1.jpg',
         ],
-        description: 'Electrical and systems work for the combined Dollar Tree and Family Dollar distribution center in Ocala, Florida — one of the region’s largest retail distribution hubs.',
+        description: 'HVAC and electrical systems work for the combined Dollar Tree and Family Dollar distribution center in Ocala, Florida — a 1.7-million-sq-ft campus and one of the region’s largest retail distribution hubs.',
     },
     {
-        title: 'Nissan — Decherd Powertrain Plant',
+        title: 'Nissan North America',
         category: 'Electrical',
         client: 'Nissan',
         clientLogo: 'assets/images/logos/clients/nissan.svg',
         poster: 'assets/images/projects/sec/nissan-dechard_orig-r833xw2hnqyqen7dvdn2ljhw2835pll1jyysdbf98o.jpg',
-        description: "Critical-process electrical and controls work supporting Nissan's North American engine manufacturing operations.",
+        description: 'Electrical and controls work for Nissan North America.',
     },
     {
         title: 'Nike Adapt',
@@ -113,7 +105,7 @@ window.PROJECTS = [
         client: 'ERMCO',
         clientLogo: 'assets/images/logos/clients/ermco.gif',
         poster: 'assets/images/projects/industrial/wide-ermco-1-e1753290005447.png',
-        description: "Long-term industrial electrical partner: production-line power, control upgrades, the Titan office building (mechanical & electrical), and ongoing service for one of the country's largest transformer builders.",
+        description: "A long-standing partner to ERMCO, one of the country's largest transformer makers — plant receptacles and power, plus a full electrical upgrade of the Titan office building in Dyersburg, TN: new 1,600-amp service, panelboards, Lutron lighting controls, pole lighting, and fire alarm.",
     },
     {
         title: 'Amazon',
@@ -124,7 +116,7 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/amazon-warehouse-1.jpg',
         ],
-        description: 'Receptacle and power work supporting an Amazon facility — installed to spec on a tight operational schedule.',
+        description: 'Receptacle and dock-door power supporting an Amazon facility — installed to spec on a tight operational schedule.',
     },
 ];
 
