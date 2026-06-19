@@ -99,11 +99,12 @@
     const ctx    = canvas.getContext('2d');
 
     /* ---------- electricity circling the selected card ---------- */
-    // per-division strand colours: [primary, secondary]
+    // per-division strand colours: [primary, secondary] — saturated so the arc reads;
+    // "white" identity comes from the thin hot core, not the glow colour
     const DIV_COLORS = [
-        ['#ffffff', '#ff2b33'],   // SEC — white + red
-        ['#ff8a2b', '#3b9bff'],   // ICE — orange + blue
-        ['#ff5b62', '#d81e26'],   // SDG — red
+        ['#ff2b33', '#ff7a80'],   // SEC — red (bright + light red); white hot core
+        ['#ff7a14', '#1f6dff'],   // ICE — orange + deep blue
+        ['#ff5b62', '#d81e26'],   // SDG — red (already reads great)
     ];
     const MARGIN = 48;   // canvas bleeds past the component so edge glow isn't clipped
     let DPR = 1, raf = 0, running = false, fxBox = null;
@@ -123,26 +124,26 @@
         edge(x + w, y + h, x, y + h, 0, 1); edge(x, y + h, x, y, -1, 0);
         return pts;
     }
-    // trace a jagged filament loop into the current path (one strand)
+    // trace a jagged filament loop into the current path (one strand) — sharp, crackling zigzag
     function jagPath(pts, amp, t, seed) {
         ctx.beginPath();
         for (let i = 0; i <= pts.length; i++) {
             const p = pts[i % pts.length];
-            const wob = Math.sin(t * 6 + i * 0.7 + seed * 2.3) * amp
-                      + Math.sin(t * 13 + i * 1.9 + seed) * amp * 0.55
-                      + (Math.random() - 0.5) * amp * 1.1;
+            const wob = Math.sin(t * 7 + i * 1.15 + seed * 2.3) * amp
+                      + Math.sin(t * 19 + i * 2.9 + seed) * amp * 0.7
+                      + (Math.random() - 0.5) * amp * 1.5;
             i ? ctx.lineTo(p.x + p.nx * wob, p.y + p.ny * wob)
               : ctx.moveTo(p.x + p.nx * wob, p.y + p.ny * wob);
         }
     }
-    // stroke the current path as neon: wide soft colored halo -> soft white core (glows in the team colour, not stark white)
+    // stroke as lightning: tight colored glow -> crisp colored arc -> thin white-hot core
     function strokeNeon(col, coreA) {
         ctx.strokeStyle = col; ctx.shadowColor = col;
-        ctx.shadowBlur = 24; ctx.lineWidth = 11;  ctx.globalAlpha = 0.13; ctx.stroke();
-        ctx.shadowBlur = 15; ctx.lineWidth = 5.5; ctx.globalAlpha = 0.30; ctx.stroke();
-        ctx.shadowBlur = 9;  ctx.lineWidth = 2.6; ctx.globalAlpha = 0.62; ctx.stroke();
-        ctx.strokeStyle = '#fff'; ctx.shadowColor = col;   // white core, but it blooms in the team colour
-        ctx.shadowBlur = 5;  ctx.lineWidth = 0.9; ctx.globalAlpha = coreA * 0.55; ctx.stroke();
+        ctx.shadowBlur = 18; ctx.lineWidth = 7;   ctx.globalAlpha = 0.14; ctx.stroke();   // soft outer glow
+        ctx.shadowBlur = 10; ctx.lineWidth = 3.4; ctx.globalAlpha = 0.34; ctx.stroke();   // colored body
+        ctx.shadowBlur = 5;  ctx.lineWidth = 1.6; ctx.globalAlpha = 0.92; ctx.stroke();   // crisp colored arc (the "bolt")
+        ctx.strokeStyle = '#fff'; ctx.shadowColor = col;
+        ctx.shadowBlur = 2;  ctx.lineWidth = 0.6; ctx.globalAlpha = coreA * 0.5; ctx.stroke();   // thin white-hot center
     }
     // short lightning tendrils spiking outward from the frame
     function drawBranches(pts, cols, t) {
@@ -174,8 +175,8 @@
         ctx.globalCompositeOperation = 'lighter';   // additive -> neon bloom where strands overlap
         // braided bundle: two filaments per colour
         cols.forEach((col, ci) => {
-            jagPath(pts, 3.0, t, ci * 3 + 1); strokeNeon(col, 0.9);
-            jagPath(pts, 1.9, t * 1.35, ci * 3 + 2); strokeNeon(col, 0.6);
+            jagPath(pts, 4.2, t, ci * 3 + 1); strokeNeon(col, 0.9);
+            jagPath(pts, 2.6, t * 1.35, ci * 3 + 2); strokeNeon(col, 0.6);
         });
         drawBranches(pts, cols, t);
         // pulsing hot nodes at the corners
