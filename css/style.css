@@ -778,11 +778,32 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
 
 /* --- Service area / licensed-states map --- */
 .service-area {
+    position: relative;
+    overflow: hidden;
     padding: var(--section-pad) 0;
     background: var(--bg-section);
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
 }
+/* the real office, full colour on the left, fading to the section's black so
+   the map reads clearly on the right */
+.service-area-photo {
+    position: absolute; inset: 0; z-index: 0;
+    background: url('../assets/images/sec/our-office.jpg') left center / cover no-repeat;
+}
+.service-area-photo::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to right,
+        rgba(8, 9, 12, 0.5) 0%,
+        rgba(8, 9, 12, 0.32) 26%,
+        rgba(10, 11, 15, 0.4) 42%,
+        var(--bg-section) 62%,
+        var(--bg-section) 100%);
+}
+.service-area-inner { position: relative; z-index: 1; }
+.service-area-text { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65); }
+.service-area .service-area-lead { color: #d9dbe0; }
+.service-area .service-area-note { color: #b7bac1; }
 .service-area-inner {
     display: grid;
     grid-template-columns: 1fr 1.1fr;
@@ -829,6 +850,15 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
 }
 @media (max-width: 880px) {
     .service-area-inner { grid-template-columns: 1fr; gap: 2.2rem; }
+    /* stacked: photo sits behind the text up top, fading down to black */
+    .service-area-photo { background-position: top center; }
+    .service-area-photo::after {
+        background: linear-gradient(to bottom,
+            rgba(8, 9, 12, 0.45) 0%,
+            rgba(8, 9, 12, 0.4) 28%,
+            var(--bg-section) 60%,
+            var(--bg-section) 100%);
+    }
 }
 
 /* --- Projects --- */
