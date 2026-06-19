@@ -1,7 +1,19 @@
 /* ============================================================
    SEC TEAM — "Arc Select" crew selector styles (js/team-select.js)
    ============================================================ */
+/* About-section placement */
+.about-team { margin-top: 4.5rem; padding-top: 3.5rem; border-top: 1px solid var(--border); }
+.about-team .section-eyebrow, .about-team .section-title { text-align: center; }
+.about-team .section-title { margin-bottom: 2.6rem; }
+
 #team-select { position: relative; }
+/* large blurred division logo watermark behind the panel */
+.ts-bg {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-repeat: no-repeat; background-position: center; background-size: min(82%, 780px) auto;
+    filter: blur(26px) saturate(1.3) brightness(1.3); opacity: 0.2;
+    transition: opacity 0.4s ease;
+}
 .ts-fx { position: absolute; inset: -48px; z-index: 6; pointer-events: none; }   /* bleed past edges so glow isn't clipped (matches MARGIN in team-select.js) */
 
 /* ---------- division tabs (SEC / ICE / SDG) ---------- */
@@ -142,6 +154,7 @@
 
 /* mission statement — full-width footer at the bottom of the team panel */
 .ts-mission {
+    position: relative; z-index: 1;   /* above the blurred bg watermark */
     margin-top: 2.2rem; padding-top: 1.6rem; border-top: 1px solid var(--border);
     display: flex; flex-direction: column; align-items: center; gap: 0.6rem; text-align: center;
 }

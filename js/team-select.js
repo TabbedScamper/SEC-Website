@@ -79,6 +79,7 @@
 
     /* ---------- build shell ---------- */
     root.innerHTML = `
+        <div class="ts-bg" aria-hidden="true"></div>
         <canvas class="ts-fx" aria-hidden="true"></canvas>
         <div class="ts-tabs" role="tablist" aria-label="Divisions">
             ${DIVISIONS.map((d, i) => `
@@ -113,8 +114,15 @@
     const sEpithet = root.querySelector('.ts-epithet');
     const sBio   = root.querySelector('.ts-bio');
     const sFocus = root.querySelector('.ts-focus');
+    const tsBg   = root.querySelector('.ts-bg');
     const canvas = root.querySelector('.ts-fx');
     const ctx    = canvas.getContext('2d');
+    // large blurred division logo behind the panel
+    const DIV_LOGOS = {
+        sec: 'assets/images/logos/sec-logo.png',
+        ice: 'assets/images/logos/UpdatedICELogo-removebg-preview.png',
+        sdg: 'Images/Logo-SDG.png',
+    };
 
     /* ---------- electricity circling the selected card ---------- */
     // per-division strand colours: [primary, secondary] — saturated so the arc reads;
@@ -237,6 +245,7 @@
         tabs.forEach((t, k) => { t.classList.toggle('is-active', k === di); t.setAttribute('aria-selected', k === di); });
         const d = DIVISIONS[di];
         const dk = d.key.toLowerCase();
+        if (tsBg && DIV_LOGOS[dk]) tsBg.style.backgroundImage = `url("${DIV_LOGOS[dk]}")`;
         grid.innerHTML = d.members.map((m, i) => `
             <button class="ts-cell" role="option" data-i="${i}" type="button" aria-selected="false" style="--i:${i}">
                 <span class="ts-cell-media">${portrait(m, dk)}</span>
