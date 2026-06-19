@@ -50,7 +50,7 @@
                     bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines — coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
                     focus: ['Precision Modeling', 'BIM Coordination', 'Systems Logic & Scripting', 'Tool & Pipeline Development'],
                 },
-                { name: 'Eriana Fleming', title: 'Designer', bio: 'Shapes SDG’s design and visual work across the brand.', focus: ['Design', 'Visualization', 'Modeling', 'Media'] },
+                { name: 'Eriana Fleming', title: 'Designer', photo: 'assets/images/team/eriana-fleming.jpg', bio: 'Shapes SDG’s design and visual work across the brand.', focus: ['Design', 'Visualization', 'Modeling', 'Media'] },
             ],
         },
     ];
