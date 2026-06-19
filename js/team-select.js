@@ -107,7 +107,7 @@
     ];
     const MARGIN = 48;   // canvas bleeds past the component so edge glow isn't clipped
     let DPR = 1, raf = 0, running = false, fxBox = null;
-    let popStart = -1, popQueued = false, popFrom = null;   // selection burst / fizzle state
+    let popStart = -1, popQueued = false;   // selection burst state
     function sizeCanvas() {
         DPR = Math.min(2, window.devicePixelRatio || 1);
         const r = root.getBoundingClientRect();
@@ -167,40 +167,63 @@
         }
     }
     const PAD = 12;   // bigger outline gap between the card edge and the ring
-    // POP burst on a new pick: jagged expanding ring + radial spark spokes
+    // stroke a jagged bolt (array of points) as neon: colored glow + white-hot core
+    function strokeBolt(pts, col, a, wide) {
+        ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+        ctx.strokeStyle = col; ctx.shadowColor = col;
+        ctx.shadowBlur = 18; ctx.lineWidth = wide * 2.4; ctx.globalAlpha = a * 0.32; ctx.stroke();
+        ctx.shadowBlur = 9;  ctx.lineWidth = wide * 1.1; ctx.globalAlpha = a * 0.7;  ctx.stroke();
+        ctx.strokeStyle = '#fff'; ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 6;  ctx.lineWidth = wide * 0.5; ctx.globalAlpha = a * 0.95; ctx.stroke();
+    }
+    // POP: anime-style electric explosion — white flash detonating into radiating, forking bolts that expand and fizzle out
     function drawBurst(b, p, cols) {
-        const cx = b.x + b.w / 2, cy = b.y + b.h / 2, a = 1 - p, grow = 0.55 + p * 0.95;
-        const rx = (b.w / 2 + PAD) * grow, ry = (b.h / 2 + PAD) * grow, segs = 46;
+        const cx = b.x + b.w / 2, cy = b.y + b.h / 2, a = 1 - p;
+        const reach = Math.max(b.w, b.h) / 2 + PAD;
+        // 1) central white flash — blinding early, gone by mid-burst
+        const flashA = Math.max(0, 1 - p * 2.3);
+        if (flashA > 0) {
+            const fr = reach * (0.5 + p * 1.0);
+            const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, fr);
+            g.addColorStop(0, 'rgba(255,255,255,' + flashA + ')');
+            g.addColorStop(0.4, 'rgba(255,255,255,' + (flashA * 0.45) + ')');
+            g.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = g; ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+            ctx.beginPath(); ctx.arc(cx, cy, fr, 0, Math.PI * 2); ctx.fill();
+        }
+        // 2) radiating lightning bolts — the explosion — each jagged, some forking
+        const BOLTS = 16, grow = 0.3 + p * 1.15;
+        for (let i = 0; i < BOLTS; i++) {
+            const ang = (i / BOLTS) * Math.PI * 2 + (i % 2) * 0.16;
+            const len = reach * grow * (0.72 + (i % 3) * 0.24);
+            const ux = Math.cos(ang), uy = Math.sin(ang), nx = -uy, ny = ux, segs = 4;
+            const pts = [{ x: cx + ux * reach * 0.18, y: cy + uy * reach * 0.18 }];
+            for (let s = 1; s <= segs; s++) {
+                const f = s / segs, d = len * f, j = (Math.random() - 0.5) * len * 0.18 * (1 - f * 0.35);
+                pts.push({ x: cx + ux * d + nx * j, y: cy + uy * d + ny * j });
+            }
+            strokeBolt(pts, cols[i % cols.length], a, 3);
+            if (i % 2 === 0) {   // a fork branching off the bolt
+                const base = pts[2], ba = ang + (i % 4 < 2 ? 0.55 : -0.55), bl = len * 0.42;
+                const fp = [base];
+                for (let s = 1; s <= 2; s++) {
+                    const d = bl * (s / 2);
+                    fp.push({ x: base.x + Math.cos(ba) * d + (Math.random() - 0.5) * 7, y: base.y + Math.sin(ba) * d + (Math.random() - 0.5) * 7 });
+                }
+                strokeBolt(fp, cols[i % cols.length], a * 0.85, 2);
+            }
+        }
+        // 3) faint expanding shock ring — the dissipating tail
+        const rr = reach * (0.9 + p * 1.1), segs = 40;
         ctx.beginPath();
         for (let i = 0; i <= segs; i++) {
-            const ang = (i / segs) * Math.PI * 2, j = (Math.random() - 0.5) * 14 * (1 - p);
-            const x = cx + Math.cos(ang) * (rx + j), y = cy + Math.sin(ang) * (ry + j);
+            const ang = (i / segs) * Math.PI * 2, j = (Math.random() - 0.5) * 12 * (1 - p);
+            const x = cx + Math.cos(ang) * (rr + j), y = cy + Math.sin(ang) * (rr + j);
             i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
         }
         ctx.strokeStyle = cols[0]; ctx.shadowColor = cols[0];
-        ctx.shadowBlur = 28; ctx.lineWidth = 7; ctx.globalAlpha = a * 0.22; ctx.stroke();
-        ctx.shadowBlur = 13; ctx.lineWidth = 2.6; ctx.globalAlpha = a * 0.6; ctx.stroke();
-        ctx.strokeStyle = '#fff'; ctx.shadowColor = '#fff';
-        ctx.shadowBlur = 9; ctx.lineWidth = 1.2; ctx.globalAlpha = a * 0.85; ctx.stroke();
-        const spokes = 11, r0 = Math.min(rx, ry) * 0.6, r1 = Math.max(rx, ry) * (1.05 + (1 - p) * 0.55);
-        for (let i = 0; i < spokes; i++) {
-            const ang = (i / spokes) * Math.PI * 2 + p * 0.8;
-            const x0 = cx + Math.cos(ang) * r0, y0 = cy + Math.sin(ang) * r0;
-            const x1 = cx + Math.cos(ang) * r1, y1 = cy + Math.sin(ang) * r1;
-            ctx.beginPath(); ctx.moveTo(x0, y0);
-            ctx.lineTo((x0 + x1) / 2 + (Math.random() - 0.5) * 12, (y0 + y1) / 2 + (Math.random() - 0.5) * 12);
-            ctx.lineTo(x1, y1);
-            ctx.strokeStyle = '#fff'; ctx.shadowColor = cols[0]; ctx.shadowBlur = 11; ctx.lineWidth = 1.5; ctx.globalAlpha = a * 0.7; ctx.stroke();
-        }
-    }
-    // old card ring shrinks + fizzles out
-    function drawFizzle(b, p, cols) {
-        const a = 1 - p, sh = 1 - p * 0.16, fp = PAD * (1 - p * 0.5);
-        const w = b.w * sh, h = b.h * sh, x = b.x + (b.w - w) / 2, y = b.y + (b.h - h) / 2;
-        const pts = perim(x - fp, y - fp, w + fp * 2, h + fp * 2, 16);
-        jagPath(pts, 3.2 * (1 - p), p * 8, 9);
-        ctx.strokeStyle = cols[0]; ctx.shadowColor = cols[0]; ctx.shadowBlur = 14 * a; ctx.lineWidth = 3; ctx.globalAlpha = a * 0.5; ctx.stroke();
-        ctx.strokeStyle = '#fff'; ctx.shadowColor = '#fff'; ctx.shadowBlur = 6 * a; ctx.lineWidth = 1; ctx.globalAlpha = a * 0.55; ctx.stroke();
+        ctx.shadowBlur = 14; ctx.lineWidth = 1.6; ctx.globalAlpha = a * a * 0.4; ctx.stroke();
     }
     function drawBorder(b, t, nowMs) {
         clearAll();
@@ -227,20 +250,19 @@
         ctx.beginPath(); ctx.arc(sp.x + sp.nx * 2, sp.y + sp.ny * 2, 2.4, 0, Math.PI * 2); ctx.fill();
         // selection burst (new card) + fizzle (old card)
         if (popStart >= 0) {
-            const p = (nowMs - popStart) / 480;
+            const p = (nowMs - popStart) / 580;
             if (p >= 1) popStart = -1;
-            else { drawBurst(b, p, cols); if (popFrom) drawFizzle(popFrom, p, cols); }
+            else drawBurst(b, p, cols);
         }
         ctx.globalCompositeOperation = 'source-over';
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
     }
     function loop(now) {
         if (!running) return;
-        const a = cells[cur];
-        if (a) {
-            const tb = box(a);
-            // on a fresh pick: snap the ring to the new card, remember the old one to fizzle, fire the burst
-            if (popQueued) { popFrom = fxBox ? { ...fxBox } : null; fxBox = { ...tb }; popStart = now; popQueued = false; }
+        if (cur >= 0 && sMedia) {
+            // the electric ring circles the BIG selected character (splash portrait)
+            const tb = box(sMedia);
+            if (popQueued) { fxBox = { ...tb }; popStart = now; popQueued = false; }   // fire the POP on a fresh pick
             if (!fxBox) fxBox = { ...tb };
             const k = 0.4;
             fxBox.x += (tb.x - fxBox.x) * k; fxBox.y += (tb.y - fxBox.y) * k; fxBox.w += (tb.w - fxBox.w) * k; fxBox.h += (tb.h - fxBox.h) * k;

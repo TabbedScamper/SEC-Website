@@ -67,11 +67,23 @@
 }
 .ts-cell-ring { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 
-/* energized / selected */
+/* simple hover on the small roster frames (devices with a real pointer) */
+@media (hover: hover) and (pointer: fine) {
+    .ts-cell:hover:not(.is-active) {
+        border-color: var(--sec-red-soft);
+        transform: translateY(-3px);
+    }
+    .ts-cell:hover:not(.is-active) .ts-sil { color: #5a6473; }
+    .ts-cell:hover:not(.is-active) .ts-sil .ts-hat { fill: #7a3036; }
+    .ts-cell:hover:not(.is-active) .ts-photo { filter: grayscale(0.4) brightness(0.8); }
+    .ts-cell:hover:not(.is-active) .ts-cell-name { color: var(--text-soft); }
+}
+
+/* energized / selected — modest lift; the electricity now lives on the big splash portrait */
 .ts-cell.is-active {
     border-color: var(--sec-red);
-    transform: translateY(-4px) scale(1.075);
-    filter: drop-shadow(0 0 10px var(--sec-red-glow));
+    transform: translateY(-3px) scale(1.035);
+    filter: drop-shadow(0 0 8px var(--sec-red-glow));
     z-index: 4;
 }
 .ts-cell.is-active .ts-photo { filter: grayscale(0) brightness(1.03); }
