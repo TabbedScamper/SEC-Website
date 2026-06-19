@@ -887,29 +887,44 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav) {
 }
 
 /* ============================================================
-   HOVER LOGO REVEAL (SEC project cards) — grey the photo, pop logo
+   HOVER REVEAL (SEC project cards): show the CLIENT logo first,
+   then reveal the actual photo on hover (desktop). On touch the
+   photo shows by default since there's no hover.
    ============================================================ */
 .pf-card--reveal .pf-thumb { transition: transform var(--t-dramatic), filter var(--t-dramatic); }
-.pf-card--reveal:hover .pf-thumb:not(.pf-thumb--logo),
-.pf-card--reveal:focus-visible .pf-thumb:not(.pf-thumb--logo) {
-    filter: grayscale(1) brightness(0.38);
-    transform: scale(1.06);
-}
-/* Center + enlarge the client badge for reveal cards (overrides the corner badge) */
 .pf-card--reveal .pf-badge {
     top: 50%; left: 50%; right: auto;
     min-width: 0;
     padding: 1.1rem 1.6rem;
     border-radius: 16px;
-    transform: translate(-50%, calc(-50% + 18px)) scale(0.8) rotate(0deg);
-}
-.pf-card--reveal:hover .pf-badge,
-.pf-card--reveal:focus-visible .pf-badge {
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
-    transition-delay: 0.05s;
 }
 .pf-card--reveal .pf-badge-logo { max-width: 168px; max-height: 80px; }
 .pf-card--reveal .pf-view { opacity: 0; }
+
+@media (hover: hover) and (pointer: fine) {
+    /* default: client logo sits over a muted, greyed photo */
+    .pf-card--reveal .pf-thumb:not(.pf-thumb--logo) {
+        filter: grayscale(1) brightness(0.4);
+        transform: scale(1.02);
+    }
+    .pf-card--reveal .pf-badge {
+        opacity: 1; filter: none;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    /* hover: the real photo comes up in full colour, logo steps aside */
+    .pf-card--reveal:hover .pf-thumb:not(.pf-thumb--logo),
+    .pf-card--reveal:focus-visible .pf-thumb:not(.pf-thumb--logo) {
+        filter: saturate(1.05) brightness(1);
+        transform: scale(1.07);
+    }
+    .pf-card--reveal:hover .pf-badge,
+    .pf-card--reveal:focus-visible .pf-badge {
+        opacity: 0;
+        transform: translate(-50%, calc(-50% - 16px)) scale(0.85);
+    }
+    .pf-card--reveal:hover .pf-view,
+    .pf-card--reveal:focus-visible .pf-view { opacity: 1; }
+}
 
 /* ============================================================
    LOGO-TILE CARDS (brands without a photo, e.g. Pepsi)
