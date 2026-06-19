@@ -144,7 +144,6 @@
     margin-top: 2.2rem; padding-top: 1.6rem; border-top: 1px solid var(--border);
     display: flex; flex-direction: column; align-items: center; gap: 0.6rem; text-align: center;
 }
-.ts-mission:empty { display: none; }
 .ts-mission-label { font: 700 0.72rem/1 'Inter', sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--sec-red-soft); }
 .ts-mission-text { color: var(--text-soft); font-size: 1.08rem; font-style: italic; line-height: 1.5; max-width: 64ch; }
 

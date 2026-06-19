@@ -49,7 +49,6 @@
                     epithet: 'The Digital Fabricator',
                     bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines — coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
                     focus: ['Precision Modeling', 'BIM Coordination', 'Systems Logic & Scripting', 'Tool & Pipeline Development'],
-                    teamRole: 'The bridge between creativity and functionality — if SDG imagines it, Mason can build it and make it run.',
                 },
                 { name: 'Eriana Fleming', title: 'Designer', bio: 'Shapes SDG’s design and visual work across the brand.', focus: ['Design', 'Visualization', 'Modeling', 'Media'] },
             ],
@@ -88,7 +87,10 @@
                 <span class="ts-flash" aria-hidden="true"></span>
             </div>
         </div>
-        <div class="ts-mission" aria-live="polite"></div>`;
+        <div class="ts-mission">
+            <span class="ts-mission-label">Our Mission</span>
+            <span class="ts-mission-text">One team, three divisions — the field crews, controls specialists, and designers who design it, build it, and bring it to life. From the first blueprint to final commissioning, SEC delivers as one accountable team.</span>
+        </div>`;
 
     const tabs   = [...root.querySelectorAll('.ts-tab')];
     const grid   = root.querySelector('.ts-grid');
@@ -98,7 +100,6 @@
     const sEpithet = root.querySelector('.ts-epithet');
     const sBio   = root.querySelector('.ts-bio');
     const sFocus = root.querySelector('.ts-focus');
-    const sMission = root.querySelector('.ts-mission');
     const canvas = root.querySelector('.ts-fx');
     const ctx    = canvas.getContext('2d');
 
@@ -244,9 +245,6 @@
         sEpithet.textContent = m.epithet || '';
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
         sBio.textContent = m.bio || '';
-        sMission.innerHTML = m.teamRole
-            ? `<span class="ts-mission-label">Mission</span><span class="ts-mission-text">${esc(m.teamRole)}</span>`
-            : '';
     }
     function select(i, fx) {
         const d = DIVISIONS[curDiv];
