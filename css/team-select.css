@@ -140,13 +140,8 @@
 }
 @keyframes tsChip { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: none; } }
 
-/* arc-flash burst + name slam on each pick */
-.ts-flash {
-    position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
-    background: radial-gradient(circle at 21% 50%, rgba(255, 255, 255, 0.9), rgba(216, 30, 38, 0.4) 28%, transparent 58%);
-}
-.ts-splash.is-flash .ts-flash { animation: tsFlash 0.45s ease-out; }
-@keyframes tsFlash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+/* name slam on each pick (red flash removed) */
+.ts-flash { display: none; }
 .ts-splash.is-flash .ts-name { animation: tsSlam 0.4s cubic-bezier(0.2, 1.4, 0.3, 1); }
 @keyframes tsSlam { 0% { transform: translateX(-14px) skewX(-8deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
 
