@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEC Team — Arc Select (preview)</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/team-select.css">
+<style>
+  body { margin: 0; background: #0a0a0d; color: #e8e8ea; font-family: 'Inter', sans-serif; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 70px 24px 100px; }
+  .eyebrow { color: #FF6B72; font: 700 .75rem/1 'Inter'; letter-spacing: .18em; text-transform: uppercase; margin-bottom: .7rem; }
+  h1 { color: #fff; font-family: 'Oswald'; font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 .4rem; text-transform: uppercase; }
+  .sub { color: #9a9aa2; margin: 0 0 2.4rem; }
+  .note { color: #6a6a72; font-size: .85rem; margin-top: 2.5rem; max-width: 60ch; }
+</style>
+</head><body>
+  <div class="wrap">
+    <div class="eyebrow">Prototype — not on the live site yet</div>
+    <h1>Meet the team behind the work.</h1>
+    <p class="sub">Pick a division (SEC / ICE / SDG), then hover or arrow-key the roster. Each pick arcs lightning to the next fighter and powers up their stats.</p>
+    <div id="team-select"></div>
+    <p class="note">Placeholder crew. Send real names, titles, a headshot per person, and which division they're in, and I'll drop them in and wire this into the About section.</p>
+  </div>
+  <script src="js/team-select.js"></script>
+</body></html>

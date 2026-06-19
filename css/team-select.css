@@ -1,0 +1,149 @@
+/* ============================================================
+   SEC TEAM — "Arc Select" crew selector styles (js/team-select.js)
+   ============================================================ */
+#team-select { position: relative; }
+.ts-fx { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+
+/* ---------- division tabs (SEC / ICE / SDG) ---------- */
+.ts-tabs { display: flex; gap: 0.6rem; margin-bottom: 1.6rem; position: relative; z-index: 3; }
+.ts-tab {
+    flex: 1; min-width: 0; cursor: pointer; text-align: left;
+    display: flex; flex-direction: column; gap: 0.15rem;
+    padding: 0.7rem 1.1rem;
+    background: #14141a; border: 1px solid var(--border); color: var(--text-muted);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+    transition: background 0.2s, border-color 0.2s, color 0.2s, filter 0.2s;
+}
+.ts-tab-key  { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.08em; color: var(--text-soft); }
+.ts-tab-name { font: 600 0.6rem/1.2 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.07em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ts-tab:hover:not(.is-active) { border-color: var(--sec-red-soft); color: var(--text); }
+.ts-tab.is-active {
+    background: linear-gradient(135deg, var(--sec-red), #8f1217);
+    border-color: var(--sec-red); color: #fff;
+    filter: drop-shadow(0 0 14px var(--sec-red-glow));
+}
+.ts-tab.is-active .ts-tab-key { color: #fff; }
+
+.ts-body { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 2.8rem; align-items: center; position: relative; z-index: 2; }
+
+/* power-on cascade when a division loads */
+.ts-grid.powering .ts-cell { animation: tsPowerOn 0.5s ease backwards; animation-delay: calc(var(--i, 0) * 0.06s); }
+@keyframes tsPowerOn {
+    0%   { opacity: 0; transform: translateY(9px) scale(0.95); filter: brightness(2.2); }
+    55%  { filter: brightness(1.3) drop-shadow(0 0 12px var(--sec-red-glow)); }
+    100% { opacity: 1; transform: none; }
+}
+
+/* ---------- roster grid ---------- */
+.ts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
+    position: relative; z-index: 2;
+    outline: none;
+}
+.ts-cell {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    padding: 0; margin: 0; cursor: pointer;
+    background: #14141a;
+    border: 1px solid var(--border);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 13px), calc(100% - 13px) 100%, 0 100%);
+    overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    transition: transform 0.22s ease, filter 0.22s ease, border-color 0.22s ease;
+}
+.ts-cell-media { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: center; }
+.ts-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.5); transition: filter 0.3s; }
+.ts-sil { width: 84%; height: 94%; color: #2a2f3a; transition: color 0.3s; }
+.ts-sil .ts-hat { fill: #3a2125; transition: fill 0.3s; }
+.ts-cell-name {
+    position: relative; z-index: 2;
+    font: 600 0.58rem/1.2 'Inter', sans-serif;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    color: var(--text-muted); text-align: center;
+    padding: 0.45rem 0.3rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+}
+.ts-cell-ring { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+
+/* energized / selected */
+.ts-cell.is-active {
+    border-color: var(--sec-red);
+    transform: translateY(-3px) scale(1.045);
+    filter: drop-shadow(0 0 16px var(--sec-red-glow));
+    z-index: 4;
+}
+.ts-cell.is-active .ts-photo { filter: grayscale(0) brightness(1.03); }
+.ts-cell.is-active .ts-sil { color: #c2cbd8; }
+.ts-cell.is-active .ts-sil .ts-hat { fill: var(--sec-red); }
+.ts-cell.is-active .ts-cell-name { color: #fff; }
+/* MK-style corner brackets on the selected cell */
+.ts-cell.is-active .ts-cell-ring::before,
+.ts-cell.is-active .ts-cell-ring::after {
+    content: ''; position: absolute; width: 15px; height: 15px; border: 3px solid var(--sec-red);
+}
+.ts-cell.is-active .ts-cell-ring::before { top: 4px; left: 4px; border-right: 0; border-bottom: 0; }
+.ts-cell.is-active .ts-cell-ring::after { bottom: 4px; right: 4px; border-left: 0; border-top: 0; }
+
+/* ---------- splash panel ---------- */
+.ts-splash {
+    position: relative;
+    display: grid; grid-template-columns: auto 1fr; gap: 1.6rem; align-items: center;
+    min-height: 300px;
+}
+.ts-splash-media { position: relative; width: 184px; aspect-ratio: 3 / 4; }
+.ts-aura {
+    position: absolute; inset: -14px;
+    border-radius: 46% / 38%;
+    background: radial-gradient(circle, var(--sec-red-glow), transparent 70%);
+    filter: blur(10px);
+    animation: tsPulse 2.4s ease-in-out infinite;
+}
+.ts-splash-portrait {
+    position: relative; z-index: 2; width: 100%; height: 100%;
+    display: flex; align-items: flex-end; justify-content: center;
+    border: 1px solid rgba(216, 30, 38, 0.45);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+    background: linear-gradient(160deg, #16161d, #0c0c11);
+    overflow: hidden;
+}
+.ts-splash-portrait .ts-sil { width: 100%; height: 100%; color: #ccd4df; }
+.ts-splash-portrait .ts-sil .ts-hat { fill: var(--sec-red); }
+.ts-splash-portrait .ts-photo { width: 100%; height: 100%; object-fit: cover; filter: none; }
+@keyframes tsPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+.ts-tag { font: 700 0.66rem/1 'Inter', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sec-red-soft); margin-bottom: 0.5rem; }
+.ts-name { font-family: 'Oswald', sans-serif; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 700; text-transform: uppercase; line-height: 1; margin: 0 0 0.35rem; color: #fff; }
+.ts-title { color: var(--text-soft); font-size: 0.96rem; margin-bottom: 1.2rem; }
+.ts-stats { display: grid; gap: 0.5rem; max-width: 320px; }
+.ts-stat { display: grid; grid-template-columns: 70px 1fr; gap: 0.65rem; align-items: center; }
+.ts-stat-k { font: 600 0.6rem/1 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+.ts-stat-bar { height: 9px; background: #191920; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+.ts-stat-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #8f1217, var(--sec-red)); box-shadow: 0 0 8px var(--sec-red-glow); transition: width 0.55s cubic-bezier(0.2, 0.8, 0.3, 1); }
+.ts-stat-bar i.go { width: calc(var(--v) / 5 * 100%); }
+
+/* arc-flash burst + name slam on each pick */
+.ts-flash {
+    position: absolute; inset: 0; z-index: 5; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle at 21% 50%, rgba(255, 255, 255, 0.9), rgba(216, 30, 38, 0.4) 28%, transparent 58%);
+}
+.ts-splash.is-flash .ts-flash { animation: tsFlash 0.45s ease-out; }
+@keyframes tsFlash { 0% { opacity: 0; } 12% { opacity: 1; } 100% { opacity: 0; } }
+.ts-splash.is-flash .ts-name { animation: tsSlam 0.4s cubic-bezier(0.2, 1.4, 0.3, 1); }
+@keyframes tsSlam { 0% { transform: translateX(-14px) skewX(-8deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+
+/* ---------- responsive + motion ---------- */
+@media (max-width: 880px) {
+    .ts-body { grid-template-columns: 1fr; gap: 1.8rem; }
+    .ts-splash { grid-template-columns: 116px 1fr; min-height: 0; }
+    .ts-splash-media { width: 116px; }
+}
+@media (max-width: 560px) {
+    .ts-tab { padding: 0.6rem 0.7rem; align-items: center; }
+    .ts-tab-name { display: none; }
+    .ts-grid { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ts-aura, .ts-stat-bar i, .ts-splash.is-flash .ts-name, .ts-cell { animation: none !important; transition: none !important; }
+}
