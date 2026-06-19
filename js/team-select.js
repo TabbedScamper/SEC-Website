@@ -44,7 +44,14 @@
             key: 'SDG', name: 'Southern Design Group',
             // PLACEHOLDER titles/bios/skills — confirm with Mason & Eriana. Eriana needs a photo.
             members: [
-                { name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.jpg', bio: 'Works across the board for SDG — estimating, BIM and CAD, IT, and the web and digital art that present SEC’s work.', focus: ['Estimator', 'BIM', 'Revit', 'AutoCAD', 'IT', 'Web Development', 'Digital Art'] },
+                {
+                    name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.jpg',
+                    epithet: 'The Digital Fabricator',
+                    bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines — coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
+                    focus: ['Precision Modeling', 'BIM Coordination', 'Systems Logic & Scripting', 'Tool & Pipeline Development'],
+                    passives: ['Never Stops Iterating', 'Dreams in Wireframes', 'Tech Radar for Optimization'],
+                    teamRole: 'The bridge between creativity and functionality — if SDG imagines it, Mason can build it and make it run.',
+                },
                 { name: 'Eriana Fleming', title: 'Designer', bio: 'Shapes SDG’s design and visual work across the brand.', focus: ['Design', 'Visualization', 'Modeling', 'Media'] },
             ],
         },
@@ -76,9 +83,12 @@
                 <div class="ts-splash-info">
                     <div class="ts-tag"></div>
                     <h3 class="ts-name"></h3>
+                    <div class="ts-epithet"></div>
                     <div class="ts-title"></div>
                     <p class="ts-bio"></p>
                     <ul class="ts-focus"></ul>
+                    <div class="ts-passives"></div>
+                    <div class="ts-role"></div>
                 </div>
                 <span class="ts-flash" aria-hidden="true"></span>
             </div>
@@ -90,9 +100,12 @@
     const sMedia = root.querySelector('.ts-splash-portrait');
     const sTag   = root.querySelector('.ts-tag');
     const sName  = root.querySelector('.ts-name');
+    const sEpithet = root.querySelector('.ts-epithet');
     const sTitle = root.querySelector('.ts-title');
     const sBio   = root.querySelector('.ts-bio');
     const sFocus = root.querySelector('.ts-focus');
+    const sPassives = root.querySelector('.ts-passives');
+    const sRole  = root.querySelector('.ts-role');
     const canvas = root.querySelector('.ts-fx');
     const ctx    = canvas.getContext('2d');
 
@@ -236,9 +249,14 @@
         sMedia.innerHTML = portrait(m);
         sTag.textContent = d.name;
         sName.textContent = m.name;
+        sEpithet.textContent = m.epithet || '';
         sTitle.innerHTML = esc(m.title) + (m.meta ? ` <span class="ts-meta">· ${esc(m.meta)}</span>` : '');
         sBio.textContent = m.bio || '';
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
+        sPassives.innerHTML = (m.passives && m.passives.length)
+            ? `<span class="ts-pass-label">Passives</span>` + m.passives.map(p => `<span class="ts-pass">${esc(p)}</span>`).join('')
+            : '';
+        sRole.textContent = m.teamRole || '';
     }
     function select(i, fx) {
         const d = DIVISIONS[curDiv];

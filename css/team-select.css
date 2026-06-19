@@ -126,7 +126,9 @@
 @keyframes tsPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
 
 .ts-tag { font: 700 0.66rem/1 'Inter', sans-serif; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sec-red-soft); margin-bottom: 0.5rem; }
-.ts-name { font-family: 'Oswald', sans-serif; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 700; text-transform: uppercase; line-height: 1; margin: 0 0 0.35rem; color: #fff; }
+.ts-name { font-family: 'Oswald', sans-serif; font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 700; text-transform: uppercase; line-height: 1; margin: 0 0 0.2rem; color: #fff; }
+.ts-epithet { font-family: 'Oswald', sans-serif; font-weight: 600; font-style: italic; font-size: 1.02rem; letter-spacing: 0.02em; color: var(--sec-red-soft); margin: 0 0 0.4rem; }
+.ts-epithet:empty { display: none; }
 .ts-title { color: var(--text-soft); font-size: 0.98rem; margin-bottom: 0.9rem; }
 .ts-meta { color: var(--text-muted); }
 .ts-bio { color: var(--text-soft); font-size: 0.94rem; line-height: 1.55; margin: 0 0 1.15rem; max-width: 42ch; }
@@ -139,6 +141,22 @@
     animation: tsChip 0.4s ease backwards; animation-delay: calc(var(--i, 0) * 0.045s);
 }
 @keyframes tsChip { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: none; } }
+
+/* passive traits — dashed "trait" chips, distinct from the solid specialty pills */
+.ts-passives { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.95rem 0 0; max-width: 420px; }
+.ts-passives:empty { display: none; }
+.ts-pass-label { font: 700 0.56rem/1 'Inter', sans-serif; letter-spacing: 0.17em; text-transform: uppercase; color: var(--text-muted); margin-right: 0.15rem; }
+.ts-pass {
+    font-family: 'Oswald', sans-serif; font-size: 0.62rem; font-weight: 600; font-style: italic;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted);
+    padding: 0.22rem 0.5rem; border-radius: 6px; border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+/* team-role signature line */
+.ts-role {
+    margin-top: 1rem; padding: 0.1rem 0 0.1rem 0.8rem; border-left: 2px solid var(--sec-red);
+    color: var(--text-soft); font-size: 0.88rem; font-style: italic; line-height: 1.45; max-width: 46ch;
+}
+.ts-role:empty { display: none; }
 
 /* shrink/fizzle then pop the whole card on each pick (red flash removed) */
 .ts-flash { display: none; }
