@@ -140,10 +140,16 @@
 }
 @keyframes tsChip { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: none; } }
 
-/* name slam on each pick (red flash removed) */
+/* shrink/fizzle then pop the whole card on each pick (red flash removed) */
 .ts-flash { display: none; }
-.ts-splash.is-flash .ts-name { animation: tsSlam 0.4s cubic-bezier(0.2, 1.4, 0.3, 1); }
-@keyframes tsSlam { 0% { transform: translateX(-14px) skewX(-8deg); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.ts-splash { transform-origin: center center; }
+.ts-splash.is-pop { animation: tsPop 0.5s cubic-bezier(0.3, 1.3, 0.4, 1); }
+@keyframes tsPop {
+    0%   { transform: scale(1);     opacity: 1; }
+    30%  { transform: scale(0.8);   opacity: 0.3; }   /* fizzle out — content swaps here */
+    62%  { transform: scale(1.045); opacity: 1; }      /* pop overshoot */
+    100% { transform: scale(1);     opacity: 1; }
+}
 
 /* ---------- responsive + motion ---------- */
 @media (max-width: 880px) {
@@ -157,5 +163,5 @@
     .ts-grid { grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-    .ts-aura, .ts-focus li, .ts-splash.is-flash .ts-name, .ts-cell { animation: none !important; transition: none !important; }
+    .ts-aura, .ts-focus li, .ts-splash.is-pop, .ts-cell { animation: none !important; transition: none !important; }
 }

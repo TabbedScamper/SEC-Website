@@ -195,11 +195,12 @@
     }
     function loop(now) {
         if (!running) return;
-        if (cur >= 0 && sMedia) {
-            // the electric ring circles the BIG selected character (splash portrait)
-            const tb = box(sMedia);
+        if (cur >= 0 && splash) {
+            // the electric ring encloses the WHOLE profile card (portrait + name + bio + skills);
+            // box() reads the live rect, so it follows the shrink/pop scale animation
+            const tb = box(splash);
             if (!fxBox) fxBox = { ...tb };
-            const k = 0.4;
+            const k = 0.5;
             fxBox.x += (tb.x - fxBox.x) * k; fxBox.y += (tb.y - fxBox.y) * k; fxBox.w += (tb.w - fxBox.w) * k; fxBox.h += (tb.h - fxBox.h) * k;
             drawBorder(fxBox, now / 1000);
         }
@@ -230,19 +231,29 @@
         select(Math.min(keep, d.members.length - 1), fx);
     }
 
-    function select(i, fx) {
-        const d = DIVISIONS[curDiv];
-        if (i === cur || !d || !d.members[i]) return;
-        const prev = cur; cur = i;
-        cells.forEach((c, k) => { c.classList.toggle('is-active', k === i); c.setAttribute('aria-selected', k === i); });
-        const m = d.members[i];
+    let swapTimer = 0;
+    function fillSplash(d, m) {
         sMedia.innerHTML = portrait(m);
         sTag.textContent = d.name;
         sName.textContent = m.name;
         sTitle.innerHTML = esc(m.title) + (m.meta ? ` <span class="ts-meta">· ${esc(m.meta)}</span>` : '');
         sBio.textContent = m.bio || '';
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
-        splash.classList.remove('is-flash'); void splash.offsetWidth; splash.classList.add('is-flash');
+    }
+    function select(i, fx) {
+        const d = DIVISIONS[curDiv];
+        if (i === cur || !d || !d.members[i]) return;
+        cur = i;
+        cells.forEach((c, k) => { c.classList.toggle('is-active', k === i); c.setAttribute('aria-selected', k === i); });
+        const m = d.members[i];
+        clearTimeout(swapTimer);
+        if (fx && !reduce) {
+            // shrink/fizzle the card out, swap the person at the bottom, then pop it back up
+            splash.classList.remove('is-pop'); void splash.offsetWidth; splash.classList.add('is-pop');
+            swapTimer = setTimeout(() => fillSplash(d, m), 150);
+        } else {
+            fillSplash(d, m);
+        }
     }
 
     /* ---------- interaction ---------- */
