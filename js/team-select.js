@@ -42,16 +42,14 @@
         },
         {
             key: 'SDG', name: 'Southern Design Group',
+            // PLACEHOLDER titles/bios/skills — confirm with Mason & Eriana. Eriana needs a photo.
             members: [
-                { name: 'Your Name', title: 'BIM / VDC Lead', meta: '11 yrs', bio: 'Coordinates the model so the field builds it once, not twice.', focus: ['Revit', 'BIM Coordination', 'Clash Detection', 'MEP'] },
-                { name: 'Your Name', title: 'Revit Modeler', meta: '8 yrs', bio: 'Builds the electrical model the whole project runs on.', focus: ['Revit', 'Modeling', 'Families', 'Coordination'] },
-                { name: 'Your Name', title: 'AutoCAD Drafter', meta: '9 yrs', bio: 'Turns the plan into shop drawings, risers, and panel schedules.', focus: ['AutoCAD', 'Shop Drawings', 'Riser Diagrams', 'Panel Schedules'] },
-                { name: 'Your Name', title: '3D / Visualization', meta: '6 yrs', bio: 'Renders and animates the work so clients can see it before it is built.', focus: ['3D Modeling', 'Rendering', 'Animation', 'Visualization'] },
-                { name: 'Your Name', title: 'Media & Web', meta: '7 yrs', bio: 'Builds the websites, videos, and visuals that tell SEC’s story.', focus: ['Web Development', 'Video', 'Media', 'Design'] },
+                { name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.jpg', bio: 'Works across the board for SDG — estimating, BIM and CAD, IT, and the web and digital art that present SEC’s work.', focus: ['Estimator', 'BIM', 'Revit', 'AutoCAD', 'IT', 'Web Development', 'Digital Art'] },
+                { name: 'Eriana Fleming', title: 'Designer', bio: 'Shapes SDG’s design and visual work across the brand.', focus: ['Design', 'Visualization', 'Modeling', 'Media'] },
             ],
         },
     ];
-    const COLS = 3;
+    let gridCols = 3;
 
     const SIL = `<svg class="ts-sil" viewBox="0 0 100 120" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
         <path d="M6 120 C6 86 24 78 50 78 C76 78 94 86 94 120 Z"/>
@@ -224,6 +222,8 @@
                 <span class="ts-cell-name">${esc(m.title)}</span>
                 <span class="ts-cell-ring" aria-hidden="true"></span>
             </button>`).join('');
+        gridCols = Math.min(d.members.length, 3);   // adapt columns to roster size (e.g. SDG has 2)
+        grid.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
         cells = [...grid.querySelectorAll('.ts-cell')];
         // selection only changes on an explicit pick (click / keyboard) — not on hover
         cells.forEach((c, i) => c.addEventListener('click', () => { select(i, true); c.focus({ preventScroll: true }); }));
@@ -263,8 +263,8 @@
         let n = cur < 0 ? 0 : cur;
         if (e.key === 'ArrowRight') n = Math.min(max, cur + 1);
         else if (e.key === 'ArrowLeft') n = Math.max(0, cur - 1);
-        else if (e.key === 'ArrowDown') n = Math.min(max, cur + COLS);
-        else if (e.key === 'ArrowUp') n = Math.max(0, cur - COLS);
+        else if (e.key === 'ArrowDown') n = Math.min(max, cur + gridCols);
+        else if (e.key === 'ArrowUp') n = Math.max(0, cur - gridCols);
         else return;
         e.preventDefault(); cells[n].focus(); select(n, true);
     });
