@@ -105,14 +105,18 @@
         ['#ff8a2b', '#3b9bff'],   // ICE — orange + blue
         ['#ff5b62', '#d81e26'],   // SDG — red
     ];
+    const MARGIN = 48;   // canvas bleeds past the component so edge glow isn't clipped
     let DPR = 1, raf = 0, running = false, fxBox = null;
+    let popStart = -1, popQueued = false, popFrom = null;   // selection burst / fizzle state
     function sizeCanvas() {
         DPR = Math.min(2, window.devicePixelRatio || 1);
         const r = root.getBoundingClientRect();
-        canvas.width = r.width * DPR; canvas.height = r.height * DPR;
-        canvas.style.width = r.width + 'px'; canvas.style.height = r.height + 'px';
-        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+        const fw = r.width + MARGIN * 2, fh = r.height + MARGIN * 2;
+        canvas.width = fw * DPR; canvas.height = fh * DPR;
+        canvas.style.width = fw + 'px'; canvas.style.height = fh + 'px';
+        ctx.setTransform(DPR, 0, 0, DPR, MARGIN * DPR, MARGIN * DPR);   // (0,0) = component top-left
     }
+    const clearAll = () => { const r = root.getBoundingClientRect(); ctx.clearRect(-MARGIN, -MARGIN, r.width + MARGIN * 2, r.height + MARGIN * 2); };
     const box = el => { const c = el.getBoundingClientRect(), r = root.getBoundingClientRect(); return { x: c.left - r.left, y: c.top - r.top, w: c.width, h: c.height }; };
     function perim(x, y, w, h, n) {
         const pts = [], edge = (ax, ay, bx, by, nx, ny) => { for (let i = 0; i < n; i++) { const f = i / n; pts.push({ x: ax + (bx - ax) * f, y: ay + (by - ay) * f, nx, ny }); } };
@@ -162,10 +166,45 @@
             ctx.shadowBlur = 5; ctx.lineWidth = 0.8; ctx.globalAlpha = on * 0.6; ctx.stroke();
         }
     }
-    function drawBorder(b, t) {
-        const r = root.getBoundingClientRect();
-        ctx.clearRect(0, 0, r.width, r.height);
-        const PAD = 7, pts = perim(b.x - PAD, b.y - PAD, b.w + PAD * 2, b.h + PAD * 2, 16);
+    const PAD = 12;   // bigger outline gap between the card edge and the ring
+    // POP burst on a new pick: jagged expanding ring + radial spark spokes
+    function drawBurst(b, p, cols) {
+        const cx = b.x + b.w / 2, cy = b.y + b.h / 2, a = 1 - p, grow = 0.55 + p * 0.95;
+        const rx = (b.w / 2 + PAD) * grow, ry = (b.h / 2 + PAD) * grow, segs = 46;
+        ctx.beginPath();
+        for (let i = 0; i <= segs; i++) {
+            const ang = (i / segs) * Math.PI * 2, j = (Math.random() - 0.5) * 14 * (1 - p);
+            const x = cx + Math.cos(ang) * (rx + j), y = cy + Math.sin(ang) * (ry + j);
+            i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+        }
+        ctx.strokeStyle = cols[0]; ctx.shadowColor = cols[0];
+        ctx.shadowBlur = 28; ctx.lineWidth = 7; ctx.globalAlpha = a * 0.22; ctx.stroke();
+        ctx.shadowBlur = 13; ctx.lineWidth = 2.6; ctx.globalAlpha = a * 0.6; ctx.stroke();
+        ctx.strokeStyle = '#fff'; ctx.shadowColor = '#fff';
+        ctx.shadowBlur = 9; ctx.lineWidth = 1.2; ctx.globalAlpha = a * 0.85; ctx.stroke();
+        const spokes = 11, r0 = Math.min(rx, ry) * 0.6, r1 = Math.max(rx, ry) * (1.05 + (1 - p) * 0.55);
+        for (let i = 0; i < spokes; i++) {
+            const ang = (i / spokes) * Math.PI * 2 + p * 0.8;
+            const x0 = cx + Math.cos(ang) * r0, y0 = cy + Math.sin(ang) * r0;
+            const x1 = cx + Math.cos(ang) * r1, y1 = cy + Math.sin(ang) * r1;
+            ctx.beginPath(); ctx.moveTo(x0, y0);
+            ctx.lineTo((x0 + x1) / 2 + (Math.random() - 0.5) * 12, (y0 + y1) / 2 + (Math.random() - 0.5) * 12);
+            ctx.lineTo(x1, y1);
+            ctx.strokeStyle = '#fff'; ctx.shadowColor = cols[0]; ctx.shadowBlur = 11; ctx.lineWidth = 1.5; ctx.globalAlpha = a * 0.7; ctx.stroke();
+        }
+    }
+    // old card ring shrinks + fizzles out
+    function drawFizzle(b, p, cols) {
+        const a = 1 - p, sh = 1 - p * 0.16, fp = PAD * (1 - p * 0.5);
+        const w = b.w * sh, h = b.h * sh, x = b.x + (b.w - w) / 2, y = b.y + (b.h - h) / 2;
+        const pts = perim(x - fp, y - fp, w + fp * 2, h + fp * 2, 16);
+        jagPath(pts, 3.2 * (1 - p), p * 8, 9);
+        ctx.strokeStyle = cols[0]; ctx.shadowColor = cols[0]; ctx.shadowBlur = 14 * a; ctx.lineWidth = 3; ctx.globalAlpha = a * 0.5; ctx.stroke();
+        ctx.strokeStyle = '#fff'; ctx.shadowColor = '#fff'; ctx.shadowBlur = 6 * a; ctx.lineWidth = 1; ctx.globalAlpha = a * 0.55; ctx.stroke();
+    }
+    function drawBorder(b, t, nowMs) {
+        clearAll();
+        const pts = perim(b.x - PAD, b.y - PAD, b.w + PAD * 2, b.h + PAD * 2, 16);
         const cols = DIV_COLORS[curDiv] || DIV_COLORS[0];
         ctx.lineJoin = 'round'; ctx.lineCap = 'round';
         ctx.globalCompositeOperation = 'lighter';   // additive -> neon bloom where strands overlap
@@ -186,6 +225,12 @@
         const sp = pts[Math.floor((t * 0.4 % 1) * pts.length)];
         ctx.fillStyle = '#fff'; ctx.shadowColor = cols[0]; ctx.shadowBlur = 16; ctx.globalAlpha = 1;
         ctx.beginPath(); ctx.arc(sp.x + sp.nx * 2, sp.y + sp.ny * 2, 2.4, 0, Math.PI * 2); ctx.fill();
+        // selection burst (new card) + fizzle (old card)
+        if (popStart >= 0) {
+            const p = (nowMs - popStart) / 480;
+            if (p >= 1) popStart = -1;
+            else { drawBurst(b, p, cols); if (popFrom) drawFizzle(popFrom, p, cols); }
+        }
         ctx.globalCompositeOperation = 'source-over';
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
     }
@@ -194,22 +239,25 @@
         const a = cells[cur];
         if (a) {
             const tb = box(a);
+            // on a fresh pick: snap the ring to the new card, remember the old one to fizzle, fire the burst
+            if (popQueued) { popFrom = fxBox ? { ...fxBox } : null; fxBox = { ...tb }; popStart = now; popQueued = false; }
             if (!fxBox) fxBox = { ...tb };
-            const k = 0.28;
+            const k = 0.4;
             fxBox.x += (tb.x - fxBox.x) * k; fxBox.y += (tb.y - fxBox.y) * k; fxBox.w += (tb.w - fxBox.w) * k; fxBox.h += (tb.h - fxBox.h) * k;
-            drawBorder(fxBox, now / 1000);
+            drawBorder(fxBox, now / 1000, now);
         }
         raf = requestAnimationFrame(loop);
     }
     function start() { if (running || reduce) return; running = true; sizeCanvas(); raf = requestAnimationFrame(loop); }
-    function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; const r = root.getBoundingClientRect(); ctx.clearRect(0, 0, r.width, r.height); }
+    function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; clearAll(); }
 
     /* ---------- state ---------- */
     let curDiv = -1, cur = -1, cells = [];
 
     function renderDivision(di, fx) {
         if (di === curDiv) return;
-        curDiv = di; cur = -1;
+        const keep = cur < 0 ? 0 : cur;   // carry the selected slot across teams
+        curDiv = di; cur = -1; fxBox = null;
         tabs.forEach((t, k) => { t.classList.toggle('is-active', k === di); t.setAttribute('aria-selected', k === di); });
         const d = DIVISIONS[di];
         grid.innerHTML = d.members.map((m, i) => `
@@ -219,13 +267,10 @@
                 <span class="ts-cell-ring" aria-hidden="true"></span>
             </button>`).join('');
         cells = [...grid.querySelectorAll('.ts-cell')];
-        cells.forEach((c, i) => {
-            c.addEventListener('mouseenter', () => select(i, true));
-            c.addEventListener('focus', () => select(i, true));
-            c.addEventListener('click', () => select(i, true));
-        });
+        // selection only changes on an explicit pick (click / keyboard) — not on hover
+        cells.forEach((c, i) => c.addEventListener('click', () => { select(i, true); c.focus({ preventScroll: true }); }));
         if (fx && !reduce) { grid.classList.remove('powering'); void grid.offsetWidth; grid.classList.add('powering'); }
-        select(0, false);
+        select(Math.min(keep, d.members.length - 1), fx);
     }
 
     function select(i, fx) {
@@ -241,6 +286,7 @@
         sBio.textContent = m.bio || '';
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
         splash.classList.remove('is-flash'); void splash.offsetWidth; splash.classList.add('is-flash');
+        if (fx && !reduce) popQueued = true;   // fire the electric POP + reveal on a real pick
     }
 
     /* ---------- interaction ---------- */

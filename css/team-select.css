@@ -2,7 +2,7 @@
    SEC TEAM — "Arc Select" crew selector styles (js/team-select.js)
    ============================================================ */
 #team-select { position: relative; }
-.ts-fx { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.ts-fx { position: absolute; inset: -48px; z-index: 6; pointer-events: none; }   /* bleed past edges so glow isn't clipped (matches MARGIN in team-select.js) */
 
 /* ---------- division tabs (SEC / ICE / SDG) ---------- */
 .ts-tabs { display: flex; gap: 0.6rem; margin-bottom: 1.6rem; position: relative; z-index: 3; }
