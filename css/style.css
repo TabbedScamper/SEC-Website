@@ -776,6 +776,61 @@ a  { color: inherit; text-decoration: none; transition: color var(--t-fast); }
     color: var(--text-muted);
 }
 
+/* --- Service area / licensed-states map --- */
+.service-area {
+    padding: var(--section-pad) 0;
+    background: var(--bg-section);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+.service-area-inner {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 3.5rem;
+    align-items: center;
+}
+.service-area-lead { color: var(--text-soft); font-size: 1.02rem; line-height: 1.7; margin: 1.2rem 0 1rem; }
+.service-area-note { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.4rem; }
+.service-area-legend {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.74rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-soft);
+}
+.service-area-legend .swatch {
+    width: 15px; height: 15px; border-radius: 3px;
+    background: var(--sec-red); box-shadow: 0 0 10px var(--sec-red-glow);
+}
+
+.usmap-wrap { width: 100%; }
+.usmap-svg {
+    width: 100%; height: auto; display: block; overflow: visible;
+    filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.55));
+}
+.usmap-svg .st  { fill: #232b38; stroke: #0c0e13; stroke-width: 1; transition: fill 0.25s; }
+.usmap-svg .svc { fill: #2c3543; }                 /* dimmed until the map scrolls in */
+.usmap-wrap.is-visible .svc {
+    animation: stateLight 0.5s ease forwards;
+    animation-delay: calc(var(--i, 0) * 0.05s);
+}
+@keyframes stateLight {
+    0%   { fill: #2c3543; }
+    55%  { fill: #ff5b62; }
+    100% { fill: var(--sec-red); }
+}
+.usmap-svg .svc:hover { fill: #ff5b62; }
+.usmap-hq { fill: #fff; opacity: 0; }
+.usmap-wrap.is-visible .usmap-hq {
+    opacity: 1;
+    animation: hqPulse 2.2s ease-in-out 1.5s infinite;
+}
+@keyframes hqPulse {
+    0%, 100% { r: 4.5; opacity: 0.95; }
+    50%      { r: 7;   opacity: 0.5; }
+}
+@media (max-width: 880px) {
+    .service-area-inner { grid-template-columns: 1fr; gap: 2.2rem; }
+}
+
 /* --- Projects --- */
 .projects { padding: var(--section-pad) 0; background: var(--bg-section); }
 .project-grid {
