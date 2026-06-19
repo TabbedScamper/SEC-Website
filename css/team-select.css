@@ -130,6 +130,7 @@
 .ts-epithet:empty { display: none; }
 .ts-bio { color: var(--text-soft); font-size: 0.92rem; line-height: 1.5; margin: 0; max-width: 44ch; }
 .ts-focus { list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 0.95rem; padding: 0; max-width: 400px; }
+.ts-focus:empty { display: none; }
 .ts-focus li {
     font-family: 'Oswald', sans-serif; font-size: 0.64rem; font-weight: 600;
     letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-soft);

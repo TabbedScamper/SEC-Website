@@ -24,22 +24,30 @@
             members: [
                 // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
                 { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.jpg', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls — SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
-                { name: 'Your Name', title: 'Master Electrician', meta: '22 yrs in the field', bio: 'Runs SEC field crews on major distribution-center and plant builds — from service gear to final trim.', focus: ['Switchgear', 'Feeders', 'Material-Handling Power', 'Trim-Out'] },
-                { name: 'Your Name', title: 'Field Foreman', meta: '18 yrs', bio: 'Keeps the job on schedule and the crew safe, from rough-in to the final walk.', focus: ['Crew Lead', 'Conduit & Rough-In', 'Lighting', 'QA / QC'] },
-                { name: 'Your Name', title: 'Project Manager', meta: '16 yrs', bio: 'Owns the project from award to closeout — your single accountable point of contact.', focus: ['Scheduling', 'Submittals', 'Coordination', 'Closeout'] },
-                { name: 'Your Name', title: 'Estimator', meta: '12 yrs', bio: 'Builds accurate, competitive bids so there are no surprises down the line.', focus: ['Takeoffs', 'Bidding', 'Value Engineering', 'Design-Build'] },
-                { name: 'Your Name', title: 'Service Technician', meta: '9 yrs', bio: 'Handles service calls, upgrades, and the work that keeps plants running.', focus: ['Service Upgrades', 'Troubleshooting', 'Receptacles', 'Repairs'] },
-                { name: 'Your Name', title: 'Apprentice', meta: '3 yrs', bio: 'Learning the trade the right way — hands-on and safety-first.', focus: ['Rough-In', 'Material Handling', 'Safety', 'Crew Support'] },
+                // Crew — names + silhouettes (guy/girl). Roles/bios/skills TBD; real photos to replace silhouettes once permission is given.
+                { name: 'Cary Prince', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Rhyan McGhee', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'David Hatcher', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Jeremey Hensley', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Alan Ross', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Mike Evans', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Jenny Gardner', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Anna Robertson', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
             ],
         },
         {
             key: 'ICE', name: 'Industrial Controls & Electrical',
             members: [
-                { name: 'Your Name', title: 'Controls Engineer', meta: '15 yrs', bio: 'Designs and programs the control systems that automate plants and distribution centers.', focus: ['Niagara 4', 'PLC Programming', 'BMS / BAS', 'System Design'] },
-                { name: 'Your Name', title: 'PLC Programmer', meta: '13 yrs', bio: 'Writes and commissions the logic that runs the line.', focus: ['PLC Programming', 'HMI', 'Sensors', 'Integration'] },
-                { name: 'Your Name', title: 'BAS Technician', meta: '11 yrs', bio: 'Installs and dials in building automation across distribution centers.', focus: ['BMS Install', 'RTU / AHU Controls', 'Sensors', 'Commissioning'] },
-                { name: 'Your Name', title: 'Commissioning Lead', meta: '17 yrs', bio: 'Makes sure every point works before the doors open.', focus: ['Commissioning', 'Point-to-Point', 'Startup', 'Documentation'] },
-                { name: 'Your Name', title: 'Panel Builder', meta: '10 yrs', bio: 'Fabricates UL-listed control panels in-house, built to spec.', focus: ['Panel Fabrication', 'UL 508A', 'Wiring', 'Testing'] },
+                // Clint owns the ICE team
+                { name: 'Clint Benedetto', title: 'Owner', sil: 'male', bio: 'Owner of Industrial Controls & Electrical.' },
+                { name: 'Richard Moody', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Hunter Alistair', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Dillon Carson', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Joseph Autry', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Joey Henson', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Keith', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Nicole Harris', sil: 'female', bio: 'Part of the Industrial Controls & Electrical team.' },
             ],
         },
         {
@@ -64,7 +72,10 @@
         <path class="ts-hat" d="M27 44 C27 25 38 20 50 20 C62 20 73 25 73 44 Z"/>
         <rect class="ts-hat" x="22" y="42" width="56" height="5" rx="2.5"/></svg>`;
     const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    const portrait = m => m.photo ? `<img class="ts-photo" src="${esc(m.photo)}" alt="${esc(m.name)}">` : SIL;
+    // real photo > branded silhouette (guy/girl + division hardhat) > generic SVG fallback
+    const portrait = (m, divKey) => m.photo
+        ? `<img class="ts-photo" src="${esc(m.photo)}" alt="${esc(m.name)}">`
+        : (m.sil ? `<img class="ts-photo ts-photo--sil" src="assets/images/team/sil-${esc(m.sil)}-${esc(divKey)}.png" alt="${esc(m.name)}">` : SIL);
 
     /* ---------- build shell ---------- */
     root.innerHTML = `
@@ -225,10 +236,11 @@
         curDiv = di; cur = -1; fxBox = null;
         tabs.forEach((t, k) => { t.classList.toggle('is-active', k === di); t.setAttribute('aria-selected', k === di); });
         const d = DIVISIONS[di];
+        const dk = d.key.toLowerCase();
         grid.innerHTML = d.members.map((m, i) => `
             <button class="ts-cell" role="option" data-i="${i}" type="button" aria-selected="false" style="--i:${i}">
-                <span class="ts-cell-media">${portrait(m)}</span>
-                <span class="ts-cell-name">${esc(m.title)}</span>
+                <span class="ts-cell-media">${portrait(m, dk)}</span>
+                <span class="ts-cell-name">${esc(m.title || m.name)}</span>
                 <span class="ts-cell-ring" aria-hidden="true"></span>
             </button>`).join('');
         gridCols = Math.min(d.members.length, 3);   // adapt columns to roster size (e.g. SDG has 2)
@@ -242,7 +254,7 @@
 
     let swapTimer = 0;
     function fillSplash(d, m) {
-        sMedia.innerHTML = portrait(m);
+        sMedia.innerHTML = portrait(m, d.key.toLowerCase());
         sName.textContent = m.name;
         sEpithet.textContent = m.epithet || '';
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
