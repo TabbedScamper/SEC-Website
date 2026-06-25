@@ -18,17 +18,17 @@
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // Roster source of truth: docs/team-roster.txt — edit names/positions/bios there, mirror here.
     const DIVISIONS = [
         {
             key: 'SEC', name: 'Southern Electric',
             members: [
                 // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
                 { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls — SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
-                // Crew — names + silhouettes (guy/girl). Roles/bios/skills TBD; real photos to replace silhouettes once permission is given.
+                // Crew — names + silhouettes (guy/girl). Positions/bios TBD; real photos to replace silhouettes once permission is given.
                 { name: 'Cary Prince', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Rhyan McGhee', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'David Hatcher', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Jeremey Hensley', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Alan Ross', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Mike Evans', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Jenny Gardner', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
@@ -37,17 +37,19 @@
         },
         {
             key: 'ICE', name: 'Industrial Controls & Electrical',
+            // Names + positions from docs/team-roster.txt (owner's notes). Bios derived from titles; refine over time.
             members: [
-                // Clint owns the ICE team
-                { name: 'Clint Benedetto', title: 'Owner', sil: 'male', bio: 'Owner of Industrial Controls & Electrical.' },
-                { name: 'Richard Moody', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Hunter Alistair', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Dillon Carson', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Joseph Autry', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Joey Henson', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Keith', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Nicole Harris', sil: 'female', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Clint Benedetto', title: 'President', sil: 'male', bio: 'President of Industrial Controls & Electrical.' },
+                { name: 'Jeremy Hensley', title: 'Project Manager', sil: 'male', bio: 'Project Manager at Industrial Controls & Electrical.' },
+                { name: 'Dillon Carson', title: 'Project Manager', sil: 'male', bio: 'Project Manager at Industrial Controls & Electrical.' },
+                { name: 'Joey Hinson', title: 'Engineering Manager', sil: 'male', bio: 'Engineering Manager at Industrial Controls & Electrical.' },
+                { name: 'Hunter Alistair', title: 'Automation Specialist', sil: 'male', bio: 'Automation Specialist at Industrial Controls & Electrical.' },
+                { name: 'Richard Moody', title: 'Automation Specialist', sil: 'male', bio: 'Automation Specialist at Industrial Controls & Electrical.' },
+                { name: 'Angel Martinez', title: 'Automation Technician', sil: 'male', bio: 'Automation Technician at Industrial Controls & Electrical.' },
+                { name: 'Joseph Autry', title: 'Panel Shop Supervisor', sil: 'male', bio: 'Panel Shop Supervisor at Industrial Controls & Electrical.' },
+                { name: 'Keith Moore', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
+                { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },   // NOT in owner's notes — confirm spelling/keep
+                { name: 'Nicole Morris', title: 'Office Administrator', sil: 'female', bio: 'Office Administrator at Industrial Controls & Electrical.' },
             ],
         },
         {
@@ -275,7 +277,7 @@
     function fillSplash(d, m) {
         sMedia.innerHTML = portrait(m, d.key.toLowerCase());
         sName.textContent = m.name;
-        sEpithet.textContent = m.epithet || '';
+        sEpithet.textContent = m.epithet || m.title || '';   // show position as the splash subtitle when there's no epithet
         sFocus.innerHTML = (m.focus || []).map((f, k) => `<li style="--i:${k}">${esc(f)}</li>`).join('');
         sBio.textContent = m.bio || '';
     }

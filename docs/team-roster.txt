@@ -1,0 +1,77 @@
+============================================================
+SEC WEBSITE — TEAM ROSTER (working doc, build over time)
+============================================================
+This is the source-of-truth notes file for the "About Us" crew selector.
+Edit names / positions / bios here, then they get mirrored into the live
+data in  js/team-select.js  (the DIVISIONS array).
+
+Format per person:
+  Full Name
+  Position (optional)
+  short bio (optional)
+
+Legend:  [?] = needs confirmation     [NEW] = added, not yet confirmed
+
+------------------------------------------------------------
+SEC — Southern Electric & Controls (field / install)
+------------------------------------------------------------
+Kevin Hatcher
+Owner
+Owns SEC, ICE and SDG; field side is home base.
+
+Cary Prince            (position TBD)
+Rhyan McGhee           (position TBD)
+David Hatcher          (position TBD)
+Alan Ross              (position TBD)
+Mike Evans             (position TBD)
+Jenny Gardner          (position TBD)
+Anna Robertson         (position TBD)
+[?] Jeremy Hensley — listed under ICE in your notes (Project Manager), so he was
+    moved to ICE. If he's actually SEC field crew, tell me and I'll move him back.
+
+------------------------------------------------------------
+ICE — Industrial Controls & Electrical, LLC
+------------------------------------------------------------
+Clint Benedetto
+President
+
+Jeremy Hensley
+Project Manager
+
+Dillon Carson
+Project Manager
+
+Joey Hinson
+Engineering Manager
+
+Hunter Alistair
+Automation Specialist
+
+Richard Moody
+Automation Specialist
+
+Angel Martinez
+Automation Technician
+
+Joseph Autry
+Panel Shop Supervisor
+
+Keith Moore
+(position TBD)
+
+Nicole Morris
+Office Administrator
+
+[?] Uegene Finley — was on the old roster but is NOT in your notes. Kept for now.
+    Confirm the spelling (Eugene?) / position, or say remove.
+
+------------------------------------------------------------
+SDG — Southern Design Group (in-house creative)
+------------------------------------------------------------
+Mason Walton
+Multi-field Designer
+"The Digital Fabricator"
+
+Eriana Fleming
+Designer
+(needs a photo)
