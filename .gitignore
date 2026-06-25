@@ -19,3 +19,8 @@ desktop.ini
 
 # Local build/preview snapshots (kept outside the repo)
 preview_*.png
+
+node_modules/
+package.json
+package-lock.json
+test-electricity.html

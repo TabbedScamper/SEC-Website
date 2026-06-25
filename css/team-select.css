@@ -7,11 +7,14 @@
 .about-team .section-title { margin-bottom: 2.6rem; }
 
 #team-select { position: relative; }
-/* large blurred division logo watermark behind the panel */
+/* Division logo watermark behind the panel. Logos are wildly different brightness (SEC black,
+   ICE blue/orange, SDG red), so a raw colored watermark is invisible for the dark ones. JS sets
+   a pre-baked WHITE ghost PNG of each logo as background-image (reliable, unlike CSS mask of an
+   external image). z-index 5 = above the packed panel, below only the lightning canvas (z-index 6). */
 .ts-bg {
-    position: absolute; inset: 0; z-index: 0; pointer-events: none;
-    background-repeat: no-repeat; background-position: center; background-size: min(82%, 780px) auto;
-    filter: blur(26px) saturate(1.3) brightness(1.3); opacity: 0.2;
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;   /* TRUE background: behind the roster, tabs, splash */
+    background-repeat: no-repeat; background-position: center; background-size: contain;   /* logo as large as possible, whole */
+    filter: blur(6px); opacity: 0.52;
     transition: opacity 0.4s ease;
 }
 .ts-fx { position: absolute; inset: -48px; z-index: 6; pointer-events: none; }   /* bleed past edges so glow isn't clipped (matches MARGIN in team-select.js) */
@@ -71,11 +74,17 @@
 .ts-sil .ts-hat { fill: #3a2125; transition: fill 0.3s; }
 .ts-cell-name {
     position: relative; z-index: 2;
-    font: 600 0.58rem/1.2 'Inter', sans-serif;
+    font: 700 0.58rem/1.2 'Inter', sans-serif;
     text-transform: uppercase; letter-spacing: 0.04em;
-    color: var(--text-muted); text-align: center;
+    color: var(--text-soft); text-align: center;
     padding: 0.45rem 0.3rem;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.88));
+}
+/* position line under the name (owners/titled roles) */
+.ts-cell-role {
+    display: block; margin-top: 0.12rem;
+    font: 600 0.48rem/1.15 'Inter', sans-serif; letter-spacing: 0.05em;
+    color: var(--sec-red-soft);
 }
 .ts-cell-ring { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 

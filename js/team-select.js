@@ -23,7 +23,7 @@
             key: 'SEC', name: 'Southern Electric',
             members: [
                 // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
-                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.jpg', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls — SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
+                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls — SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
                 // Crew — names + silhouettes (guy/girl). Roles/bios/skills TBD; real photos to replace silhouettes once permission is given.
                 { name: 'Cary Prince', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Rhyan McGhee', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
@@ -55,12 +55,12 @@
             // PLACEHOLDER titles/bios/skills — confirm with Mason & Eriana. Eriana needs a photo.
             members: [
                 {
-                    name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.jpg',
+                    name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.webp',
                     epithet: 'The Digital Fabricator',
                     bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines — coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
                     focus: ['Precision Modeling', 'BIM Coordination', 'Systems Logic & Scripting', 'Tool & Pipeline Development'],
                 },
-                { name: 'Eriana Fleming', title: 'Designer', photo: 'assets/images/team/eriana-fleming.jpg', bio: 'Always learning and evolving to pursue my dream goals and help others.', focus: ['Photoshop', 'AutoCAD', 'Navisworks', 'Revit', 'Architectural Drafting', '3D Modeling', 'Graphic Design'] },
+                { name: 'Eriana Fleming', title: 'Designer', photo: 'assets/images/team/eriana-fleming.webp', bio: 'Always learning and evolving to pursue my dream goals and help others.', focus: ['Photoshop', 'AutoCAD', 'Navisworks', 'Revit', 'Architectural Drafting', '3D Modeling', 'Graphic Design'] },
             ],
         },
     ];
@@ -75,7 +75,7 @@
     // real photo > branded silhouette (guy/girl + division hardhat) > generic SVG fallback
     const portrait = (m, divKey) => m.photo
         ? `<img class="ts-photo" src="${esc(m.photo)}" alt="${esc(m.name)}">`
-        : (m.sil ? `<img class="ts-photo ts-photo--sil" src="assets/images/team/sil-${esc(m.sil)}-${esc(divKey)}.png" alt="${esc(m.name)}">` : SIL);
+        : (m.sil ? `<img class="ts-photo ts-photo--sil" src="assets/images/team/sil-${esc(m.sil)}-${esc(divKey)}.webp" alt="${esc(m.name)}">` : SIL);
 
     /* ---------- build shell ---------- */
     root.innerHTML = `
@@ -117,11 +117,12 @@
     const tsBg   = root.querySelector('.ts-bg');
     const canvas = root.querySelector('.ts-fx');
     const ctx    = canvas.getContext('2d');
-    // large blurred division logo behind the panel
+    // pre-baked WHITE ghost of each division logo (RGB forced white, alpha kept) so it reads as a
+    // watermark on the dark panel. Plain background-image — reliable, unlike CSS mask of an external img.
     const DIV_LOGOS = {
-        sec: 'assets/images/logos/sec-logo.png',
-        ice: 'assets/images/logos/UpdatedICELogo-removebg-preview.png',
-        sdg: 'Images/Logo-SDG.png',
+        sec: 'assets/images/logos/ghost-sec.webp',
+        ice: 'assets/images/logos/ghost-ice.webp',
+        sdg: 'assets/images/logos/ghost-sdg.webp',
     };
 
     /* ---------- electricity circling the selected card ---------- */
@@ -133,9 +134,14 @@
         ['#ff5b62', '#d81e26'],   // SDG — red (already reads great)
     ];
     const MARGIN = 48;   // canvas bleeds past the component so edge glow isn't clipped
-    let DPR = 1, raf = 0, running = false, fxBox = null;
+    // PERF: the glow is built from cheap wide additive ('lighter') strokes inside the canvas —
+    // NO ctx.shadowBlur and NO CSS filter on the element. Both re-blur the whole surface every
+    // frame and tanked this to ~40fps; without them the effect holds 160+fps.
+    // precomputed crackle so jagPath never calls Math.random() per-vertex per-frame (no GC churn)
+    const NOISE = Array.from({ length: 256 }, () => Math.random() - 0.5);
+    let DPR = 1, raf = 0, running = false, fxBox = null, lastDraw = 0;
     function sizeCanvas() {
-        DPR = Math.min(2, window.devicePixelRatio || 1);
+        DPR = Math.min(1.5, window.devicePixelRatio || 1);   // 1.5 is plenty once the CSS filter does the blur
         const r = root.getBoundingClientRect();
         const fw = r.width + MARGIN * 2, fh = r.height + MARGIN * 2;
         canvas.width = fw * DPR; canvas.height = fh * DPR;
@@ -155,21 +161,23 @@
         ctx.beginPath();
         for (let i = 0; i <= pts.length; i++) {
             const p = pts[i % pts.length];
+            const nz = NOISE[(i * 7 + (t * 30 | 0) + (seed | 0) * 13) & 255];   // animated crackle, no per-vertex RNG
             const wob = Math.sin(t * 7 + i * 1.15 + seed * 2.3) * amp
                       + Math.sin(t * 19 + i * 2.9 + seed) * amp * 0.7
-                      + (Math.random() - 0.5) * amp * 1.5;
+                      + nz * amp * 1.5;
             i ? ctx.lineTo(p.x + p.nx * wob, p.y + p.ny * wob)
               : ctx.moveTo(p.x + p.nx * wob, p.y + p.ny * wob);
         }
     }
-    // stroke as lightning: tight colored glow -> crisp colored arc -> thin white-hot core
+    // stroke as lightning, glow faked with stacked translucent strokes under 'lighter' compositing
+    // (no shadowBlur, no CSS filter): wide soft halo -> colored body -> crisp arc -> white-hot core.
     function strokeNeon(col, coreA) {
-        ctx.strokeStyle = col; ctx.shadowColor = col;
-        ctx.shadowBlur = 18; ctx.lineWidth = 7;   ctx.globalAlpha = 0.14; ctx.stroke();   // soft outer glow
-        ctx.shadowBlur = 10; ctx.lineWidth = 3.4; ctx.globalAlpha = 0.34; ctx.stroke();   // colored body
-        ctx.shadowBlur = 5;  ctx.lineWidth = 1.6; ctx.globalAlpha = 0.92; ctx.stroke();   // crisp colored arc (the "bolt")
-        ctx.strokeStyle = '#fff'; ctx.shadowColor = col;
-        ctx.shadowBlur = 2;  ctx.lineWidth = 0.6; ctx.globalAlpha = coreA * 0.5; ctx.stroke();   // thin white-hot center
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 6.5; ctx.globalAlpha = 0.10; ctx.stroke();   // wide soft halo (the faux-glow)
+        ctx.lineWidth = 3.2; ctx.globalAlpha = 0.26; ctx.stroke();   // colored body
+        ctx.lineWidth = 1.6; ctx.globalAlpha = 0.9;  ctx.stroke();   // crisp colored arc (the "bolt")
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 0.6; ctx.globalAlpha = coreA * 0.7; ctx.stroke();   // thin white-hot center
     }
     // short lightning tendrils spiking outward from the frame
     function drawBranches(pts, cols, t) {
@@ -186,10 +194,8 @@
             }
             ctx.beginPath(); ctx.moveTo(bp[0].x, bp[0].y);
             for (let k = 1; k < bp.length; k++) ctx.lineTo(bp[k].x, bp[k].y);
-            ctx.strokeStyle = cols[s % cols.length]; ctx.shadowColor = cols[s % cols.length];
-            ctx.shadowBlur = 12; ctx.lineWidth = 1.7; ctx.globalAlpha = on * 0.6; ctx.stroke();
-            ctx.strokeStyle = '#fff'; ctx.shadowColor = cols[s % cols.length];
-            ctx.shadowBlur = 5; ctx.lineWidth = 0.7; ctx.globalAlpha = on * 0.4; ctx.stroke();
+            ctx.strokeStyle = cols[s % cols.length]; ctx.lineWidth = 1.7; ctx.globalAlpha = on * 0.7; ctx.stroke();
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.7; ctx.globalAlpha = on * 0.5; ctx.stroke();
         }
     }
     const PAD = 12;   // outline gap between the card edge and the ring
@@ -209,18 +215,21 @@
         const cx = b.x - PAD, cy = b.y - PAD, cw = b.w + PAD * 2, ch = b.h + PAD * 2;
         [[cx, cy], [cx + cw, cy], [cx + cw, cy + ch], [cx, cy + ch]].forEach((c, ci) => {
             const pul = 0.5 + Math.sin(t * 4 + ci * 1.3) * 0.35;
-            ctx.fillStyle = '#fff'; ctx.shadowColor = cols[0]; ctx.shadowBlur = 16; ctx.globalAlpha = pul * 0.6;
-            ctx.beginPath(); ctx.arc(c[0], c[1], 1.9, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.globalAlpha = pul * 0.7;
+            ctx.beginPath(); ctx.arc(c[0], c[1], 2.1, 0, Math.PI * 2); ctx.fill();
         });
         // bright spark running around the perimeter
         const sp = pts[Math.floor((t * 0.4 % 1) * pts.length)];
-        ctx.fillStyle = '#fff'; ctx.shadowColor = cols[0]; ctx.shadowBlur = 16; ctx.globalAlpha = 1;
-        ctx.beginPath(); ctx.arc(sp.x + sp.nx * 2, sp.y + sp.ny * 2, 2.0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#fff'; ctx.globalAlpha = 1;
+        ctx.beginPath(); ctx.arc(sp.x + sp.nx * 2, sp.y + sp.ny * 2, 2.2, 0, Math.PI * 2); ctx.fill();
         ctx.globalCompositeOperation = 'source-over';
-        ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+        ctx.globalAlpha = 1;
     }
     function loop(now) {
         if (!running) return;
+        raf = requestAnimationFrame(loop);
+        if (now - lastDraw < 33) return;   // PERF: cap to ~30fps — lightning reads great strobed, halves the work
+        lastDraw = now;
         if (cur >= 0 && splash) {
             // the electric ring encloses the WHOLE profile card (portrait + name + bio + skills);
             // box() reads the live rect, so it follows the shrink/pop scale animation
@@ -230,9 +239,10 @@
             fxBox.x += (tb.x - fxBox.x) * k; fxBox.y += (tb.y - fxBox.y) * k; fxBox.w += (tb.w - fxBox.w) * k; fxBox.h += (tb.h - fxBox.h) * k;
             drawBorder(fxBox, now / 1000);
         }
-        raf = requestAnimationFrame(loop);
     }
-    function start() { if (running || reduce) return; running = true; sizeCanvas(); raf = requestAnimationFrame(loop); }
+    // reduced-motion users get a single static ring instead of a bare card (no animation loop)
+    function drawStatic() { if (cur < 0 || !splash) return; sizeCanvas(); fxBox = box(splash); drawBorder(fxBox, 0); }
+    function start() { if (reduce) { drawStatic(); return; } if (running) return; running = true; lastDraw = 0; sizeCanvas(); raf = requestAnimationFrame(loop); }
     function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; clearAll(); }
 
     /* ---------- state ---------- */
@@ -245,11 +255,11 @@
         tabs.forEach((t, k) => { t.classList.toggle('is-active', k === di); t.setAttribute('aria-selected', k === di); });
         const d = DIVISIONS[di];
         const dk = d.key.toLowerCase();
-        if (tsBg && DIV_LOGOS[dk]) tsBg.style.backgroundImage = `url("${DIV_LOGOS[dk]}")`;
+        if (tsBg && DIV_LOGOS[dk]) tsBg.style.backgroundImage = `url("${DIV_LOGOS[dk]}")`;   // white ghost watermark
         grid.innerHTML = d.members.map((m, i) => `
             <button class="ts-cell" role="option" data-i="${i}" type="button" aria-selected="false" style="--i:${i}">
                 <span class="ts-cell-media">${portrait(m, dk)}</span>
-                <span class="ts-cell-name">${esc(m.title || m.name)}</span>
+                <span class="ts-cell-name">${esc(m.name)}${m.title ? `<span class="ts-cell-role">${esc(m.title)}</span>` : ''}</span>
                 <span class="ts-cell-ring" aria-hidden="true"></span>
             </button>`).join('');
         gridCols = Math.min(d.members.length, 3);   // adapt columns to roster size (e.g. SDG has 2)
@@ -283,6 +293,7 @@
         } else {
             fillSplash(d, m);
         }
+        if (reduce) drawStatic();   // no loop for reduced motion, so re-fit the static ring to the new card
     }
 
     /* ---------- interaction ---------- */

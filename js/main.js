@@ -134,6 +134,13 @@
         });
     })();
 
+    // PERF: the looping drone background (large file, preload="none") only appears AFTER the intro
+    // clip finishes, so keep it out of the initial load. Start buffering it once the intro is actually
+    // playing — it then has the intro's full duration to fill before the hand-off.
+    if (heroVideo && heroDrone) {
+        heroVideo.addEventListener('playing', () => heroDrone.load(), { once: true });
+    }
+
     const revealHero = () => heroEl?.classList.add('is-revealed');
     const HERO_TRIM_END_SECONDS = 0.25;  // cut just before the natural end so the
                                          // instant hand-off lands on the final frame
