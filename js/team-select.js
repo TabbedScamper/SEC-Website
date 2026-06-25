@@ -150,7 +150,9 @@
         canvas.style.width = fw + 'px'; canvas.style.height = fh + 'px';
         ctx.setTransform(DPR, 0, 0, DPR, MARGIN * DPR, MARGIN * DPR);   // (0,0) = component top-left
     }
-    const clearAll = () => { const r = root.getBoundingClientRect(); ctx.clearRect(-MARGIN, -MARGIN, r.width + MARGIN * 2, r.height + MARGIN * 2); };
+    // clear the WHOLE canvas bitmap (over-clears) — not just the current root rect, which leaves a
+    // stale ring at the bottom when switching to a shorter roster (e.g. ICE -> SDG).
+    const clearAll = () => ctx.clearRect(-MARGIN, -MARGIN, canvas.width + MARGIN * 2, canvas.height + MARGIN * 2);
     const box = el => { const c = el.getBoundingClientRect(), r = root.getBoundingClientRect(); return { x: c.left - r.left, y: c.top - r.top, w: c.width, h: c.height }; };
     function perim(x, y, w, h, n) {
         const pts = [], edge = (ax, ay, bx, by, nx, ny) => { for (let i = 0; i < n; i++) { const f = i / n; pts.push({ x: ax + (bx - ax) * f, y: ay + (by - ay) * f, nx, ny }); } };
@@ -267,6 +269,7 @@
         gridCols = Math.min(d.members.length, 3);   // adapt columns to roster size (e.g. SDG has 2)
         grid.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
         cells = [...grid.querySelectorAll('.ts-cell')];
+        sizeCanvas();   // roster size changed the panel height — resize (and clear) the fx canvas to match
         // selection only changes on an explicit pick (click / keyboard) — not on hover
         cells.forEach((c, i) => c.addEventListener('click', () => { select(i, true); c.focus({ preventScroll: true }); }));
         if (fx && !reduce) { grid.classList.remove('powering'); void grid.offsetWidth; grid.classList.add('powering'); }
