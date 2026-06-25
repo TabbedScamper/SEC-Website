@@ -49,7 +49,7 @@
                 { name: 'Joseph Autry', title: 'Panel Shop Supervisor', sil: 'male', bio: 'Panel Shop Supervisor at Industrial Controls & Electrical.' },
                 { name: 'Keith Moore', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
                 { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },   // NOT in owner's notes — confirm spelling/keep
-                { name: 'Nicole Morris', title: 'Office Administrator', sil: 'female', bio: 'Office Administrator at Industrial Controls & Electrical.' },
+                { name: 'Nicole Harris', title: 'Office Administrator', sil: 'female', bio: 'Office Administrator at Industrial Controls & Electrical.' },
             ],
         },
         {
@@ -146,7 +146,9 @@
         DPR = Math.min(1.5, window.devicePixelRatio || 1);   // 1.5 is plenty once the CSS filter does the blur
         const r = root.getBoundingClientRect();
         const fw = r.width + MARGIN * 2, fh = r.height + MARGIN * 2;
-        canvas.width = fw * DPR; canvas.height = fh * DPR;
+        const cw = Math.round(fw * DPR), ch = Math.round(fh * DPR);
+        if (canvas.width === cw && canvas.height === ch) return;   // unchanged — skip (resizing clears + flickers)
+        canvas.width = cw; canvas.height = ch;
         canvas.style.width = fw + 'px'; canvas.style.height = fh + 'px';
         ctx.setTransform(DPR, 0, 0, DPR, MARGIN * DPR, MARGIN * DPR);   // (0,0) = component top-left
     }
@@ -321,4 +323,7 @@
         const io = new IntersectionObserver(es => es.forEach(en => en.isIntersecting ? start() : stop()), { threshold: 0.12 });
         io.observe(root);
     } else { start(); }
+    // Keep the fx canvas matched to the panel as its content reflows (e.g. a long bio wrapping tall
+    // on mobile) — otherwise the bottom of the electric ring gets clipped by a too-short canvas.
+    if ('ResizeObserver' in window) new ResizeObserver(() => sizeCanvas()).observe(root);
 })();
