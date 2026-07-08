@@ -24,7 +24,7 @@
             key: 'SEC', name: 'Southern Electric',
             members: [
                 // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
-                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls · SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
+                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'President/Owner', bio: 'Owner of Southern Electric & Controls · SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
                 // Crew — names + silhouettes (guy/girl). Positions/bios TBD; real photos to replace silhouettes once permission is given.
                 { name: 'Cary Prince', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Rhyan McGhee', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
