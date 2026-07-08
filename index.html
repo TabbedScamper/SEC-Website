@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Southern Electric & Controls — premier electrical installation and building automation contractor. ICE LLC subsidiary handles controls and Honeywell Niagara 4 building automation.">
+    <meta name="description" content="Southern Electric & Controls: premier electrical installation and building automation contractor. ICE LLC subsidiary handles controls and Honeywell Niagara 4 building automation.">
     <title>Southern Electric &amp; Controls | Electrical Installation &amp; Building Automation</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
                 <img src="assets/images/logos/sec-logo.webp" alt="Southern Electric &amp; Controls" class="logo-img logo-img--sec" decoding="async">
             </a>
             <span class="logo-divider"></span>
-            <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" aria-label="Industrial Controls &amp; Electrical (opens in new tab)">
+            <a href="#companies" aria-label="Industrial Controls &amp; Electrical">
                 <img src="assets/images/logos/UpdatedICELogo-removebg-preview.webp" alt="Industrial Controls &amp; Electrical" class="logo-img logo-img--ice" decoding="async">
             </a>
         </div>
@@ -40,7 +40,7 @@
             <ul class="nav-list">
                 <li><a href="#companies" class="nav-link">Companies</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
-                <li><a href="#automation" class="nav-link">Automation</a></li>
+                <li><a href="#controls" class="nav-link">Controls</a></li>
                 <li><a href="#design-group" class="nav-link">Design</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
@@ -61,7 +61,7 @@
         <li><a href="#hero">Home</a></li>
         <li><a href="#companies">Companies</a></li>
         <li><a href="#services">Services</a></li>
-        <li><a href="#automation">Automation</a></li>
+        <li><a href="#controls">Controls</a></li>
         <li><a href="#design-group">Design</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#about">About</a></li>
@@ -111,7 +111,7 @@
             </h1>
             <p class="hero-lead">
                 Southern Electric &amp; Controls delivers complete electrical installation,
-                switchgear, and building automation — under one company, with one
+                switchgear, and building automation, under one company, with one
                 accountable team from design through commissioning.
             </p>
         </div>
@@ -126,39 +126,67 @@
     </a>
 </section>
 
-<!-- ───── TWO-COMPANY INTRO ───── -->
+<!-- ───── THREE-COMPANY EXPLORER ─────
+   Three interactive panels — SEC (spinning logo), ICE (live 3D control
+   panel), SDG (the Shelby drives across). Backgrounds idle blurred with a
+   short description overlaid; hovering brings them to life, and clicking
+   opens a Rockstar-style explore drawer (right slide-over) that carries the
+   full condensed company content so the page itself stays short.
+   js/company-panels.js drives it.
+-->
 <section id="companies" class="companies">
     <div class="container">
         <div class="section-eyebrow">One team. Endless talents.</div>
-        <h2 class="section-title">Electrical, controls, design, and estimating &mdash; coordinated under one accountable team.</h2>
+        <h2 class="section-title">Electrical, controls, design, and estimating, coordinated under one accountable team.</h2>
+    </div>
+    <div class="container co-stage">
+        <article class="co-panel co-panel--sec" data-drawer="sec">
+            <div class="co-face">
+                <img class="co-face-logo" src="assets/images/logos/sec-logo.webp" alt="Southern Electric &amp; Controls" loading="lazy" decoding="async">
+                <div class="co-face-desc">
+                    <div class="co-mark">SEC</div>
+                    <h3 class="co-name">Southern Electric &amp; Controls</h3>
+                    <p class="co-tag">The parent company. Industrial &amp; commercial electrical contracting:
+                        conduit, wire, switchgear, service, and the crews that put it in.</p>
+                    <span class="co-cta">Click the logo below to explore</span>
+                </div>
+            </div>
+            <button class="co-totem" type="button" aria-label="Explore Southern Electric &amp; Controls">
+                <img class="co-totem-img co-totem-spin" src="assets/images/logos/sec-logo.webp" alt="" loading="lazy" decoding="async">
+            </button>
+        </article>
 
-        <div class="company-grid">
-            <article class="company-card company-card--sec">
-                <div class="company-mark">SEC</div>
-                <h3 class="company-name">Southern Electric &amp; Controls</h3>
-                <p class="company-tag">Installation &amp; Electrical Contractor</p>
-                <ul class="company-bullets">
-                    <li>Industrial &amp; commercial electrical installation</li>
-                    <li>Distribution, switchgear, and motor controls</li>
-                    <li>Service, maintenance, and arc-flash compliance</li>
-                    <li>Hospitals, distribution centers, manufacturing</li>
-                </ul>
-                <a href="#services" class="company-link">See SEC services →</a>
-            </article>
+        <article class="co-panel co-panel--ice" data-drawer="ice">
+            <div class="co-face">
+                <img class="co-face-logo" src="Images/Ice Logo Upscaled.webp" alt="Industrial Controls &amp; Electrical" loading="lazy" decoding="async">
+                <div class="co-face-desc">
+                    <div class="co-mark">ICE</div>
+                    <h3 class="co-name">Industrial Controls &amp; Electrical</h3>
+                    <p class="co-tag">The controls specialists. UL 508A panel shop, building automation,
+                        BACnet cabling, and the programming that runs it all.</p>
+                    <span class="co-cta">Click the panel below to see it up close</span>
+                </div>
+            </div>
+            <button class="co-totem" type="button" aria-label="Explore Industrial Controls &amp; Electrical">
+                <canvas id="coIceCanvas" aria-hidden="true"></canvas>
+            </button>
+        </article>
 
-            <article class="company-card company-card--ice">
-                <div class="company-mark">ICE</div>
-                <h3 class="company-name">Industrial Controls &amp; Electrical</h3>
-                <p class="company-tag">Building Automation &amp; Controls — a Southern Electric company</p>
-                <ul class="company-bullets">
-                    <li>Honeywell Niagara 4 building automation</li>
-                    <li>HVAC controls, lighting controls, integration</li>
-                    <li>System programming &amp; commissioning</li>
-                    <li>Award-winning Honeywell partner</li>
-                </ul>
-                <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" class="company-link">Visit ICE Electric →</a>
-            </article>
-        </div>
+        <article class="co-panel co-panel--sdg" data-drawer="sdg">
+            <div class="co-face">
+                <img class="co-face-logo" src="Images/Logo-SDG-card.webp" alt="Southern Design Group" loading="lazy" decoding="async">
+                <div class="co-face-desc">
+                    <div class="co-mark">SDG</div>
+                    <h3 class="co-name">Southern Design Group</h3>
+                    <p class="co-tag">The in-house design team. Revit &amp; BIM coordination, CAD drafting,
+                        renders, and media, drawing what the field builds.</p>
+                    <span class="co-cta">Click the truck below to see SDG</span>
+                </div>
+            </div>
+            <button class="co-totem" type="button" aria-label="Go to Southern Design Group">
+                <img class="co-totem-img co-truck" src="assets/images/projects/sdg/truck-still.webp" alt="" loading="lazy" decoding="async">
+            </button>
+        </article>
     </div>
 </section>
 
@@ -166,7 +194,7 @@
 <section id="services" class="services">
     <div class="container">
         <div class="section-eyebrow">What we do</div>
-        <h2 class="section-title">Full-scope electrical &amp; controls — from preconstruction to commissioning.</h2>
+        <h2 class="section-title">Full-scope electrical &amp; controls, from preconstruction to commissioning.</h2>
 
         <div class="service-grid">
             <article class="service-card">
@@ -216,7 +244,7 @@
                 </div>
                 <h3>Preventive Maintenance</h3>
                 <p>Scheduled maintenance programs that catch issues before they shut down
-                   production — switchgear PMs, infrared scans, motor surveys, panel checks.</p>
+                   production: switchgear PMs, infrared scans, motor surveys, panel checks.</p>
             </article>
 
             <article class="service-card">
@@ -252,7 +280,7 @@
                 </div>
                 <h3>BIM &amp; Revit Modeling</h3>
                 <p>Coordinated 3D MEP and electrical models from our in-house Southern
-                   Design Group &mdash; clash detection and fabrication support before
+                   Design Group: clash detection and fabrication support before
                    crews mobilize.</p>
             </article>
 
@@ -266,7 +294,7 @@
                 </div>
                 <h3>CAD Drafting</h3>
                 <p>AutoCAD shop drawings, riser diagrams, panel schedules, and one-line
-                   diagrams &mdash; drawing-ready documentation produced in-house by SDG.</p>
+                   diagrams, drawing-ready documentation produced in-house by SDG.</p>
             </article>
 
             <article class="service-card">
@@ -293,7 +321,7 @@
                 </div>
                 <h3>Estimating &amp; Takeoffs</h3>
                 <p>Electrical and controls bid estimating, material takeoffs, and
-                   detailed pricing analysis &mdash; vendor-current numbers for
+                   detailed pricing analysis, vendor-current numbers for
                    design-build and hard-bid projects.</p>
             </article>
         </div>
@@ -317,40 +345,45 @@
             <span>Industrial</span>
             <span>Corporate Offices</span>
             <span>Automation</span>
+            <span>Municipal</span>
+            <span>Water / Wastewater</span>
         </div>
     </div>
 </section>
 
-<!-- ───── BUILDING AUTOMATION SPOTLIGHT ───── -->
-<section id="automation" class="automation">
-    <div class="automation-bg"></div>
-    <div class="container automation-inner">
-        <div class="automation-text">
-            <div class="section-eyebrow section-eyebrow--light">ICE Building Automation</div>
-            <h2 class="section-title section-title--light">
-                A Honeywell-certified partner running on Niagara 4.
-            </h2>
-            <p>
-                Our ICE team designs, programs, and commissions building automation
-                systems for warehouses, offices, hospitals, and distribution centers.
-                We standardize on Honeywell Niagara 4 and TR-100 series sensors
-                for repeatable, supportable installations.
-            </p>
-            <ul class="automation-bullets">
-                <li><strong>Honeywell Niagara 4</strong> — certified programmers on staff</li>
-                <li><strong>TR-100 series</strong> — current sensor standard across new builds</li>
-                <li><strong>Award-winning partner</strong> — recognized by Honeywell for project execution</li>
-                <li><strong>In-house training</strong> — Niagara 4 training on Tridium framework</li>
-            </ul>
-            <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" class="btn btn--primary">Talk to our controls team</a>
+<!-- (The Building Automation spotlight moved into the ICE explore drawer —
+     see <template id="tpl-ice">. Nav/footer "Automation" links open it.) -->
+
+<!-- ───── ICE INDUSTRIAL CONTROLS / UL 508A PANEL SHOP ─────
+   Interactive 3D control panel (built by ICE, modeled from a real job).
+   Idle: slow turntable.  Hover (tap on touch): the enclosure door swings
+   open to show the backplate build.  js/controls-panel.js drives it; the
+   model only loads when the section nears the viewport.
+-->
+<section id="controls" class="controls-spotlight">
+    <div class="controls-bg"></div>
+    <div class="container controls-inner">
+        <div class="controls-viewer" id="panelViewer">
+            <canvas id="panelCanvas" aria-label="Interactive 3D model of a UL 508A industrial control panel. Hover or tap to open the enclosure door."></canvas>
+            <div class="controls-hint" id="panelHint"><span class="hint-desktop">Click to look inside &middot; drag to spin</span><span class="hint-touch">Tap to look inside &middot; drag to spin</span></div>
         </div>
-        <div class="automation-badge">
-            <div class="badge-ring">
-                <div class="badge-content">
-                    <img src="assets/images/logos/Honeywell-Logo.webp" alt="Honeywell" class="badge-logo" loading="lazy" decoding="async">
-                    <div class="badge-num">Niagara 4</div>
-                    <div class="badge-line">Certified Partner</div>
-                </div>
+        <div class="controls-text">
+            <div class="controls-text-inner">
+                <div class="section-eyebrow section-eyebrow--light">ICE Industrial Controls</div>
+                <h2 class="section-title">UL 508A panels. Designed, built, and programmed in&#8209;house.</h2>
+                <p>
+                    From 10,000 sq.&nbsp;ft. of dedicated shop space, our ICE team builds
+                    UL&nbsp;Listed control panels for custom applications and pre-engineered
+                    automated systems, then writes the code that runs them. The panel
+                    you're looking at is one of ours, straight from the shop drawings.
+                </p>
+                <ul class="automation-bullets">
+                    <li><strong>UL 508A Listed:</strong> industrial control panel construction to the standard</li>
+                    <li><strong>PLC, HMI &amp; drives:</strong> programming and multi-device integration</li>
+                    <li><strong>SCADA &amp; telemetry:</strong> water/wastewater upgrades, radio and cellular</li>
+                    <li><strong>Full-service electrical:</strong> industrial, commercial, and municipal</li>
+                </ul>
+                <button type="button" class="btn btn--primary" data-open-drawer="ice">See what ICE can do</button>
             </div>
         </div>
     </div>
@@ -361,24 +394,24 @@
     <div class="design-group-intro">
         <div class="design-group-visual">
             <img src="Images/SDG/Example-1.webp" alt="" class="design-group-bim" data-reveal loading="lazy" decoding="async">
-            <img src="Images/Logo-SDG.webp" alt="Southern Design Group" class="design-group-logo" data-reveal loading="lazy" decoding="async" style="--delay: 0.25s;">
+            <img src="Images/Logo-SDG-card.webp" alt="Southern Design Group" class="design-group-logo" data-reveal loading="lazy" decoding="async" style="--delay: 0.25s;">
         </div>
         <div class="container design-group-inner">
             <div class="design-group-text" data-reveal="right">
                 <div class="section-eyebrow">Southern Design Group</div>
-                <h2 class="section-title">Drafting, BIM, and design support &mdash; in-house.</h2>
+                <h2 class="section-title">Drafting, BIM, and design support. In-house.</h2>
                 <p>
                     Southern Design Group is the in-house design division of Southern
-                    Electric &amp; Controls &mdash; alongside our ICE controls division.
+                    Electric &amp; Controls, alongside our ICE controls division.
                     From conceptual layouts to coordinated 3D models, SDG keeps every
-                    project drawing-ready &mdash; and turns out 3D, game, video, and web
+                    project drawing-ready, and turns out 3D, game, video, and web
                     work of its own.
                 </p>
                 <ul class="design-group-bullets">
-                    <li><strong>Revit modeling</strong> &mdash; coordinated MEP &amp; electrical BIM</li>
-                    <li><strong>AutoCAD drafting</strong> &mdash; shop drawings, riser diagrams, panel schedules</li>
-                    <li><strong>3D &amp; visualization</strong> &mdash; vehicle modeling, renders, animation</li>
-                    <li><strong>Media &amp; web</strong> &mdash; video editing and custom website builds</li>
+                    <li><strong>Revit modeling:</strong> coordinated MEP &amp; electrical BIM</li>
+                    <li><strong>AutoCAD drafting:</strong> shop drawings, riser diagrams, panel schedules</li>
+                    <li><strong>3D &amp; visualization:</strong> vehicle modeling, renders, animation</li>
+                    <li><strong>Media &amp; web:</strong> video editing and custom website builds</li>
                 </ul>
                 <div class="design-group-cta">
                     <button class="sdg-studio-trigger" id="sdgStudioOpen" type="button" aria-haspopup="dialog">
@@ -409,7 +442,7 @@
         <div class="sdg-showcase-head">
             <div class="section-eyebrow section-eyebrow--light">Skills &amp; creations</div>
             <h2 class="sdg-showcase-title">The disciplines behind Southern Design Group.</h2>
-            <p class="sdg-showcase-lead">SDG is the in-house creative division of Southern Electric &amp; Controls. Pick a discipline to slide open the work — every piece lists the tools and skills it was built with.</p>
+            <p class="sdg-showcase-lead">SDG is the in-house creative division of Southern Electric &amp; Controls. Pick a discipline to slide open the work. Every piece lists the tools and skills it was built with.</p>
         </div>
 
         <div class="sdg-caps" id="sdgCaps"></div>
@@ -461,7 +494,7 @@
         <div class="service-area-text" data-reveal="right">
             <div class="section-eyebrow">Service Area</div>
             <h2 class="section-title">Our Mission.</h2>
-            <p class="service-area-lead">To become one of the nation&rsquo;s top-ranking electrical contractors. Southern Electric is committed to leading the industry in safety, workforce training and customer satisfaction. We meet and exceed customer expectations through our full line of electrical design, build and maintenance services &mdash; backed by state-of-the-art technology and financial strength &mdash; completing projects on time and on budget, and we keep adopting new technologies as they emerge to pursue the unique, challenging projects that build a culture of innovative thinking.</p>
+            <p class="service-area-lead">To become one of the nation&rsquo;s top-ranking electrical contractors. Southern Electric is committed to leading the industry in safety, workforce training and customer satisfaction. We meet and exceed customer expectations through our full line of electrical design, build and maintenance services, backed by state-of-the-art technology and financial strength, completing projects on time and on budget, and we keep adopting new technologies as they emerge to pursue the unique, challenging projects that build a culture of innovative thinking.</p>
             <p class="service-area-note">A Jackson, TN&ndash;based contractor holding a Tennessee CE&ndash;Unlimited license, licensed and at work across the Southeast, Midwest and beyond.</p>
             <div class="service-area-legend"><span class="swatch"></span> Service area</div>
         </div>
@@ -541,7 +574,7 @@
             <p class="portfolio-head-lead">
                 Electrical installation and Honeywell building automation for distribution
                 centers, plants, and retail across the Mid-South. Hover a project to reveal
-                the client — tap to see photos and details.
+                the client. Tap to see photos and details.
             </p>
         </div>
 
@@ -553,7 +586,7 @@
         <div class="sec-list-head">
             <div class="section-eyebrow">The full list</div>
             <h3 class="sec-list-title">Every project, by year.</h3>
-            <p class="sec-list-lead"><span id="secProjectCount">0</span>+ awarded projects across the Mid-South &mdash; and counting. Pick a year to expand.</p>
+            <p class="sec-list-lead"><span id="secProjectCount">0</span>+ awarded projects across the Mid-South, and counting. Pick a year to expand.</p>
         </div>
         <div class="sec-list" id="secProjectList"></div>
 
@@ -591,7 +624,7 @@
                 Southern Electric &amp; Controls is a family-built electrical and controls
                 contractor serving the Mid-South. Our ICE division handles building
                 automation; our SEC division handles installation. Same leadership.
-                Same standards. Same commitment to getting your project online — on time.
+                Same standards. Same commitment to getting your project online, on time.
             </p>
             <p>
                 Whether you need an industrial electrical install, a hospital fit-out, or
@@ -608,7 +641,7 @@
             <div class="callout">
                 <div class="callout-num">2</div>
                 <h4>One team, endless talents</h4>
-                <p>Electrical, controls, building automation, BIM, drafting, and estimating &mdash; every discipline under one roof, no coordination tax.</p>
+                <p>Electrical, controls, building automation, BIM, drafting, and estimating: every discipline under one roof, no coordination tax.</p>
             </div>
             <div class="callout">
                 <div class="callout-num">3</div>
@@ -739,11 +772,11 @@
                     <img src="assets/images/logos/sec-logo.webp" alt="Southern Electric &amp; Controls" class="logo-img logo-img--sec" decoding="async">
                 </a>
                 <span class="logo-divider"></span>
-                <a href="https://ice-electric.com/industrial-controls-and-electrical/" target="_blank" rel="noopener noreferrer" aria-label="Industrial Controls &amp; Electrical (opens in new tab)">
+                <a href="#companies" aria-label="Industrial Controls &amp; Electrical">
                     <img src="assets/images/logos/UpdatedICELogo-removebg-preview.webp" alt="Industrial Controls &amp; Electrical" class="logo-img logo-img--ice" decoding="async">
                 </a>
             </div>
-            <p class="footer-tagline">Commercial · Design-Build · Industrial &mdash; one team, one accountable contractor.<br>86 Volunteer Blvd, Jackson, TN 38305 · (731) 660-5980</p>
+            <p class="footer-tagline">Commercial · Design-Build · Industrial. One team, one accountable contractor.<br>86 Volunteer Blvd, Jackson, TN 38305 · (731) 660-5980</p>
         </div>
         <div class="footer-right">
             <div class="footer-col">
@@ -758,7 +791,7 @@
                 <h5>Services</h5>
                 <ul>
                     <li><a href="#services">Electrical install</a></li>
-                    <li><a href="#automation">Building automation</a></li>
+                    <li><a href="#companies" data-open-drawer="ice">Building automation</a></li>
                     <li><a href="#services">Preventive maintenance</a></li>
                 </ul>
             </div>
@@ -776,11 +809,165 @@
     </div>
 </footer>
 
-<script src="js/projects.js"></script>
-<script src="js/sdg-creations.js"></script>
-<script src="js/sdg-truck.js"></script>
-<script src="js/sdg-tow.js"></script>
-<script src="js/team-select.js"></script>
-<script src="js/main.js"></script>
+<!-- ───── COMPANY EXPLORE DRAWER (Rockstar-style right slide-over) ───── -->
+<div class="explore-scrim" id="exploreScrim" aria-hidden="true"></div>
+<aside class="explore-drawer" id="exploreDrawer" aria-hidden="true" role="dialog" aria-modal="true">
+    <button class="explore-close" id="exploreClose" aria-label="Close">&times;</button>
+    <div class="explore-content" id="exploreContent"></div>
+</aside>
+
+<template id="tpl-sec">
+    <div class="explore-head">
+        <div class="co-mark">SEC</div>
+        <h3>Southern Electric &amp; Controls</h3>
+        <p class="explore-tagline">Installation &amp; electrical contractor &middot; the parent company</p>
+    </div>
+    <p>Founded in 2011 in Jackson, Tennessee, Southern Electric is a merit-shop contractor
+        of roughly 50, with reach-back to 300+ tradespeople. A WBE minority-owned company holding a
+        Tennessee CE&#8209;Unlimited license and licensed in 15+ states, at home on
+        heavy industrial work: equipment installation, conveyor and process systems,
+        switchgear, hospitals, and extrusion plants, with projects typically $2M and up.</p>
+    <details class="explore-acc" open>
+        <summary>What SEC does</summary>
+        <ul class="automation-bullets">
+            <li><strong>Electrical installation:</strong> industrial &amp; commercial, greenfield to tenant fit-out</li>
+            <li><strong>Distribution &amp; switchgear:</strong> MDPs, panelboards, transformers, motor controls</li>
+            <li><strong>Service &amp; maintenance:</strong> preventive programs and arc-flash compliance</li>
+            <li><strong>Markets:</strong> hospitals, distribution centers, manufacturing</li>
+        </ul>
+        <a href="#services" class="company-link">See the full services grid &rarr;</a>
+    </details>
+    <details class="explore-acc">
+        <summary>Careers at SEC</summary>
+        <ul class="automation-bullets">
+            <li>Electrical Project Superintendent</li>
+            <li>Electrical Project Manager</li>
+            <li>Journeyman Electrician</li>
+            <li>Electrician Apprentice</li>
+        </ul>
+        <a href="#contact" class="company-link">Apply now &rarr;</a>
+    </details>
+    <details class="explore-acc">
+        <summary>Contact</summary>
+        <p>86 Volunteer Blvd, Jackson, TN 38305<br>
+            <a href="tel:+17316605980">(731) 660-5980</a> &middot;
+            <a href="mailto:info@southernelectric.net">info@southernelectric.net</a></p>
+    </details>
+</template>
+
+<template id="tpl-ice">
+    <div class="explore-head">
+        <div class="co-mark">ICE</div>
+        <h3>Industrial Controls &amp; Electrical</h3>
+        <p class="explore-tagline">Making electrical technology work &middot; a Southern Electric company</p>
+    </div>
+    <p>Founded in 2007 in Dyersburg, Tennessee, and part of the Southern Electric family since
+        April 2025, ICE is a certified UL&nbsp;508A panel shop and full-service system
+        integrator. Hundreds of UL-Listed control panels have left its 10,000 sq.&nbsp;ft. shop,
+        every one hot-tested before it ships, serving western Tennessee and
+        clients across the country.</p>
+    <details class="explore-acc" open>
+        <summary>Industrial controls &amp; panel shop</summary>
+        <ul class="automation-bullets">
+            <li><strong>UL 508A Listed panels:</strong> custom and pre-engineered, OEM runs included</li>
+            <li><strong>PLC, HMI &amp; drives:</strong> programming and multi-device integration</li>
+            <li><strong>Design-build control systems:</strong> from concept drawings to commissioning</li>
+            <li><strong>Power distribution &amp; industrial automation</strong></li>
+        </ul>
+        <a href="#controls" class="company-link">See the 3D panel &rarr;</a>
+    </details>
+    <details class="explore-acc">
+        <summary>Building automation</summary>
+        <p>Our ICE team designs, programs, and commissions building automation systems
+            for warehouses, offices, hospitals, and distribution centers,
+            standardized on Honeywell Niagara 4 and TR-100 series sensors for
+            repeatable, supportable installations.</p>
+        <ul class="automation-bullets">
+            <li><strong>Honeywell Niagara 4:</strong> certified WEBS contractor, certified programmers on staff</li>
+            <li><strong>Award-winning partner:</strong> recognized by Honeywell for project execution</li>
+            <li><strong>TR-100 series:</strong> current sensor standard across new builds</li>
+            <li><strong>In-house training:</strong> Niagara 4 training on the Tridium framework</li>
+            <li><strong>BAS engineering:</strong> design graphics, operator interfaces, site services, budget proposals</li>
+            <li><strong>Honeywell hardware:</strong> Optimizer controllers, WEB-HMI touchscreens, TR-series sensors</li>
+            <li><strong>Whole-building integration:</strong> HVAC, lighting, security, and fire safety</li>
+        </ul>
+        <div class="explore-badge">
+            <div class="badge-ring">
+                <div class="badge-content">
+                    <img src="assets/images/logos/Honeywell-Logo.webp" alt="Honeywell" class="badge-logo" loading="lazy" decoding="async">
+                    <div class="badge-num">Niagara 4</div>
+                    <div class="badge-line">Certified Partner</div>
+                </div>
+            </div>
+        </div>
+        <a href="#contact" class="btn btn--primary">Talk to our controls team</a>
+    </details>
+    <details class="explore-acc">
+        <summary>Water / wastewater &amp; SCADA</summary>
+        <ul class="automation-bullets">
+            <li><strong>Control system upgrades</strong> for water and wastewater facilities</li>
+            <li><strong>SCADA architecture &amp; design</strong></li>
+            <li><strong>Radio &amp; cellular telemetry</strong> systems</li>
+        </ul>
+    </details>
+    <details class="explore-acc">
+        <summary>Careers at ICE</summary>
+        <ul class="automation-bullets">
+            <li>Wiring Technician</li>
+            <li>UL Control Panel Builder / Integrator</li>
+            <li>Electro-Mechanical Technician</li>
+        </ul>
+        <a href="#contact" class="company-link">Apply now &rarr;</a>
+    </details>
+    <details class="explore-acc">
+        <summary>Contact</summary>
+        <p>2245 Industrial Rd., Dyersburg, TN 38024<br>
+            <a href="tel:+17312858863">(731) 285-8863</a> &middot;
+            <a href="mailto:info@ice-electric.com">info@ice-electric.com</a></p>
+    </details>
+</template>
+
+<template id="tpl-sdg">
+    <div class="explore-head">
+        <div class="co-mark">SDG</div>
+        <h3>Southern Design Group</h3>
+        <p class="explore-tagline">The in-house design division of Southern Electric</p>
+    </div>
+    <p>SDG turns conceptual layouts into coordinated 3D models, shop drawings, and
+        project media, keeping every SEC and ICE project drawing-ready from
+        kickoff through closeout.</p>
+    <details class="explore-acc" open>
+        <summary>What SDG does</summary>
+        <ul class="automation-bullets">
+            <li><strong>Revit modeling &amp; BIM:</strong> coordinated MEP and electrical models</li>
+            <li><strong>AutoCAD drafting:</strong> shop drawings, riser diagrams, panel schedules</li>
+            <li><strong>3D &amp; visualization:</strong> vehicle modeling, renders, animation</li>
+            <li><strong>Media &amp; web:</strong> video editing and custom website builds</li>
+        </ul>
+        <a href="#design-group" class="company-link">See the SDG spotlight &rarr;</a>
+    </details>
+    <details class="explore-acc">
+        <summary>Meet the crew</summary>
+        <p>The About Us crew selector below has the whole team. Give it a spin.</p>
+        <a href="#about" class="company-link">Go to the crew &rarr;</a>
+    </details>
+</template>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "./js/vendor/three.module.min.js",
+        "three/addons/": "./js/vendor/addons/"
+    }
+}
+</script>
+<script type="module" src="js/controls-panel.js?v=5"></script>
+<script type="module" src="js/company-panels.js?v=5"></script>
+<script src="js/projects.js?v=2"></script>
+<script src="js/sdg-creations.js?v=2"></script>
+<script src="js/sdg-truck.js?v=2"></script>
+<script src="js/sdg-tow.js?v=2"></script>
+<script src="js/team-select.js?v=2"></script>
+<script src="js/main.js?v=3"></script>
 </body>
 </html>

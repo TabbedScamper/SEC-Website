@@ -1,5 +1,5 @@
 /* ============================================================
-   PROJECTS — field work grid + shared portfolio helpers
+   PROJECTS: field work grid + shared portfolio helpers
    ------------------------------------------------------------
    This file does two jobs:
      1. Renders the #projects sub-tab grid from window.PROJECTS
@@ -15,7 +15,7 @@
    FIELDS
      title       (req)  Project name
      category    (req)  Drives the sub-tabs
-     client      (req)  Company / building — shown as hover badge
+     client      (req)  Company / building: shown as hover badge
      clientLogo  (opt)  Logo png (alpha). Omit → clean text wordmark
      poster      (req)  Card image (16:10 looks best)
      hover       (opt)  GIF/img swapped in on hover (lazy-loaded)
@@ -34,10 +34,10 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/pepsico-warehouse-1.webp',
         ],
-        description: 'A long-running PepsiCo partner across multiple plants — air-compressor power, EV chargers, exhaust fans, pallet-inverter power, and rack & warehouse lighting, plus data-rack receptacles.',
+        description: 'A long-running PepsiCo partner across multiple plants: air-compressor power, EV chargers, exhaust fans, pallet-inverter power, and rack & warehouse lighting, plus data-rack receptacles.',
     },
     {
-        title: 'Walmart — Distribution & Facilities',
+        title: 'Walmart · Distribution & Facilities',
         category: 'Building Automation',
         client: 'Walmart',
         clientLogo: 'assets/images/logos/clients/walmart.svg',
@@ -46,10 +46,10 @@ window.PROJECTS = [
             'assets/images/projects/industrial/walmart-gray-1-e1753291372130.webp',
             'assets/images/projects/awarded/walmart-ks-1.webp',
         ],
-        description: 'Building automation and electrical across Walmart distribution centers — BMS and sensor installs with commissioning, rooftop RTU, air-handler and air-rotation-unit controls, plus office and warehouse power at DC sites in multiple states.',
+        description: 'Building automation and electrical across Walmart distribution centers: BMS and sensor installs with commissioning, rooftop RTU, air-handler and air-rotation-unit controls, plus office and warehouse power at DC sites in multiple states.',
     },
     {
-        title: 'Milwaukee Tool — Geek+ Automation',
+        title: 'Milwaukee Tool · Geek+ Automation',
         category: 'Electrical',
         client: 'Milwaukee Tool',
         clientLogo: 'assets/images/logos/clients/milwaukee.svg',
@@ -59,7 +59,7 @@ window.PROJECTS = [
             'assets/images/projects/awarded/milwaukee-geek-2.webp',
             'assets/images/projects/awarded/milwaukee-geek-3.webp',
         ],
-        description: 'Power for a Geek+ automated storage-and-retrieval system in Olive Branch, MS — new panelboards and feeders, charger circuits run down the racking to the shuttles, baler and elevator-control power, and plant receptacles.',
+        description: 'Power for a Geek+ automated storage-and-retrieval system in Olive Branch, MS: new panelboards and feeders, charger circuits run down the racking to the shuttles, baler and elevator-control power, and plant receptacles.',
     },
     {
         title: 'FedEx',
@@ -70,7 +70,7 @@ window.PROJECTS = [
         description: 'Electrical and facility work for FedEx.',
     },
     {
-        title: 'Dollar Tree — Ocala Distribution Center',
+        title: 'Dollar Tree · Ocala Distribution Center',
         category: 'Electrical',
         client: 'Dollar Tree',
         clientLogo: 'assets/images/logos/clients/dollar-tree.svg',
@@ -78,7 +78,7 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/dollar-tree-ocala-1.webp',
         ],
-        description: 'HVAC and electrical systems work for the combined Dollar Tree and Family Dollar distribution center in Ocala, Florida — a 1.7-million-sq-ft campus and one of the region’s largest retail distribution hubs.',
+        description: 'HVAC and electrical systems work for the combined Dollar Tree and Family Dollar distribution center in Ocala, Florida: a 1.7-million-sq-ft campus and one of the region’s largest retail distribution hubs.',
     },
     {
         title: 'Nissan North America',
@@ -97,7 +97,7 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/nike-adapt-1.webp',
         ],
-        description: 'Electrical for a Nike Adapt restroom expansion — branch wiring, lighting, and devices on a fast-tracked fit-out.',
+        description: 'Electrical for a Nike Adapt restroom expansion: branch wiring, lighting, and devices on a fast-tracked fit-out.',
     },
     {
         title: 'ERMCO Transformer Manufacturing',
@@ -105,7 +105,7 @@ window.PROJECTS = [
         client: 'ERMCO',
         clientLogo: 'assets/images/logos/clients/ermco.gif',
         poster: 'assets/images/projects/industrial/wide-ermco-1-e1753290005447.webp',
-        description: "A long-standing partner to ERMCO, one of the country's largest transformer makers — plant receptacles and power, plus a full electrical upgrade of the Titan office building in Dyersburg, TN: new 1,600-amp service, panelboards, Lutron lighting controls, pole lighting, and fire alarm.",
+        description: "A long-standing partner to ERMCO, one of the country's largest transformer makers: plant receptacles and power, plus a full electrical upgrade of the Titan office building in Dyersburg, TN, with a new 1,600-amp service, panelboards, Lutron lighting controls, pole lighting, and fire alarm.",
     },
     {
         title: 'Amazon',
@@ -116,7 +116,7 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/amazon-warehouse-1.webp',
         ],
-        description: 'Receptacle and dock-door power supporting an Amazon facility — installed to spec on a tight operational schedule.',
+        description: 'Receptacle and dock-door power supporting an Amazon facility: installed to spec on a tight operational schedule.',
     },
 ];
 
@@ -190,7 +190,7 @@ window.PF = (() => {
         card.dataset.category = p.category || '';
         card.tabIndex = 0;
         card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', `${p.title} — view project`);
+        card.setAttribute('aria-label', `${p.title}: view project`);
 
         const logoMarkup = p.clientLogo
             ? `<img class="pf-badge-logo" src="${esc(p.clientLogo)}" alt="${esc(p.client)}"
@@ -473,7 +473,7 @@ window.PF = (() => {
 })();
 
 /* ============================================================
-   #projects grid — sub-tabs + cards
+   #projects grid: sub-tabs + cards
    ============================================================ */
 (() => {
     'use strict';
@@ -570,74 +570,74 @@ window.PF = (() => {
 })();
 
 /* ============================================================
-   FULL PROJECT INDEX — a simple list of every SEC job + year.
+   FULL PROJECT INDEX: a simple list of every SEC job + year.
    Add a line here as projects are awarded; it renders grouped by
    year automatically. (Sourced from the awarded project records.)
    ============================================================ */
 window.SEC_PROJECT_LIST = [
     // 2026
-    { name: 'PepsiCo — Lighting Warranty', year: 2026 },
-    { name: 'Amcor — Bird Projects', year: 2026 },
-    { name: 'Northside Church — Youth Renovation', year: 2026 },
-    { name: 'AEO — Ottawa Electrical Evaluation', year: 2026 },
+    { name: 'PepsiCo · Lighting', year: 2026 },
+    { name: 'Amcor · Bird Projects', year: 2026 },
+    { name: 'Northside Church · Youth Renovation', year: 2026 },
+    { name: 'AEO · Ottawa Electrical Evaluation', year: 2026 },
     { name: 'USJ Maintenance Building', year: 2026 },
-    { name: 'PepsiCo — Data Rack Receptacles', year: 2026 },
+    { name: 'PepsiCo · Data Rack Receptacles', year: 2026 },
     { name: 'Hopkinsville', year: 2026 },
     { name: 'Jabil', year: 2026 },
-    { name: 'ERMCO — Titan Office Building (Mechanical & Electrical)', year: 2026 },
-    { name: 'S&S — New 400A Panel & Feeder', year: 2026 },
-    { name: 'S&S — TVSS on Main Switchboard', year: 2026 },
+    { name: 'ERMCO · Titan Office Building (Mechanical & Electrical)', year: 2026 },
+    { name: 'S&S · New 400A Panel & Feeder', year: 2026 },
+    { name: 'S&S · TVSS on Main Switchboard', year: 2026 },
     // 2025
-    { name: 'Amazon — Receptacle', year: 2025 },
+    { name: 'Amazon · Receptacle', year: 2025 },
     { name: 'Ayers Asset Management', year: 2025 },
-    { name: 'Berry Plastics — DECO Expansion', year: 2025 },
+    { name: 'Berry Plastics · DECO Expansion', year: 2025 },
     { name: 'Black & Decker', year: 2025 },
     { name: 'Doxicom Global', year: 2025 },
-    { name: 'JMCGH — Infectious Disease Unit', year: 2025 },
+    { name: 'JMCGH · Infectious Disease Unit', year: 2025 },
     { name: "Kirkland's", year: 2025 },
-    { name: 'Milwaukee — Byhalia Battery Chargers', year: 2025 },
-    { name: 'Milwaukee — Byhalia Office Power Pole', year: 2025 },
-    { name: 'Northside Church — Time Clocks & Wall Packs', year: 2025 },
-    { name: 'PepsiCo — Air Compressors', year: 2025 },
-    { name: 'PepsiCo — Guardhouse Flood Lighting', year: 2025 },
-    { name: 'PepsiCo — Pallet Inverter', year: 2025 },
-    { name: 'PepsiCo — Rack Lighting', year: 2025 },
-    { name: 'Phoenix Assurance — Cooler & Freezer', year: 2025 },
-    { name: 'Quirch Foods — Lebanon, TN', year: 2025 },
-    { name: 'Ross — HVAC, Carlisle PA', year: 2025 },
-    { name: 'S&S Warehouse — Under-Mezzanine Lighting', year: 2025 },
-    { name: 'Simon & Schuster — High Bay Lights', year: 2025 },
-    { name: 'US Farathane — Jackson, TN', year: 2025 },
-    { name: 'US Farathane — Dock Doors', year: 2025 },
-    { name: 'Walmart — Brookhaven, MS', year: 2025 },
-    { name: 'Walmart — Searcy, AR', year: 2025 },
-    { name: 'Walmart — Sutherland, VA', year: 2025 },
-    { name: 'Walmart — Winter Haven, FL', year: 2025 },
-    { name: 'Walmart — Palestine, TX', year: 2025 },
-    { name: 'Walmart — Seymour', year: 2025 },
+    { name: 'Milwaukee · Byhalia Battery Chargers', year: 2025 },
+    { name: 'Milwaukee · Byhalia Office Power Pole', year: 2025 },
+    { name: 'Northside Church · Time Clocks & Wall Packs', year: 2025 },
+    { name: 'PepsiCo · Air Compressors', year: 2025 },
+    { name: 'PepsiCo · Guardhouse Flood Lighting', year: 2025 },
+    { name: 'PepsiCo · Pallet Inverter', year: 2025 },
+    { name: 'PepsiCo · Rack Lighting', year: 2025 },
+    { name: 'Phoenix Assurance · Cooler & Freezer', year: 2025 },
+    { name: 'Quirch Foods · Lebanon, TN', year: 2025 },
+    { name: 'Ross · HVAC, Carlisle PA', year: 2025 },
+    { name: 'S&S Warehouse · Under-Mezzanine Lighting', year: 2025 },
+    { name: 'Simon & Schuster · High Bay Lights', year: 2025 },
+    { name: 'US Farathane · Jackson, TN', year: 2025 },
+    { name: 'US Farathane · Dock Doors', year: 2025 },
+    { name: 'Walmart · Brookhaven, MS', year: 2025 },
+    { name: 'Walmart · Searcy, AR', year: 2025 },
+    { name: 'Walmart · Sutherland, VA', year: 2025 },
+    { name: 'Walmart · Winter Haven, FL', year: 2025 },
+    { name: 'Walmart · Palestine, TX', year: 2025 },
+    { name: 'Walmart · Seymour', year: 2025 },
     // 2024
-    { name: 'Nike Adapt — Restroom Expansion', year: 2024 },
-    { name: 'Milwaukee Tool — Geek+', year: 2024 },
-    { name: 'Walmart — Hope Mills, NC', year: 2024 },
-    { name: 'Walmart — KS', year: 2024 },
-    { name: 'Walmart — Plainview, TX', year: 2024 },
-    { name: 'PepsiCo — EV Chargers', year: 2024 },
-    { name: 'PepsiCo — Exhaust Fans', year: 2024 },
+    { name: 'Nike Adapt · Restroom Expansion', year: 2024 },
+    { name: 'Milwaukee Tool · Geek+', year: 2024 },
+    { name: 'Walmart · Hope Mills, NC', year: 2024 },
+    { name: 'Walmart · KS', year: 2024 },
+    { name: 'Walmart · Plainview, TX', year: 2024 },
+    { name: 'PepsiCo · EV Chargers', year: 2024 },
+    { name: 'PepsiCo · Exhaust Fans', year: 2024 },
     { name: 'PepsiCo', year: 2024 },
-    { name: 'Georgia-Pacific — Johnson Equipment', year: 2024 },
-    { name: 'Quantix — Air Compressor', year: 2024 },
+    { name: 'Georgia-Pacific · Johnson Equipment', year: 2024 },
+    { name: 'Quantix · Air Compressor', year: 2024 },
     { name: 'Quirch Foods', year: 2024 },
     { name: 'Berry Plastics', year: 2024 },
-    { name: 'Dollar Tree — HVAC, NC', year: 2024 },
-    { name: 'Sprouts — Cooler Addition, Orlando FL', year: 2024 },
-    { name: 'First Bank — Re-lighting', year: 2024 },
-    { name: 'Milwaukee — Red Journey Maintenance Shop', year: 2024 },
-    { name: 'Milwaukee — Byhalia Pole Light', year: 2024 },
-    { name: 'Love & Truth — High Bay Replacement', year: 2024 },
+    { name: 'Dollar Tree · HVAC, NC', year: 2024 },
+    { name: 'Sprouts · Cooler Addition, Orlando FL', year: 2024 },
+    { name: 'First Bank · Re-lighting', year: 2024 },
+    { name: 'Milwaukee · Red Journey Maintenance Shop', year: 2024 },
+    { name: 'Milwaukee · Byhalia Pole Light', year: 2024 },
+    { name: 'Love & Truth · High Bay Replacement', year: 2024 },
     { name: 'Love & Truth', year: 2024 },
-    { name: 'Southern States — Utility Trailer', year: 2024 },
-    { name: 'Scotts Hill — Water Treatment', year: 2024 },
-    { name: 'Baxter — 110V Circuit', year: 2024 },
+    { name: 'Southern States · Utility Trailer', year: 2024 },
+    { name: 'Scotts Hill · Water Treatment', year: 2024 },
+    { name: 'Baxter · 110V Circuit', year: 2024 },
     { name: 'Spa Vita', year: 2024 },
 ];
 

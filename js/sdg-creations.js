@@ -1,10 +1,10 @@
 /* ============================================================
-   SOUTHERN DESIGN GROUP — Creations showcase (design section)
+   SOUTHERN DESIGN GROUP: Creations showcase (design section)
    ------------------------------------------------------------
    Southern Design Group (SDG) is the in-house creative division of
    Southern Electric & Controls (the parent company); ICE is the
    controls/automation division. This showcase is SDG's work,
-   organized by SKILL DOMAIN — each capability is a discipline and
+   organized by SKILL DOMAIN: each capability is a discipline and
    every item lists the tech/skills it was actually built with.
 
    Expanding "capability cards": a row of capabilities; click one
@@ -31,7 +31,7 @@ window.SDG_CREATIONS = [
                 poster: 'assets/images/projects/sdg/bim-bolivar.webp',
                 gallery: ['assets/images/projects/sdg/bim-bolivar.webp'],
                 skills: ['Revit', 'Electrical BIM', 'Lighting & Power', 'Clash Detection'],
-                description: 'Electrical and lighting BIM model for a micro-hospital — fixtures, devices, conduit and gear modeled and coordinated in Revit for a clash-free install.',
+                description: 'Electrical and lighting BIM model for a micro-hospital: fixtures, devices, conduit and gear modeled and coordinated in Revit for a clash-free install.',
             },
             {
                 title: 'Crossover Medical Office Building',
@@ -40,7 +40,7 @@ window.SDG_CREATIONS = [
                 poster: 'assets/images/projects/sdg/bim-crossover.webp',
                 gallery: ['assets/images/projects/sdg/bim-crossover.webp'],
                 skills: ['Revit', 'Lighting Layout', 'Electrical BIM', 'Clash Detection'],
-                description: 'Lighting and power BIM model for the Crossover medical office building — full fixture and device layout coordinated against the architectural and structural models.',
+                description: 'Lighting and power BIM model for the Crossover medical office building: full fixture and device layout coordinated against the architectural and structural models.',
             },
             {
                 title: 'Project Forge',
@@ -49,7 +49,7 @@ window.SDG_CREATIONS = [
                 poster: 'assets/images/projects/sdg/bim-forge.webp',
                 gallery: ['assets/images/projects/sdg/bim-forge.webp'],
                 skills: ['Revit', 'Power Distribution', 'Electrical BIM', 'Coordination'],
-                description: 'Full-facility electrical BIM for a large industrial plant — high-bay lighting, power distribution, conduit and equipment modeled across the structure for fabrication and field coordination.',
+                description: 'Full-facility electrical BIM for a large industrial plant: high-bay lighting, power distribution, conduit and equipment modeled across the structure for fabrication and field coordination.',
             },
             {
                 title: 'TCAT Covington',
@@ -58,32 +58,32 @@ window.SDG_CREATIONS = [
                 poster: 'assets/images/projects/sdg/bim-tcat-covington.webp',
                 gallery: ['assets/images/projects/sdg/bim-tcat-covington.webp'],
                 skills: ['Revit', 'Electrical BIM', 'Lighting & Power'],
-                description: 'Electrical BIM model for the TCAT Covington campus — lighting, power and device layout coordinated for construction.',
+                description: 'Electrical BIM model for the TCAT Covington campus: lighting, power and device layout coordinated for construction.',
             },
             {
-                title: 'TCAT Paris — Academic Building',
+                title: 'TCAT Paris · Academic Building',
                 category: 'Education · Electrical BIM',
                 client: 'Education',
                 poster: 'assets/images/projects/sdg/bim-tcat-paris-academic.webp',
                 gallery: ['assets/images/projects/sdg/bim-tcat-paris-academic.webp'],
                 skills: ['Revit', 'Electrical BIM', 'Lighting & Power'],
-                description: 'Electrical BIM model for the academic building at TCAT Paris — coordinated lighting, power and systems layout.',
+                description: 'Electrical BIM model for the academic building at TCAT Paris: coordinated lighting, power and systems layout.',
             },
             {
-                title: 'TCAT Paris — Shop Building',
+                title: 'TCAT Paris · Shop Building',
                 category: 'Education · Electrical BIM',
                 client: 'Education',
                 poster: 'assets/images/projects/sdg/bim-tcat-paris-shop.webp',
                 gallery: ['assets/images/projects/sdg/bim-tcat-paris-shop.webp'],
                 skills: ['Revit', 'Electrical BIM', 'Lighting & Power'],
-                description: 'Electrical BIM model for the shop / trades building at TCAT Paris — high-bay lighting, power and equipment coordinated in Revit.',
+                description: 'Electrical BIM model for the shop / trades building at TCAT Paris: high-bay lighting, power and equipment coordinated in Revit.',
             },
         ],
     },
     {
         capability: '3D Modeling & Animation',
         icon: 'car',
-        blurb: 'Ground-up 3D vehicle builds — modeled, rigged, textured and game-ready.',
+        blurb: 'Ground-up 3D vehicle builds: modeled, rigged, textured and game-ready.',
         items: [
             {
                 title: '2023 F-250 Super Baja',
@@ -128,10 +128,10 @@ window.SDG_CREATIONS = [
                     text: 'Awesome mod! Great work and can’t wait to see what you do in the future.',
                     author: 'DrafterTechie · GTA5-Mods',
                 },
-                description: 'Full ground-up 3D model of the Shelby Super Baja F-250 — body, drivetrain, suspension, and a custom drift-rig animation, modeled, rigged and rendered in 3ds Max, automated with Python/MAXScript, and integrated into GTA V with custom C# tooling. Drag the slider to go from wireframe to final render.',
+                description: 'Full ground-up 3D model of the Shelby Super Baja F-250: body, drivetrain, suspension, and a custom drift-rig animation, modeled, rigged and rendered in 3ds Max, automated with Python/MAXScript, and integrated into GTA V with custom C# tooling. Drag the slider to go from wireframe to final render.',
             },
             {
-                title: 'Jeep Kaiser M715 — Trevor’s Truck',
+                title: 'Jeep Kaiser M715 · Trevor’s Truck',
                 category: '3D Model · Game-Ready',
                 client: 'GTA V Mod',
                 year: '2025',
@@ -161,10 +161,10 @@ window.SDG_CREATIONS = [
                     text: 'This is awesome. Much better than the Bodhi.',
                     author: 'Bet Nimrod · GTA5-Mods',
                 },
-                description: 'A real-world build of Trevor’s in-game truck — a game-ready Jeep Kaiser M715 with lowered tuner and extreme off-road variants and full customization. Modeled and detailed in 3ds Max and ZBrush, textured in Substance Painter, and packaged for GTA V.',
+                description: 'A real-world build of Trevor’s in-game truck: a game-ready Jeep Kaiser M715 with lowered tuner and extreme off-road variants and full customization. Modeled and detailed in 3ds Max and ZBrush, textured in Substance Painter, and packaged for GTA V.',
             },
             {
-                title: 'Battlefield 6 — Undead Ground Zero',
+                title: 'Battlefield 6 · Undead Ground Zero',
                 category: '3D Level · Game Mode',
                 client: 'Published by EA',
                 year: '2026',
@@ -177,7 +177,7 @@ window.SDG_CREATIONS = [
                     text: 'Slay the undead at St. Lydian Memorial: epicenter of the REDFALL outbreak. Power is dead, alarms are echoing through the halls, NATO is closing in.',
                     author: 'EA · Battlefield 6 Season 2 blog',
                 },
-                description: 'Level geometry and environment built in Godot for “Undead Ground Zero” — a full Battlefield 6 Portal experience I designed (experience code ZQ2V4), featured by EA in the official Season 2 blog. Modeled the map and its play spaces, then built the modes and mechanics: four classes, waves of enemies, an upgrade economy, perks, a fuse-box puzzle, and a VIP escort-and-extraction win condition.',
+                description: 'Level geometry and environment built in Godot for “Undead Ground Zero”: a full Battlefield 6 Portal experience I designed (experience code ZQ2V4), featured by EA in the official Season 2 blog. Modeled the map and its play spaces, then built the modes and mechanics: four classes, waves of enemies, an upgrade economy, perks, a fuse-box puzzle, and a VIP escort-and-extraction win condition.',
             },
         ],
     },
@@ -197,17 +197,17 @@ window.SDG_CREATIONS = [
                 skills: ['Vector Illustration', 'Automotive Art', 'Brand Livery', 'Color & Shading'],
                 gallery: ['assets/images/projects/sdg/art-shelby.webp'],
                 featured: true,
-                description: 'Vector illustration of the Shelby Super Baja F-250 in the Southern Electric design-build livery — the same truck modeled in 3D, reimagined as brand artwork. Hover the card to see it in motion.',
+                description: 'Vector illustration of the Shelby Super Baja F-250 in the Southern Electric design-build livery: the same truck modeled in 3D, reimagined as brand artwork. Hover the card to see it in motion.',
             },
             {
-                title: 'Barry’s Truck — Vintage Dodge',
+                title: 'Barry’s Truck · Vintage Dodge',
                 category: 'Vector Illustration',
                 client: 'Commission',
                 poster: 'assets/images/projects/sdg/art-barry.webp',
                 fit: 'contain',
                 skills: ['Vector Illustration', 'Automotive Art', 'Color & Shading'],
                 gallery: ['assets/images/projects/sdg/art-barry.webp'],
-                description: 'A hand-built vector illustration of a classic late-’60s Dodge D-Series pickup — every panel, reflection, and trim piece drawn by hand.',
+                description: 'A hand-built vector illustration of a classic late-’60s Dodge D-Series pickup: every panel, reflection, and trim piece drawn by hand.',
             },
         ],
     },
@@ -217,24 +217,24 @@ window.SDG_CREATIONS = [
         blurb: 'Fast, modern, hand-coded custom websites.',
         items: [
             {
-                title: 'Southern Electric & Controls — Website',
+                title: 'Southern Electric & Controls · Website',
                 category: 'Design · Build',
                 client: 'Southern Electric & Controls',
                 clientLogo: 'assets/images/logos/sec-logo.webp',
                 year: '2026',
                 poster: 'assets/images/projects/sdg/sec-shot.webp',
                 skills: ['HTML', 'CSS', 'JavaScript', 'Responsive Design', 'Git'],
-                description: 'This very site — a custom, hand-coded build with a cinematic hero, building-automation spotlight, and this design showcase. Designed and coded in-house.',
+                description: 'This very site: a custom, hand-coded build with a cinematic hero, building-automation spotlight, and this design showcase. Designed and coded in-house.',
             },
             {
-                title: 'JM2 Engineering — Website',
+                title: 'JM2 Engineering · Website',
                 category: 'Design · Build',
                 client: 'JM2 Engineering',
                 year: '2026',
                 poster: 'assets/images/projects/sdg/jm2-shot.webp',
                 skills: ['HTML', 'CSS', 'JavaScript', 'GSAP', 'GitHub Pages'],
                 link: { label: 'Visit the live site', url: 'https://tabbedscamper.github.io/jm2-website/' },
-                description: 'A custom site for JM2 Engineering — mechanical engineering, BIM, and 3D scanning — with GSAP scroll animations, a team carousel, and skewed zigzag service panels. Designed and built in-house.',
+                description: 'A custom site for JM2 Engineering: mechanical engineering, BIM, and 3D scanning: with GSAP scroll animations, a team carousel, and skewed zigzag service panels. Designed and built in-house.',
             },
         ],
     },
@@ -324,7 +324,7 @@ window.SDG_CREATIONS = [
 })();
 
 /* ============================================================
-   SDG Studio overlay — "See What SDG Can Do" fades in the panel
+   SDG Studio overlay: "See What SDG Can Do" fades in the panel
    ============================================================ */
 (() => {
     'use strict';
@@ -349,9 +349,18 @@ window.SDG_CREATIONS = [
         (lastFocus || openBtn).focus();
     };
 
-    openBtn.addEventListener('click', open);
+    // The tow sequence (sdg-tow.js) claims the click with preventDefault and
+    // drives the studio in itself. Defer the plain open one tick so that —
+    // regardless of listener ordering — it only runs when the tow didn't.
+    openBtn.addEventListener('click', (e) => {
+        setTimeout(() => { if (!e.defaultPrevented) open(); }, 0);
+    });
     closeBtn?.addEventListener('click', close);
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
     });
+
+    // Public hook: lets other UI (the SDG company panel, SDG service cards)
+    // open the studio directly — plain fade-in, no tow sequence.
+    window.SDGStudio = { open, close };
 })();

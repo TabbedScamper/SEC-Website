@@ -1,11 +1,11 @@
 /* ============================================================
-   SEC TEAM — "Arc Select" fighting-game-style crew selector.
+   SEC TEAM: "Arc Select" fighting-game-style crew selector.
    Three faction tabs (SEC / ICE / SDG) each with a roster of
    powered-down crew portraits + a red selector that arcs lightning
    cell-to-cell; the picked crew member powers on in a splash panel
    with a short bio and "what they do" skill bubbles.
 
-   Renders into #team-select. Vanilla — canvas lightning, CSS glow.
+   Renders into #team-select. Vanilla: canvas lightning, CSS glow.
    Keyboard (arrows/enter) + mouse + touch.
 
    PLACEHOLDER DATA: swap DIVISIONS[].members for real names/titles/
@@ -24,7 +24,7 @@
             key: 'SEC', name: 'Southern Electric',
             members: [
                 // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
-                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls — SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
+                { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'The Big Cheese', bio: 'Owner of Southern Electric & Controls · SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
                 // Crew — names + silhouettes (guy/girl). Positions/bios TBD; real photos to replace silhouettes once permission is given.
                 { name: 'Cary Prince', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Rhyan McGhee', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
@@ -48,7 +48,7 @@
                 { name: 'Angel Martinez', title: 'Automation Technician', sil: 'male', bio: 'Automation Technician at Industrial Controls & Electrical.' },
                 { name: 'Joseph Autry', title: 'Panel Shop Supervisor', sil: 'male', bio: 'Panel Shop Supervisor at Industrial Controls & Electrical.' },
                 { name: 'Keith Moore', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },   // NOT in owner's notes — confirm spelling/keep
+                { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },   // NOT in owner's notes · confirm spelling/keep
                 { name: 'Nicole Harris', title: 'Office Administrator', sil: 'female', bio: 'Office Administrator at Industrial Controls & Electrical.' },
             ],
         },
@@ -59,7 +59,7 @@
                 {
                     name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.webp',
                     epithet: 'The Digital Fabricator',
-                    bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines — coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
+                    bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines: coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
                     focus: ['Precision Modeling', 'BIM Coordination', 'Systems Logic & Scripting', 'Tool & Pipeline Development'],
                 },
                 { name: 'Eriana Fleming', title: 'Designer', photo: 'assets/images/team/eriana-fleming.webp', bio: 'Always learning and evolving to pursue my dream goals and help others.', focus: ['Photoshop', 'AutoCAD', 'Navisworks', 'Revit', 'Architectural Drafting', '3D Modeling', 'Graphic Design'] },
@@ -105,7 +105,7 @@
         </div>
         <div class="ts-mission">
             <span class="ts-mission-label">Our Mission</span>
-            <span class="ts-mission-text">One team, three divisions — the field crews, controls specialists, and designers who design it, build it, and bring it to life. From the first blueprint to final commissioning, SEC delivers as one accountable team.</span>
+            <span class="ts-mission-text">One team, three divisions: the field crews, controls specialists, and designers who design it, build it, and bring it to life. From the first blueprint to final commissioning, SEC delivers as one accountable team.</span>
         </div>`;
 
     const tabs   = [...root.querySelectorAll('.ts-tab')];
@@ -131,9 +131,9 @@
     // per-division strand colours: [primary, secondary] — saturated so the arc reads;
     // "white" identity comes from the thin hot core, not the glow colour
     const DIV_COLORS = [
-        ['#ff2b33', '#ff7a80'],   // SEC — red (bright + light red); white hot core
-        ['#ff7a14', '#1f6dff'],   // ICE — orange + deep blue
-        ['#ff5b62', '#d81e26'],   // SDG — red (already reads great)
+        ['#ff2b33', '#ff7a80'],   // SEC: red (bright + light red); white hot core
+        ['#ff7a14', '#1f6dff'],   // ICE: orange + deep blue
+        ['#ff5b62', '#d81e26'],   // SDG: red (already reads great)
     ];
     const MARGIN = 48;   // canvas bleeds past the component so edge glow isn't clipped
     // PERF: the glow is built from cheap wide additive ('lighter') strokes inside the canvas —
@@ -147,7 +147,7 @@
         const r = root.getBoundingClientRect();
         const fw = r.width + MARGIN * 2, fh = r.height + MARGIN * 2;
         const cw = Math.round(fw * DPR), ch = Math.round(fh * DPR);
-        if (canvas.width === cw && canvas.height === ch) return;   // unchanged — skip (resizing clears + flickers)
+        if (canvas.width === cw && canvas.height === ch) return;   // unchanged: skip (resizing clears + flickers)
         canvas.width = cw; canvas.height = ch;
         canvas.style.width = fw + 'px'; canvas.style.height = fh + 'px';
         ctx.setTransform(DPR, 0, 0, DPR, MARGIN * DPR, MARGIN * DPR);   // (0,0) = component top-left
@@ -234,7 +234,7 @@
     function loop(now) {
         if (!running) return;
         raf = requestAnimationFrame(loop);
-        if (now - lastDraw < 33) return;   // PERF: cap to ~30fps — lightning reads great strobed, halves the work
+        if (now - lastDraw < 33) return;   // PERF: cap to ~30fps: lightning reads great strobed, halves the work
         lastDraw = now;
         if (cur >= 0 && splash) {
             // the electric ring encloses the WHOLE profile card (portrait + name + bio + skills);
@@ -271,7 +271,7 @@
         gridCols = Math.min(d.members.length, 3);   // adapt columns to roster size (e.g. SDG has 2)
         grid.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
         cells = [...grid.querySelectorAll('.ts-cell')];
-        sizeCanvas();   // roster size changed the panel height — resize (and clear) the fx canvas to match
+        sizeCanvas();   // roster size changed the panel height: resize (and clear) the fx canvas to match
         // selection only changes on an explicit pick (click / keyboard) — not on hover
         cells.forEach((c, i) => c.addEventListener('click', () => { select(i, true); c.focus({ preventScroll: true }); }));
         if (fx && !reduce) { grid.classList.remove('powering'); void grid.offsetWidth; grid.classList.add('powering'); }

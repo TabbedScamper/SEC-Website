@@ -46,10 +46,11 @@
     // have to sprinkle data-reveal manually on every element.
     const autoSelectors = [
         '.section-title', '.section-eyebrow',
-        '.company-card', '.service-card', '.project-card', '.callout',
+        '.company-card', '.co-panel', '.service-card', '.project-card', '.callout',
         '.contact-block', '.stat',
         '.hero-title', '.hero-lead', '.hero-cta', '.hero-eyebrow',
         '.automation-text', '.automation-badge',
+        /* .controls-text and .controls-viewer animate themselves (intro-driven) */
     ];
     autoSelectors.forEach(sel => {
         document.querySelectorAll(sel).forEach((el, i) => {
@@ -204,6 +205,22 @@
         window.addEventListener('scroll', requestUpdate, { passive: true });
         window.addEventListener('resize', requestUpdate, { passive: true });
         updateHeroLogo();
+    }
+
+    // ---- 5d. PERF: the drone loop would decode video forever once started.
+    //          Pause it whenever the hero scrolls out of view, resume on return.
+    if (heroDrone && heroSection && 'IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (!heroDrone.classList.contains('is-in')) return;   // loop not started yet
+                if (e.isIntersecting) {
+                    const p = heroDrone.play();
+                    if (p && typeof p.catch === 'function') p.catch(() => {});
+                } else {
+                    heroDrone.pause();
+                }
+            });
+        }).observe(heroSection);
     }
 
     // ---- 6. Footer year ----

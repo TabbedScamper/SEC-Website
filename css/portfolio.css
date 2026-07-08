@@ -762,7 +762,7 @@ body.sdg-studio-open { overflow: hidden; }
 /* Exclude elements that use transform to stay hidden (the mobile nav / its
    overlay) — shaking them would override their translateX(100%) and pop them
    into view. */
-body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav) {
+body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):not(.explore-drawer):not(.explore-scrim) {
     animation: sdgPageShake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 @keyframes sdgPageShake {
