@@ -1081,7 +1081,16 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
         scrollbar-width: none;
     }
     .pf-tabs::-webkit-scrollbar { display: none; }
-    .pf-tab { flex: 0 0 auto; }
+    /* Compact the three tabs so they all fit one row on typical phones
+       (the sliding indicator is horizontal-only, so they must not wrap);
+       the horizontal scroll above stays as the fallback for tiny screens */
+    .pf-tab {
+        flex: 0 0 auto;
+        font-size: 0.72rem;
+        letter-spacing: 0.05em;
+        padding: 0.55rem 0.8rem;
+    }
+    .pf-tabs { gap: 0.15rem; padding: 0.3rem; }
     .sdg-caps { grid-template-columns: 1fr; }
     .sdg-stage-grid { padding: 1rem; }
     /* Accordion: tighter padding + slightly smaller year on phones */
