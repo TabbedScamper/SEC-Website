@@ -80,12 +80,12 @@
 }
 .pf-card {
     position: relative;
-    border-radius: 14px;
+    clip-path: var(--cut-md);
     overflow: hidden;
     background: var(--bg-card);
     border: 1px solid var(--border);
     cursor: pointer;
-    transition: transform var(--t-smooth), border-color var(--t-smooth), box-shadow var(--t-smooth);
+    transition: transform var(--t-smooth), border-color var(--t-smooth);
     /* entrance */
     opacity: 0;
     transform: translateY(26px);
@@ -104,7 +104,6 @@
 .pf-card:focus-visible {
     transform: translateY(-6px);
     border-color: var(--sec-red);
-    box-shadow: 0 22px 50px rgba(0,0,0,0.6), 0 0 0 1px var(--sec-red-glow);
     outline: none;
 }
 
@@ -364,9 +363,9 @@
     max-height: 86vh;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    clip-path: var(--cut-lg);
     overflow: hidden;
-    box-shadow: 0 40px 100px rgba(0,0,0,0.7);
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.7));
     transform: translateY(18px) scale(0.98);
     transition: transform var(--t-dramatic);
 }
@@ -588,13 +587,13 @@
     display: inline-flex; align-items: center; gap: 1.1rem;
     padding: 0.9rem 1.1rem 0.9rem 1.5rem;
     border: none; cursor: pointer;
-    border-radius: 12px;
+    clip-path: var(--cut-md);
     background: linear-gradient(135deg, var(--sec-red) 0%, #8f1217 100%);
-    box-shadow: 0 14px 34px var(--sec-red-glow);
+    filter: drop-shadow(0 12px 26px var(--sec-red-glow));
     color: #fff;
-    transition: transform var(--t-smooth), box-shadow var(--t-smooth);
+    transition: transform var(--t-smooth);
 }
-.sdg-studio-trigger:hover { transform: translateY(-3px); box-shadow: 0 22px 46px var(--sec-red-glow); }
+.sdg-studio-trigger:hover { transform: translateY(-3px); }
 .sdg-studio-trigger-text { display: flex; flex-direction: column; text-align: left; }
 .sdg-studio-trigger-eyebrow {
     font-size: 0.64rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
@@ -815,17 +814,17 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
     text-align: left;
     padding: 1.1rem 1.2rem;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    clip-path: var(--cut-md);
     background: var(--bg-card);
     color: var(--text);
     cursor: pointer;
-    transition: border-color var(--t-smooth), background var(--t-smooth), transform var(--t-smooth), box-shadow var(--t-smooth);
+    transition: border-color var(--t-smooth), background var(--t-smooth), transform var(--t-smooth);
 }
 .sdg-cap:hover { transform: translateY(-3px); border-color: var(--sec-red); background: var(--bg-card-hover); }
 .sdg-cap.is-active {
     border-color: var(--sec-red);
     background: linear-gradient(135deg, rgba(216,30,38,0.16), var(--bg-card));
-    box-shadow: 0 14px 36px rgba(0,0,0,0.5), inset 0 0 0 1px var(--sec-red-glow);
+    box-shadow: inset 0 0 0 1px var(--sec-red-glow);
 }
 .sdg-cap-icon {
     flex-shrink: 0;
@@ -880,7 +879,7 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
     padding: 1.5rem;
     margin-top: 0.4rem;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    clip-path: var(--cut-lg);
     background:
         radial-gradient(ellipse at 50% -20%, rgba(216,30,38,0.10), transparent 60%),
         #0c0c11;
@@ -945,8 +944,8 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
     width: auto; height: auto; object-fit: contain;
     background: #fff;
     padding: 1.3rem 1.7rem;
-    border-radius: 14px;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    clip-path: var(--cut-md);
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.5));
 }
 .pf-logo-tile-word {
     font-family: 'Oswald', sans-serif; font-size: 1.7rem; font-weight: 700;
@@ -988,7 +987,7 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
 }
 .sec-list-group {
     border: 1px solid var(--border);
-    border-radius: 12px;
+    clip-path: var(--cut-md);
     overflow: hidden;
     background: var(--bg-card);
     transition: border-color var(--t-smooth);
