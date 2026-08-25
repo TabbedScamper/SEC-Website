@@ -48,7 +48,7 @@
                 { name: 'Angel Martinez', title: 'Automation Technician', sil: 'male', bio: 'Automation Technician at Industrial Controls & Electrical.' },
                 { name: 'Joseph Autry', title: 'Panel Shop Supervisor', sil: 'male', bio: 'Panel Shop Supervisor at Industrial Controls & Electrical.' },
                 { name: 'Keith Moore', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },
-                { name: 'Uegene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },   // NOT in owner's notes · confirm spelling/keep
+                { name: 'Eugene Finley', sil: 'male', bio: 'Part of the Industrial Controls & Electrical team.' },   // spelling confirmed by owner · position TBD
                 { name: 'Nicole Harris', title: 'Office Administrator', sil: 'female', bio: 'Office Administrator at Industrial Controls & Electrical.' },
             ],
         },
