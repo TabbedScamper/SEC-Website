@@ -587,13 +587,25 @@
     display: inline-flex; align-items: center; gap: 1.1rem;
     padding: 0.9rem 1.1rem 0.9rem 1.5rem;
     border: none; cursor: pointer;
-    clip-path: var(--cut-md);
-    background: linear-gradient(135deg, var(--sec-red) 0%, #8f1217 100%);
-    filter: drop-shadow(0 12px 26px var(--sec-red-glow));
+    position: relative;
+    background: transparent;
     color: #fff;
     transition: transform var(--t-smooth);
 }
+/* The red slab is a pseudo-element, NOT the button itself. js/sdg-truck.js
+   appends .sdg-truck-fx into this button and the truck drives in from
+   off-screen and parks left of it (--tpark: -78%), so a clip-path or filter
+   on the button would trap the truck inside the button's own box. */
+.sdg-studio-trigger::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(135deg, var(--sec-red) 0%, #8f1217 100%);
+    clip-path: var(--cut-md);
+    filter: drop-shadow(0 12px 26px var(--sec-red-glow));
+}
 .sdg-studio-trigger:hover { transform: translateY(-3px); }
+.sdg-studio-trigger-text,
+.sdg-studio-trigger-icon { position: relative; z-index: 1; }
 .sdg-studio-trigger-text { display: flex; flex-direction: column; text-align: left; }
 .sdg-studio-trigger-eyebrow {
     font-size: 0.64rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
