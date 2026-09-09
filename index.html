@@ -737,7 +737,8 @@
                 2. Create a new form and copy your form ID
                 3. Replace {your-form-id} below with your actual form ID
                 -->
-                <form class="contact-form" action="https://formspree.io/f/{your-form-id}" method="POST" data-ajax="true">
+                <form class="contact-form" action="/contact.php" method="POST" data-ajax="true"
+                      data-fallback-action="">
                     <div class="form-group">
                         <label for="name">Your Name</label>
                         <input type="text" id="name" name="name" placeholder="John Doe" required>

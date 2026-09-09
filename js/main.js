@@ -249,12 +249,23 @@
             if (contactForm.dataset.ajax !== 'true') return;
             e.preventDefault();
 
-            fetch(contactForm.action, {
+            // Primary endpoint is contact.php on this host. If the form carries a
+            // non-empty data-fallback-action (e.g. a Formspree URL), a failed
+            // primary post is retried against it once. Left empty the fallback
+            // is skipped entirely, so there is no dead endpoint to fail into.
+            const post = (url) => fetch(url, {
                 method: 'POST',
                 body: new FormData(contactForm),
                 headers: { 'Accept': 'application/json' }
+            }).then(r => { if (!r.ok) throw new Error('bad response'); return r.json(); });
+
+            const fallback = (contactForm.dataset.fallbackAction || '').trim();
+
+            post(contactForm.action)
+            .catch(err => {
+                if (!fallback) throw err;
+                return post(fallback);
             })
-            .then(r => { if (!r.ok) throw new Error('bad response'); return r.json(); })
             .then(() => {
                 if (feedback) {
                     feedback.textContent = 'Thanks — your message is on its way. We’ll be in touch shortly.';
