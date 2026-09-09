@@ -24,3 +24,6 @@ node_modules/
 package.json
 package-lock.json
 test-electricity.html
+
+# Brevo API key - never commit, this repo is public
+brevo.key

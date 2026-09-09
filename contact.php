@@ -27,10 +27,10 @@ const MAIL_TO = [
 const MAIL_FROM = 'noreply@southernelectric.net';    // must be a VERIFIED sender in Brevo
 // The Brevo API key is deliberately NOT in this file. This repository is
 // public on GitHub, and a committed key would be scraped and abused within
-// hours. It lives in a one-line file outside the web root and outside the
-// repo, readable only by this account:
-//     /home/iceelectricadmin/secrets/brevo.key
-const BREVO_KEY_FILE = '/home/iceelectricadmin/secrets/brevo.key';
+// hours. It lives in brevo.key beside this script, which is:
+//   * listed in .gitignore, so it is never committed
+//   * denied in .htaccess, so it cannot be fetched over HTTP
+const BREVO_KEY_FILE = __DIR__ . '/brevo.key';
 const SITE_NAME = 'Southern Electric & Controls';
 const MAX_PER_HOUR = 8;                              // per IP
 
