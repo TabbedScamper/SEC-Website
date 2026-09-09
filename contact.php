@@ -115,11 +115,19 @@ $mail = new PHPMailer\PHPMailer\PHPMailer(true);
 $sent = false;
 try {
     $mail->isSMTP();
-    $mail->Host       = 'localhost';
+    // Try the local Exim first, then deliver straight to the domain's MX.
+    // localhost:25 returns 250 on this host but the message never appears in
+    // Track Delivery and never reaches the recipient, so we fall through to
+    // Proofpoint directly - which is what any external mail server would do.
+    // SPF still passes: the sending IP is GoDaddy's, and the domain's SPF
+    // record contains include:secureserver.net.
+    $mail->Host       = 'localhost;mx1-us1.ppe-hosted.com;mx2-us1.ppe-hosted.com';
     $mail->Port       = 25;
     $mail->SMTPAuth   = false;
     $mail->SMTPAutoTLS = false;
-    $mail->Timeout    = 15;
+    $mail->Timeout    = 12;
+    $mail->SMTPDebug  = 2;
+    $mail->Debugoutput = function ($str, $level) { error_log('contact.php smtp: ' . trim($str)); };
     $mail->CharSet    = 'UTF-8';
 
     $mail->setFrom(MAIL_FROM, SITE_NAME);
