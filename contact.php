@@ -24,7 +24,13 @@ const MAIL_TO = [
     'clint@ice-electric.com',
     'info@southernelectric.net',
 ];
-const MAIL_FROM = 'noreply@southernelectric.net';    // must stay on-domain (SPF)
+const MAIL_FROM = 'noreply@southernelectric.net';    // must be a VERIFIED sender in Brevo
+// The Brevo API key is deliberately NOT in this file. This repository is
+// public on GitHub, and a committed key would be scraped and abused within
+// hours. It lives in a one-line file outside the web root and outside the
+// repo, readable only by this account:
+//     /home/iceelectricadmin/secrets/brevo.key
+const BREVO_KEY_FILE = '/home/iceelectricadmin/secrets/brevo.key';
 const SITE_NAME = 'Southern Electric & Controls';
 const MAX_PER_HOUR = 8;                              // per IP
 
@@ -99,19 +105,49 @@ $headers = [
     'X-Mailer: sec-site',
 ];
 
-// --- SENDING IS DISABLED --------------------------------------------
-// This host cannot deliver mail from PHP. Established 2026-09-09:
-//   * mail()            - returns true, nothing ever reaches Exim's log
-//   * localhost:25      - connects, returns 250, message silently vanishes
-//   * MX on port 25     - blocked outbound, connection times out
-//   * smtp.office365:587- blocked outbound, connection times out
-// GoDaddy blocks outbound SMTP from shared hosting and their local relay
-// accepts then discards. Until that is resolved with GoDaddy, or the mail
-// is sent through an HTTPS email API (port 443 is obviously open), this
-// endpoint fails fast and honestly rather than pretending to succeed.
-error_log('contact.php: submission from ' . $email . ' - sending disabled, no route off this host');
-respond(503, ['ok' => false, 'error' =>
-    'Our web form is temporarily unavailable. Please call (731) 660-5980 or email info@southernelectric.net and we will get right back to you.']);
+// --- send via the Brevo HTTPS API -----------------------------------
+// NOT SMTP. Every outbound SMTP port is blocked on this GoDaddy shared
+// plan - verified 2026-09-09 against ports 25, 465 and 587 to our own MX,
+// Microsoft, Google and Brevo; all timed out. Their localhost:25 relay
+// connects and returns 250, then silently discards the message. Port 443
+// is the only way off this host, so we post to Brevo's API instead.
+$brevoKey = is_readable(BREVO_KEY_FILE) ? trim((string) file_get_contents(BREVO_KEY_FILE)) : '';
+if ($brevoKey === '') {
+    error_log('contact.php: Brevo key missing or unreadable at ' . BREVO_KEY_FILE);
+    respond(503, ['ok' => false, 'error' =>
+        'Our web form is temporarily unavailable. Please call (731) 660-5980 or email info@southernelectric.net and we will get right back to you.']);
+}
+
+$payload = [
+    'sender'      => ['name' => SITE_NAME, 'email' => MAIL_FROM],
+    'to'          => array_map(static fn($a) => ['email' => $a], MAIL_TO),
+    'replyTo'     => ['email' => $email, 'name' => $name],
+    'subject'     => '[Website] ' . $subject,
+    'textContent' => $body,
+];
+
+$ch = curl_init('https://api.brevo.com/v3/smtp/email');
+curl_setopt_array($ch, [
+    CURLOPT_POST           => true,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT        => 15,
+    CURLOPT_HTTPHEADER     => [
+        'accept: application/json',
+        'content-type: application/json',
+        'api-key: ' . $brevoKey,
+    ],
+    CURLOPT_POSTFIELDS     => json_encode($payload),
+]);
+$response = curl_exec($ch);
+$status   = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+$curlErr  = curl_error($ch);
+curl_close($ch);
+
+// Brevo returns 201 Created on success.
+$sent = ($status === 201);
+if (!$sent) {
+    error_log('contact.php brevo failed: http=' . $status . ' curl=' . $curlErr . ' body=' . substr((string)$response, 0, 300));
+}
 
 if (!$sent) {
     error_log('contact.php: send failed for ' . $email);
