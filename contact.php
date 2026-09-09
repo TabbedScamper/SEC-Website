@@ -99,19 +99,30 @@ $headers = [
     'X-Mailer: sec-site',
 ];
 
-// --- SENDING IS DISABLED --------------------------------------------
-// This host cannot deliver mail from PHP. Established 2026-09-09:
-//   * mail()            - returns true, nothing ever reaches Exim's log
-//   * localhost:25      - connects, returns 250, message silently vanishes
-//   * MX on port 25     - blocked outbound, connection times out
-//   * smtp.office365:587- blocked outbound, connection times out
-// GoDaddy blocks outbound SMTP from shared hosting and their local relay
-// accepts then discards. Until that is resolved with GoDaddy, or the mail
-// is sent through an HTTPS email API (port 443 is obviously open), this
-// endpoint fails fast and honestly rather than pretending to succeed.
-error_log('contact.php: submission from ' . $email . ' - sending disabled, no route off this host');
-respond(503, ['ok' => false, 'error' =>
-    'Our web form is temporarily unavailable. Please call (731) 660-5980 or email info@southernelectric.net and we will get right back to you.']);
+// TEMPORARY port-465 probe. Fast failure = port open (auth refused);
+// ~12s timeout = port blocked.
+require_once __DIR__ . '/vendor/phpmailer/Exception.php';
+require_once __DIR__ . '/vendor/phpmailer/PHPMailer.php';
+require_once __DIR__ . '/vendor/phpmailer/SMTP.php';
+$t0 = microtime(true);
+$results = [];
+foreach ([['smtp.gmail.com',465,'ssl'], ['smtp.gmail.com',587,'tls'], ['smtp-relay.brevo.com',587,'tls']] as [$h,$pt,$sec]) {
+    $m = new PHPMailer\PHPMailer\PHPMailer(true);
+    $s0 = microtime(true);
+    try {
+        $m->isSMTP(); $m->Host=$h; $m->Port=$pt; $m->SMTPSecure=$sec;
+        $m->SMTPAuth=true; $m->Username='probe'; $m->Password='probe'; $m->Timeout=10;
+        $m->setFrom(MAIL_FROM); $m->addAddress(MAIL_TO[0]);
+        $m->Subject='probe'; $m->Body='probe';
+        $m->send();
+        $results[] = "$h:$pt UNEXPECTED SUCCESS";
+    } catch (Throwable $e) {
+        $el = round(microtime(true)-$s0, 1);
+        $msg = substr($e->getMessage(), 0, 90);
+        $results[] = "$h:$pt  {$el}s  " . ($el < 8 ? 'OPEN (refused/auth)' : 'BLOCKED (timeout)') . "  | $msg";
+    }
+}
+respond(200, ['ok'=>false, 'probe'=>$results, 'total'=>round(microtime(true)-$t0,1)]);
 
 if (!$sent) {
     error_log('contact.php: send failed for ' . $email);
