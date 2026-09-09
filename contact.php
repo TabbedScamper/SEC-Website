@@ -99,51 +99,19 @@ $headers = [
     'X-Mailer: sec-site',
 ];
 
-// --- send via SMTP to the local Exim instance -------------------------
-// NOT mail(). On GoDaddy shared hosting mail() hands off to
-// /usr/sbin/sendmail, which bypasses this account's Exim entirely: the
-// call returns true and the message never appears in cPanel's Track
-// Delivery, delivered or not. Talking SMTP to localhost:25 puts the
-// message INTO Exim, which then routes it out via the domain's MX
-// (Proofpoint -> Microsoft 365). localhost:25 with no auth is GoDaddy's
-// documented method for cPanel hosting.
-require_once __DIR__ . '/vendor/phpmailer/Exception.php';
-require_once __DIR__ . '/vendor/phpmailer/PHPMailer.php';
-require_once __DIR__ . '/vendor/phpmailer/SMTP.php';
-
-$mail = new PHPMailer\PHPMailer\PHPMailer(true);
-$sent = false;
-try {
-    $mail->isSMTP();
-    // Try the local Exim first, then deliver straight to the domain's MX.
-    // localhost:25 returns 250 on this host but the message never appears in
-    // Track Delivery and never reaches the recipient, so we fall through to
-    // Proofpoint directly - which is what any external mail server would do.
-    // SPF still passes: the sending IP is GoDaddy's, and the domain's SPF
-    // record contains include:secureserver.net.
-    $mail->Host       = 'smtp.office365.com';
-    $mail->Port       = 587;
-    $mail->SMTPAuth   = false;
-    $mail->SMTPAutoTLS = false;
-    $mail->Timeout    = 12;
-    $mail->SMTPDebug  = 2;
-    $mail->Debugoutput = function ($str, $level) { error_log('contact.php smtp: ' . trim($str)); };
-    $mail->CharSet    = 'UTF-8';
-
-    $mail->setFrom(MAIL_FROM, SITE_NAME);
-    $mail->Sender = MAIL_FROM;            // envelope sender, for SPF
-    foreach (MAIL_TO as $rcpt) { $mail->addAddress($rcpt); }
-    $mail->addReplyTo($email, $name);
-
-    $mail->Subject = '[Website] ' . $subject;
-    $mail->Body    = $body;
-    $mail->isHTML(false);
-
-    $sent = $mail->send();
-} catch (Throwable $e) {
-    error_log('contact.php SMTP failure: ' . $e->getMessage());
-    $sent = false;
-}
+// --- SENDING IS DISABLED --------------------------------------------
+// This host cannot deliver mail from PHP. Established 2026-09-09:
+//   * mail()            - returns true, nothing ever reaches Exim's log
+//   * localhost:25      - connects, returns 250, message silently vanishes
+//   * MX on port 25     - blocked outbound, connection times out
+//   * smtp.office365:587- blocked outbound, connection times out
+// GoDaddy blocks outbound SMTP from shared hosting and their local relay
+// accepts then discards. Until that is resolved with GoDaddy, or the mail
+// is sent through an HTTPS email API (port 443 is obviously open), this
+// endpoint fails fast and honestly rather than pretending to succeed.
+error_log('contact.php: submission from ' . $email . ' - sending disabled, no route off this host');
+respond(503, ['ok' => false, 'error' =>
+    'Our web form is temporarily unavailable. Please call (731) 660-5980 or email info@southernelectric.net and we will get right back to you.']);
 
 if (!$sent) {
     error_log('contact.php: send failed for ' . $email);
