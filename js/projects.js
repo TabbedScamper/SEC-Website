@@ -70,7 +70,7 @@ window.PROJECTS = [
         description: 'Electrical and facility work for FedEx.',
     },
     {
-        title: 'Dollar Tree · Ocala Distribution Center',
+        title: 'Dollar Tree / Family Dollar Distribution Center',
         category: 'Electrical',
         client: 'Dollar Tree',
         clientLogo: 'assets/images/logos/clients/dollar-tree.svg',
@@ -78,7 +78,10 @@ window.PROJECTS = [
         gallery: [
             'assets/images/projects/sec/dollar-tree-ocala-1.webp',
         ],
-        description: 'HVAC and electrical systems work for the combined Dollar Tree and Family Dollar distribution center in Ocala, Florida: a 1.7-million-sq-ft campus and one of the region’s largest retail distribution hubs.',
+        // Location and size deliberately omitted: the Z: drive documents this as the
+        // Family Dollar / Dollar Tree NC distribution center, and the sq-ft and
+        // "largest in the region" figures were never verified. Scope below is verified.
+        description: 'HVAC and electrical systems work for a combined Dollar Tree and Family Dollar distribution center: fire alarm, power monitoring, and transformer work alongside the mechanical scope.',
     },
     {
         title: 'Nissan North America',

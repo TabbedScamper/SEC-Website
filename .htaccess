@@ -1,0 +1,59 @@
+# ------------------------------------------------------------------
+# southernelectric.net - static SEC site
+# Lives in this domain's own document root on the shared GoDaddy
+# hosting account. Touches NO DNS: the Proofpoint MX records
+# (mx1/mx2-us1.ppe-hosted.com) that carry mail for this domain and
+# for ice-electric.com are unaffected by anything in this file.
+# ------------------------------------------------------------------
+
+DirectoryIndex index.html index.htm
+
+# --- Deny access to VCS/dev files. The site is deployed by cloning the git
+#     repo into this document root, so .git/ sits inside the web root. ---
+RedirectMatch 404 /\.git(/|$)
+<FilesMatch "^(\.gitignore|\.gitattributes|package(-lock)?\.json|\.cpanel\.yml)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Canonical host: HTTPS, non-www.
+    # !! HTTPS FORCING IS DISABLED ON PURPOSE !!
+    # southernelectric.net currently has only a self-signed certificate
+    # (GoDaddy has AutoSSL disabled on this plan). Forcing HTTPS before a
+    # valid cert exists would redirect every visitor into a browser security
+    # warning and make the site unreachable. Re-enable the two lines below
+    # the moment a real certificate is installed for this domain.
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://southernelectric.net/$1 [R=301,L]
+
+    # Scheme-preserving so this is correct both before and after the cert.
+    RewriteCond %{HTTP_HOST} ^www\.southernelectric\.net [NC]
+    RewriteRule ^(.*)$ %{REQUEST_SCHEME}://southernelectric.net/$1 [R=301,L]
+</IfModule>
+
+# --- MIME types Apache may not know ---
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+    AddType model/gltf-binary .glb
+    AddType font/woff2 .woff2
+    AddType video/mp4 .mp4
+</IfModule>
+
+# --- Compression ---
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain
+    AddOutputFilterByType DEFLATE application/javascript application/json image/svg+xml
+</IfModule>
+
+# --- Caching. index.html stays short so redeploys appear immediately ---
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access plus 10 minutes"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType video/mp4 "access plus 1 year"
+    ExpiresByType model/gltf-binary "access plus 1 year"
+</IfModule>
