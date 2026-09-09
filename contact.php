@@ -99,16 +99,46 @@ $headers = [
     'X-Mailer: sec-site',
 ];
 
-$sent = mail(
-    implode(', ', MAIL_TO),
-    '[Website] ' . $subject,
-    $body,
-    implode("\r\n", $headers),
-    '-f' . MAIL_FROM          // envelope sender, so SPF checks pass
-);
+// --- send via SMTP to the local Exim instance -------------------------
+// NOT mail(). On GoDaddy shared hosting mail() hands off to
+// /usr/sbin/sendmail, which bypasses this account's Exim entirely: the
+// call returns true and the message never appears in cPanel's Track
+// Delivery, delivered or not. Talking SMTP to localhost:25 puts the
+// message INTO Exim, which then routes it out via the domain's MX
+// (Proofpoint -> Microsoft 365). localhost:25 with no auth is GoDaddy's
+// documented method for cPanel hosting.
+require_once __DIR__ . '/vendor/phpmailer/Exception.php';
+require_once __DIR__ . '/vendor/phpmailer/PHPMailer.php';
+require_once __DIR__ . '/vendor/phpmailer/SMTP.php';
+
+$mail = new PHPMailer\PHPMailer\PHPMailer(true);
+$sent = false;
+try {
+    $mail->isSMTP();
+    $mail->Host       = 'localhost';
+    $mail->Port       = 25;
+    $mail->SMTPAuth   = false;
+    $mail->SMTPAutoTLS = false;
+    $mail->Timeout    = 15;
+    $mail->CharSet    = 'UTF-8';
+
+    $mail->setFrom(MAIL_FROM, SITE_NAME);
+    $mail->Sender = MAIL_FROM;            // envelope sender, for SPF
+    foreach (MAIL_TO as $rcpt) { $mail->addAddress($rcpt); }
+    $mail->addReplyTo($email, $name);
+
+    $mail->Subject = '[Website] ' . $subject;
+    $mail->Body    = $body;
+    $mail->isHTML(false);
+
+    $sent = $mail->send();
+} catch (Throwable $e) {
+    error_log('contact.php SMTP failure: ' . $e->getMessage());
+    $sent = false;
+}
 
 if (!$sent) {
-    error_log('contact.php: mail() failed for ' . $email);
+    error_log('contact.php: send failed for ' . $email);
     respond(500, ['ok' => false, 'error' => 'Could not send. Please call us.']);
 }
 
