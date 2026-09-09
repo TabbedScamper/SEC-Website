@@ -19,14 +19,12 @@ RedirectMatch 404 /\.git(/|$)
     RewriteEngine On
 
     # Canonical host: HTTPS, non-www.
-    # !! HTTPS FORCING IS DISABLED ON PURPOSE !!
-    # southernelectric.net currently has only a self-signed certificate
-    # (GoDaddy has AutoSSL disabled on this plan). Forcing HTTPS before a
-    # valid cert exists would redirect every visitor into a browser security
-    # warning and make the site unreachable. Re-enable the two lines below
-    # the moment a real certificate is installed for this domain.
-    # RewriteCond %{HTTPS} off
-    # RewriteRule ^(.*)$ https://southernelectric.net/$1 [R=301,L]
+    # Let's Encrypt cert for southernelectric.net + www installed 2026-09-09,
+    # valid to 2026-12-08. GoDaddy has AutoSSL disabled on this plan, so this
+    # cert is renewed MANUALLY every 90 days - if it lapses, comment these two
+    # lines out again or the site becomes unreachable behind a cert warning.
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://southernelectric.net/$1 [R=301,L]
 
     # Scheme-preserving so this is correct both before and after the cert.
     RewriteCond %{HTTP_HOST} ^www\.southernelectric\.net [NC]
