@@ -121,7 +121,7 @@ try {
     // Proofpoint directly - which is what any external mail server would do.
     // SPF still passes: the sending IP is GoDaddy's, and the domain's SPF
     // record contains include:secureserver.net.
-    $mail->Host       = 'localhost;mx1-us1.ppe-hosted.com;mx2-us1.ppe-hosted.com';
+    $mail->Host       = 'mx1-us1.ppe-hosted.com;mx2-us1.ppe-hosted.com';
     $mail->Port       = 25;
     $mail->SMTPAuth   = false;
     $mail->SMTPAutoTLS = false;
