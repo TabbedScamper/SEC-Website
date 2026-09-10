@@ -33,7 +33,7 @@
                 { name: 'Mike Evans', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Jenny Gardner', title: 'Accountant', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
                 { name: 'Anna Robertson', title: 'Partner/Accountant', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Ken McNabb', title: 'Project Manager', bio: 'Part of the Southern Electric field crew.' },   // silhouette not set - falls back to the generic SVG
+                { name: 'Ken McNabb', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
             ],
         },
         {
