@@ -27,3 +27,6 @@ test-electricity.html
 
 # Brevo API key - never commit, this repo is public
 brevo.key
+
+# Contact form submissions - contains customer data, never commit
+submissions.log

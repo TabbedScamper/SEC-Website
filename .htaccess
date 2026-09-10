@@ -11,7 +11,7 @@ DirectoryIndex index.html index.htm
 # --- Deny access to VCS/dev files. The site is deployed by cloning the git
 #     repo into this document root, so .git/ sits inside the web root. ---
 RedirectMatch 404 /\.git(/|$)
-<FilesMatch "^(brevo\.key|\.gitignore|\.gitattributes|package(-lock)?\.json|\.cpanel\.yml)$">
+<FilesMatch "^(brevo\.key|submissions\.log|\.gitignore|\.gitattributes|package(-lock)?\.json|\.cpanel\.yml)$">
     Require all denied
 </FilesMatch>
 

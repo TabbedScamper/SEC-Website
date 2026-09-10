@@ -24,7 +24,11 @@ const MAIL_TO = [
     'clint@ice-electric.com',
     'info@southernelectric.net',
 ];
-const MAIL_FROM = 'noreply@southernelectric.net';    // must be a VERIFIED sender in Brevo
+// Sent from a real, monitored mailbox rather than noreply@. No-reply
+// addresses are weighted heavily as bulk mail by filters like Proofpoint,
+// and noreply@ is not even a real mailbox on this domain.
+const MAIL_FROM = 'info@southernelectric.net';        // must be a VERIFIED sender in Brevo
+const SUBMISSION_LOG = __DIR__ . '/submissions.log';  // gitignored + htaccess-denied
 // The Brevo API key is deliberately NOT in this file. This repository is
 // public on GitHub, and a committed key would be scraped and abused within
 // hours. It lives in brevo.key beside this script, which is:
@@ -98,19 +102,26 @@ $body = "New message from the " . SITE_NAME . " website\n"
       . "Sent: " . date('Y-m-d H:i:s T') . "\n"
       . "IP:   {$ip}\n";
 
-$headers = [
-    'From: ' . SITE_NAME . ' <' . MAIL_FROM . '>',
-    'Reply-To: ' . $name . ' <' . $email . '>',
-    'Content-Type: text/plain; charset=utf-8',
-    'X-Mailer: sec-site',
-];
-
 // --- send via the Brevo HTTPS API -----------------------------------
 // NOT SMTP. Every outbound SMTP port is blocked on this GoDaddy shared
 // plan - verified 2026-09-09 against ports 25, 465 and 587 to our own MX,
 // Microsoft, Google and Brevo; all timed out. Their localhost:25 relay
 // connects and returns 250, then silently discards the message. Port 443
 // is the only way off this host, so we post to Brevo's API instead.
+// Record every submission on the server BEFORE trying to send. Mail can be
+// filtered downstream (Proofpoint has been swallowing these), so the log is
+// the durable record - a filtered email becomes an inconvenience, not a lost
+// lead. One JSON object per line.
+@file_put_contents(SUBMISSION_LOG, json_encode([
+    'at'      => date('c'),
+    'name'    => $name,
+    'email'   => $email,
+    'phone'   => $phone,
+    'subject' => $subject,
+    'message' => $message,
+    'ip'      => $ip,
+], JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
+
 $brevoKey = is_readable(BREVO_KEY_FILE) ? trim((string) file_get_contents(BREVO_KEY_FILE)) : '';
 if ($brevoKey === '') {
     error_log('contact.php: Brevo key missing or unreadable at ' . BREVO_KEY_FILE);
