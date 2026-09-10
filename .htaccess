@@ -26,6 +26,16 @@ RedirectMatch 404 /\.git(/|$)
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://southernelectric.net/$1 [R=301,L]
 
+    # --- Outlook autodiscover ---
+    # Outlook checks the ROOT domain first:
+    #   https://southernelectric.net/autodiscover/autodiscover.xml
+    # Since this domain's A record now points at the web server rather than
+    # at mail infrastructure, that request lands here and Outlook can end up
+    # warning about the connection. Hand it straight to Microsoft, which is
+    # where autodiscover.southernelectric.net already points.
+    RewriteRule ^autodiscover/autodiscover\.xml$ https://autodiscover.outlook.com/autodiscover/autodiscover.xml [R=301,L]
+    RewriteRule ^Autodiscover/Autodiscover\.xml$ https://autodiscover.outlook.com/autodiscover/autodiscover.xml [R=301,L,NC]
+
     # Scheme-preserving so this is correct both before and after the cert.
     RewriteCond %{HTTP_HOST} ^www\.southernelectric\.net [NC]
     RewriteRule ^(.*)$ %{REQUEST_SCHEME}://southernelectric.net/$1 [R=301,L]
