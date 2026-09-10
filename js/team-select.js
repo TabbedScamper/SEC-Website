@@ -26,14 +26,14 @@
                 // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
                 { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'President/Owner', bio: 'Owner of Southern Electric & Controls · SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
                 // Crew — names + silhouettes (guy/girl). Positions/bios TBD; real photos to replace silhouettes once permission is given.
-                { name: 'Cary Prince', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Rhyan McGhee', title: 'Estimator', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'David Hatcher', title: 'Partner', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Alan Ross', title: 'Estimator', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Mike Evans', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Jenny Gardner', title: 'Accountant', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Anna Robertson', title: 'Partner/Accountant', sil: 'female', bio: 'Part of the Southern Electric field crew.' },
-                { name: 'Ken McNabb', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric field crew.' },
+                { name: 'Cary Prince', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric crew.' },
+                { name: 'Rhyan McGhee', title: 'Estimator', sil: 'male', bio: 'Part of the Southern Electric crew.' },
+                { name: 'David Hatcher', title: 'Partner', sil: 'male', bio: 'Part of the Southern Electric crew.' },
+                { name: 'Alan Ross', title: 'Estimator', sil: 'male', bio: 'Part of the Southern Electric crew.' },
+                { name: 'Mike Evans', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric crew.' },
+                { name: 'Jenny Gardner', title: 'Accountant', sil: 'female', bio: 'Part of the Southern Electric crew.' },
+                { name: 'Anna Robertson', title: 'Partner/Accountant', sil: 'female', bio: 'Part of the Southern Electric crew.' },
+                { name: 'Ken McNabb', title: 'Project Manager', sil: 'male', bio: 'Part of the Southern Electric crew.' },
             ],
         },
         {
