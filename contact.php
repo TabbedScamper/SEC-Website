@@ -23,7 +23,6 @@ const MAIL_TO = [
     'kevin@southernelectric.net',
     'clint@ice-electric.com',
     'info@southernelectric.net',
-    'mwaltondrafter@yahoo.com',   // TEMPORARY diagnostic recipient - remove after testing
 ];
 const MAIL_FROM = 'noreply@southernelectric.net';    // must be a VERIFIED sender in Brevo
 // The Brevo API key is deliberately NOT in this file. This repository is
