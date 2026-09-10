@@ -60,7 +60,7 @@
                 {
                     name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.webp',
                     epithet: 'The Digital Fabricator',
-                    bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines: coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, Mason doesn’t just build assets; he engineers worlds.',
+                    bio: 'Raised in the JM2 workshop around blueprints, server racks, and the hum of machines: coordinating BIM models and pushing 3D environments to their limits by sixteen. From modding tools to fully rigged characters, vehicles, and entire gameplay systems, I don’t just build assets; I engineer worlds.',
                     focus: ['Precision Modeling', 'BIM Coordination', 'Systems Logic & Scripting', 'Tool & Pipeline Development'],
                 },
                 { name: 'Eriana Fleming', title: 'Designer', photo: 'assets/images/team/eriana-fleming.webp', bio: 'Always learning and evolving to pursue my dream goals and help others.', focus: ['Photoshop', 'AutoCAD', 'Navisworks', 'Revit', 'Architectural Drafting', '3D Modeling', 'Graphic Design'] },
