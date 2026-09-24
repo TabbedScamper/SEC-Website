@@ -350,8 +350,8 @@ window.SDG_CREATIONS = [
     };
 
     // The tow sequence (sdg-tow.js) claims the click with preventDefault and
-    // drives the studio in itself. Defer the plain open one tick so that —
-    // regardless of listener ordering — it only runs when the tow didn't.
+    // drives the studio in itself. Defer the plain open one tick so that -
+    // regardless of listener ordering - it only runs when the tow didn't.
     openBtn.addEventListener('click', (e) => {
         setTimeout(() => { if (!e.defaultPrevented) open(); }, 0);
     });
@@ -361,6 +361,6 @@ window.SDG_CREATIONS = [
     });
 
     // Public hook: lets other UI (the SDG company panel, SDG service cards)
-    // open the studio directly — plain fade-in, no tow sequence.
+    // open the studio directly - plain fade-in, no tow sequence.
     window.SDGStudio = { open, close };
 })();

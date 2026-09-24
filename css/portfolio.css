@@ -1,5 +1,5 @@
 /* ============================================================
-   SOUTHERN DESIGN GROUP — Portfolio showcase
+   SOUTHERN DESIGN GROUP - Portfolio showcase
    Cinematic dark grid, GTA-VI-style sliding sub-tabs, and a
    hover "client stamp" reveal. Pairs with js/sdg-projects.js.
    ============================================================ */
@@ -564,7 +564,7 @@
 .pf-lb-close:hover { background: var(--sec-red); border-color: var(--sec-red); transform: rotate(90deg); }
 
 /* ============================================================
-   SDG CREATIONS SHOWCASE — expanding capability cards
+   SDG CREATIONS SHOWCASE - expanding capability cards
    (lives at the bottom of the design section, on the dark base)
    ============================================================ */
 .sdg-showcase {
@@ -656,7 +656,7 @@
 .sdg-truck-fx.is-driving .sdg-truck {
     animation: sdgTruckDrift 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
-/* Monotonic decelerate into the park — never travels back past the spot,
+/* Monotonic decelerate into the park - never travels back past the spot,
    so it reads as braking to a stop rather than reversing. */
 @keyframes sdgTruckDrift {
     0%   { opacity: 0; transform: translateX(var(--tpark)) translateX(380%) rotate(9deg); }  /* off-screen right */
@@ -679,7 +679,7 @@
 .sdg-truck-fx.is-leaving .sdg-truck {
     animation: sdgTruckLeave 1.5s linear forwards;
 }
-/* Strains and lurches — digs in, barely moves, then finally breaks free. */
+/* Strains and lurches - digs in, barely moves, then finally breaks free. */
 @keyframes sdgTruckLeave {
     0%   { opacity: 1; transform: translateX(-78%) translateX(0)     rotate(0deg); }
     14%  { transform: translateX(-78%) translateX(-4%)   rotate(-1deg); }    /* digs in */
@@ -740,7 +740,7 @@ body.sdg-studio-open { overflow: hidden; }
 }
 .sdg-studio.is-open { opacity: 1; visibility: visible; transform: none; }
 /* "Towed in" entrance: the studio is dragged in from the right by the rope
-   (js/sdg-tow.js). Only the OPEN is changed — closing still uses the
+   (js/sdg-tow.js). Only the OPEN is changed - closing still uses the
    transition above. */
 /* While being hauled in, js/sdg-tow.js drives translateX each frame (in
    lock-step with the truck), so the transition is off and it gets its own
@@ -766,12 +766,12 @@ body.sdg-studio-open { overflow: hidden; }
     pointer-events: none;
     z-index: 1460;
 }
-/* Camera shake when the rope's hook connects. Shake the body's CHILDREN —
+/* Camera shake when the rope's hook connects. Shake the body's CHILDREN -
    transforming <body> itself would make every position:fixed element (the
    header, the rope canvas) re-anchor to the scrolled-out document origin and
    vanish. The studio overlay is excluded (it's about to slide in). */
 /* Exclude elements that use transform to stay hidden (the mobile nav / its
-   overlay) — shaking them would override their translateX(100%) and pop them
+   overlay) - shaking them would override their translateX(100%) and pop them
    into view. */
 body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):not(.explore-drawer):not(.explore-scrim) {
     animation: sdgPageShake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
@@ -980,7 +980,7 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
 }
 
 /* ============================================================
-   FULL PROJECT INDEX — simple list grouped by year
+   FULL PROJECT INDEX - simple list grouped by year
    ============================================================ */
 .sec-list-head {
     margin-top: 4.5rem;
@@ -1032,7 +1032,7 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
 .sec-list-chev svg { width: 22px; height: 22px; }
 .sec-list-group.is-open .sec-list-chev { transform: rotate(180deg); color: var(--sec-red-soft); }
 
-/* Collapsible panel — grid-rows 0fr → 1fr slide */
+/* Collapsible panel - grid-rows 0fr → 1fr slide */
 .sec-list-panel {
     display: grid;
     grid-template-rows: 0fr;

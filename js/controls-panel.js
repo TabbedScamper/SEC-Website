@@ -1,8 +1,8 @@
-/* SEC website — controls-panel.js
+/* SEC website - controls-panel.js
    3D UL 508A control-panel viewer for the ICE Industrial Controls section.
    The model (assets/models/control-panel.glb) has two named nodes:
-     "Door" — pivot sits on the hinge axis; rotate local Z to swing open
-     "Body" — enclosure, backplate, and all mounted devices
+     "Door" - pivot sits on the hinge axis; rotate local Z to swing open
+     "Body" - enclosure, backplate, and all mounted devices
    PERF: nothing loads until the section is ~400px from the viewport, and the
    render loop only runs while the section is on screen.
 */
@@ -27,7 +27,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     let renderer, scene, camera, turntable, doorNode;
     // Door rest pose (captured at load). The GLB's Door node carries a
     // quantization-compensation translation/scale, so we can't just spin the
-    // node — we rotate its rest pose about the hinge axis (the parent
+    // node - we rotate its rest pose about the hinge axis (the parent
     // wrapper's local Z, through the wrapper origin) instead.
     const doorRestPos  = new THREE.Vector3();
     const doorRestQuat = new THREE.Quaternion();
@@ -52,7 +52,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     const introStartPos = new THREE.Vector3(), introStartLook = new THREE.Vector3(), _look = new THREE.Vector3();
     const INTRO_HOLD = 0.7, INTRO_ZOOM = 2.4;   // seconds
     let introReady = false, introDone = false, introT = 0;
-    let introBackdrop = null;   // black plane behind the logo — makes frame one a pure splash
+    let introBackdrop = null;   // black plane behind the logo - makes frame one a pure splash
     // Door guard: corners of the FULLY-OPEN door in turntable space. Each
     // frame we predict where they'd land on screen for the current spin
     // angle; if the open door would reach the text overlay, it auto-closes.
@@ -75,7 +75,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(32, 1, 0.05, 20);
 
-        // Deterministic studio lighting — no IBL/PMREM, which renders
+        // Deterministic studio lighting - no IBL/PMREM, which renders
         // differently (or barely at all) across GPUs. Hemisphere gives the
         // painted steel its broad base; key/fill/rim add form.
         scene.add(new THREE.HemisphereLight(0xf4f6ff, 0x35353d, 1.2));
@@ -92,9 +92,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         turntable = new THREE.Group();
         scene.add(turntable);
 
-        // Bump ?v= whenever the model is re-exported — busts any stale browser cache
+        // Bump ?v= whenever the model is re-exported - busts any stale browser cache
         // PERF: fetch + parse the GLB once, shared with the ICE company-card
-        // mini viewer. Each consumer clones the (4-node) tree — geometries and
+        // mini viewer. Each consumer clones the (4-node) tree - geometries and
         // materials are shared by reference, so the expensive work happens once.
         (window.__panelGLB ||= new Promise((resolve, reject) =>
             new GLTFLoader().load('assets/models/control-panel.glb?v=4', resolve, undefined, reject)
@@ -115,7 +115,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
             turntable.add(model);
 
-            // Frame the camera off the model's real size — tight, so the
+            // Frame the camera off the model's real size - tight, so the
             // panel dominates the column
             const size = box.getSize(new THREE.Vector3());
             const midY = size.y * 0.52;
@@ -154,7 +154,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
             }
 
             // ---- Intro setup: find the HMI screen (Ice_Screen material on the
-            // door) and stage the splash — ICE logo filling the whole frame on
+            // door) and stage the splash - ICE logo filling the whole frame on
             // black, then the camera pulls back and the panel materializes.
             turntable.updateMatrixWorld(true);
             let screenMesh = null, screenArea = 0;
@@ -188,7 +188,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
                         logo.renderOrder = 2;
                         scene.add(logo);
                         doorNode.attach(logo);
-                        // Black backdrop just behind the logo — at the start
+                        // Black backdrop just behind the logo - at the start
                         // distance it fills the frame, so frame one is a pure
                         // logo-on-black splash; it dissolves during the pull-back
                         introBackdrop = new THREE.Mesh(
@@ -225,7 +225,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
             viewerEl.classList.add('is-loaded');
             start();
         }, (err) => {
-            // Loading failed (old browser, blocked fetch…) — leave the CSS fallback
+            // Loading failed (old browser, blocked fetch…) - leave the CSS fallback
             console.error('control panel model failed to load', err);
             finishIntro();   // never leave the text column hidden
             viewerEl.classList.add('is-failed');
@@ -240,7 +240,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         renderer.setSize(w, h, false);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
-        // Portrait (stacked mobile) has far less horizontal room — the open
+        // Portrait (stacked mobile) has far less horizontal room - the open
         // door needs a much longer dolly-out to stay in frame
         ZOOM_OPEN = camera.aspect > 1.2 ? 1.35 : 2.15;
         // Left edge of the text overlay in NDC (only when it overlays the stage)
@@ -271,7 +271,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
         // ---- Intro: logo-on-black splash, then pull back to the hero shot
         if (!introDone) {
-            if (!introReady) {   // logo texture still loading — hold blank
+            if (!introReady) {   // logo texture still loading - hold blank
                 if (visible) rafId = requestAnimationFrame(tick);
                 return;
             }
@@ -297,7 +297,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         }
 
         if (dragging) {
-            // user is spinning it — hands off
+            // user is spinning it - hands off
         } else if (hovered && !userSpun) {
             // Ease the turntable to the nearest front-facing angle so the
             // open door and interior face the viewer.
@@ -374,7 +374,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         }
     };
     // Leaving the stage hands the turntable back to the idle spin (only when
-    // the door is closed — an open door holds its pose)
+    // the door is closed - an open door holds its pose)
     viewerEl.addEventListener('pointerleave', () => { if (doorTarget === 0) userSpun = false; });
 
     // Drag to spin (mouse + touch). A click/tap (little movement, quick)

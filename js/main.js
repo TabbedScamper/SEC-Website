@@ -1,4 +1,4 @@
-/* SEC website — main.js
+/* SEC website - main.js
    Loading screen, sticky-header shrink, mobile nav, reveal-on-scroll,
    stat count-up.  No framework, no jQuery.
 */
@@ -78,7 +78,7 @@
     const numericTargets = new Map();
     statNums.forEach(el => {
         const txt = el.textContent.trim();
-        // Parse "35+", "1,200+", "24 / 7" — extract the leading number if any
+        // Parse "35+", "1,200+", "24 / 7" - extract the leading number if any
         const m = txt.match(/^([\d,]+)/);
         if (m) {
             // Preserve the source formatting: if the user wrote "1988" (no
@@ -137,7 +137,7 @@
 
     // PERF: the looping drone background (large file, preload="none") only appears AFTER the intro
     // clip finishes, so keep it out of the initial load. Start buffering it once the intro is actually
-    // playing — it then has the intro's full duration to fill before the hand-off.
+    // playing - it then has the intro's full duration to fill before the hand-off.
     if (heroVideo && heroDrone) {
         heroVideo.addEventListener('playing', () => heroDrone.load(), { once: true });
     }
@@ -268,7 +268,7 @@
             })
             .then(() => {
                 if (feedback) {
-                    feedback.textContent = 'Thanks — your message is on its way. We’ll be in touch shortly.';
+                    feedback.textContent = 'Thanks - your message is on its way. We’ll be in touch shortly.';
                     feedback.classList.add('success');
                     feedback.style.display = 'block';
                 }
@@ -291,6 +291,84 @@
     }
 
     // ---- 7. Smooth-scroll offset for fixed header ----
+    // Several sections use content-visibility:auto with an ESTIMATED height
+    // (contain-intrinsic-size: auto 700px). Until a section has rendered once,
+    // that estimate is wrong, so the page's height changes while you scroll -
+    // which both aborted the native smooth scroll part-way (COMPANIES stopped
+    // ~150px short) and moved the target after landing.
+    // Fix: switch content-visibility off for the duration of the jump so every
+    // section has its real height, scroll, then snap onto the exact mark and
+    // hand the optimisation back. Sizes are remembered afterwards ("auto"),
+    // so nothing jumps when it is re-enabled.
+    // Jumping to a section, the awkward way, because this page fights the
+    // plain version:
+    //   * several sections use content-visibility:auto with an ESTIMATED
+    //     height (contain-intrinsic-size: auto 700px). As they materialise the
+    //     page's height changes, which ABORTS a native smooth scroll part-way
+    //     - clicking COMPANIES used to stop ~150px short; and
+    //   * late arrivals (deferred hero video, images) move the target after
+    //     the scroll has landed on it.
+    // So: turn the optimisation off for the jump so everything has its real
+    // height, let the browser do the smooth scroll, then hand the optimisation
+    // back, snap exactly onto the mark, and re-check a few times in case
+    // something settles late. Any scrolling by the visitor cancels the rest.
+    let navJumpToken = 0;
+    const scrollToTarget = (target) => {
+        if (!target) return;
+        const myToken = ++navJumpToken;          // a newer jump cancels this one
+        const root = document.documentElement;
+        const dest = () =>
+            target.getBoundingClientRect().top + window.scrollY - (header?.offsetHeight || 0) + 1;
+
+        let userTookOver = false;
+        const yield_ = () => { userTookOver = true; };
+        const events = ['wheel', 'touchstart', 'keydown'];
+        events.forEach(ev => window.addEventListener(ev, yield_, { passive: true }));
+
+        root.classList.add('is-nav-scrolling');
+        void root.offsetHeight;                  // force the real layout now
+        window.scrollTo({ top: dest(), behavior: 'smooth' });
+
+        const correct = () => {
+            if (userTookOver || myToken !== navJumpToken) return;
+            const d = dest();
+            if (Math.abs(window.scrollY - d) > 2) window.scrollTo(0, d);
+        };
+        setTimeout(() => {
+            if (myToken !== navJumpToken) return;
+            // Restore BEFORE measuring: sections go back to their estimated
+            // heights here, which can shift the target.
+            root.classList.remove('is-nav-scrolling');
+            void root.offsetHeight;
+            correct();
+            [150, 400, 800].forEach(ms => setTimeout(correct, ms));
+
+            // The hero plays an intro video and reveals its text afterwards,
+            // which changes its height SECONDS after load and pushes every
+            // section below it down - a jump made during the intro would
+            // otherwise end up ~150px off. Rather than guess at timings, watch
+            // for the page actually resizing and re-snap when it does.
+            let ro = null;
+            const stopWatching = () => {
+                if (ro) { ro.disconnect(); ro = null; }
+                events.forEach(ev => window.removeEventListener(ev, yield_));
+            };
+            if ('ResizeObserver' in window) {
+                let first = true;
+                ro = new ResizeObserver(() => {
+                    if (first) { first = false; return; }   // fires once on observe
+                    if (userTookOver || myToken !== navJumpToken) { stopWatching(); return; }
+                    correct();
+                });
+                ro.observe(document.body);
+            }
+            setTimeout(stopWatching, 8000);
+        }, 700);
+    };
+
+    // company-panels.js reuses this for its own jump links.
+    window.SECScrollToTarget = scrollToTarget;
+
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
             const href = a.getAttribute('href');
@@ -298,9 +376,7 @@
             const target = document.querySelector(href);
             if (!target) return;
             e.preventDefault();
-            const headerH = header?.offsetHeight || 0;
-            const y = target.getBoundingClientRect().top + window.scrollY - headerH + 1;
-            window.scrollTo({ top: y, behavior: 'smooth' });
+            scrollToTarget(target);
         });
     });
 })();

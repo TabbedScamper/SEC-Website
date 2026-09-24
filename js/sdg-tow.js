@@ -22,7 +22,7 @@
     const canCanvas = !!document.createElement('canvas').getContext;
     const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    // On touch (no hover), bring the truck back when the studio is closed —
+    // On touch (no hover), bring the truck back when the studio is closed -
     // there's no hover to re-drive it in.
     if (!hoverCapable) {
         let wasOpen = overlay.classList.contains('is-open');
@@ -158,7 +158,7 @@
 
         // Hand the parked truck to the tow and lift it into a layer ABOVE the
         // rope canvas (but below the studio), so the rope renders behind the
-        // truck and its tied-off end stays hidden behind the body — no visible
+        // truck and its tied-off end stays hidden behind the body - no visible
         // segment growth/shrink at the start.
         let towTruck = window.SDGTruck ? window.SDGTruck.beginTow() : null;
         let towLayer = null, truckHome = null;

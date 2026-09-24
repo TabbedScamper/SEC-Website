@@ -543,7 +543,7 @@ window.PF = (() => {
     }
 
     // Reveal each card as it scrolls into view so the company logos "pop up"
-    // — especially on mobile, where the 1-column stack puts most cards below
+    // - especially on mobile, where the 1-column stack puts most cards below
     // the fold. Cards entering together get a small cascading stagger.
     const revealObserver = ('IntersectionObserver' in window)
         ? new IntersectionObserver((entries, obs) => {

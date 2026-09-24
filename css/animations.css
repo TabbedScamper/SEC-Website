@@ -1,5 +1,5 @@
 /* ============================================
-   SEC — animation layer
+   SEC - animation layer
    Reveal-on-scroll + section transitions
    ============================================ */
 
@@ -20,7 +20,7 @@
 [data-reveal="right"] { transform: translateX(28px); }
 [data-reveal="right"].is-visible { transform: translateX(0); }
 
-/* Staggered children — set --delay in JS */
+/* Staggered children - set --delay in JS */
 [data-reveal][style*="--delay"] {
     transition-delay: var(--delay);
 }

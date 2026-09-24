@@ -15,7 +15,7 @@
      • the truck simply slides in once when the button scrolls
        into view, gives a quick puff, and freezes.
 
-   Decorative only — the layer is pointer-events:none so the
+   Decorative only - the layer is pointer-events:none so the
    button stays clickable. Honors prefers-reduced-motion.
    ============================================================ */
 (() => {
@@ -101,7 +101,7 @@
             stopSmoke();
             setStill();                 // freeze the truck (stop the wheels)
         };
-        // Burnout only on real mouse hover. (Not focus — closing the studio
+        // Burnout only on real mouse hover. (Not focus - closing the studio
         // refocuses the button, which would otherwise burn out with no hover.)
         btn.addEventListener('mouseenter', enter);
         btn.addEventListener('mouseleave', leave);
@@ -143,7 +143,7 @@
             fx.querySelectorAll('.sdg-puff').forEach(p => p.remove());   // no leftover smoke during the tow
             setAnim();                                        // wheels spin as it pulls
             fx.classList.remove('is-driving', 'is-leaving');  // release CSS control of transform
-            // pin opacity + transform inline — without is-driving the base rule's
+            // pin opacity + transform inline - without is-driving the base rule's
             // opacity:0 (entrance state) would otherwise make the truck vanish.
             truck.style.opacity = '1';
             truck.style.transform = 'translateX(var(--tpark)) translateX(0) rotate(0deg)';  // hold parked (mobile-aware)
@@ -157,7 +157,7 @@
             reset();
         },
         // Re-drive the truck in and freeze (touch devices, after the studio is
-        // closed — there's no hover to bring it back).
+        // closed - there's no hover to bring it back).
         comeBack() {
             if (fx.classList.contains('is-driving')) return;
             setAnim();

@@ -1,4 +1,4 @@
-/* SEC website — company-panels.js
+/* SEC website - company-panels.js
    The three-company explorer (#companies): SEC / ICE / SDG panels with live
    backgrounds (spinning logo · 3D control panel · the Shelby), plus the
    right-hand explore drawer that carries the condensed company content.
@@ -63,11 +63,14 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         const t = document.querySelector(sel);
         if (!t) return;
         const headerH = document.getElementById('header')?.offsetHeight || 0;
+        // Use main.js's frame-driven scroll when present: native smooth
+        // scrolling gets aborted by the content-visibility sections.
+        if (window.SECScrollToTarget) { window.SECScrollToTarget(t); return; }
         window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - headerH + 1, behavior: 'smooth' });
     };
 
     // The totem (small logo / 3D panel / truck at the bottom of each card)
-    // is the selection control — native buttons, so keyboard comes free.
+    // is the selection control - native buttons, so keyboard comes free.
     // ICE's 3D panel scrolls to the big 3D panel section; SDG's truck
     // scrolls to the design spotlight; SEC opens the explore drawer.
     const TOTEM_ACTIONS = {
@@ -82,7 +85,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     });
 
     // Service cards: each routes to the drawer of the company that does that
-    // work — "more info" is one click away, matching the explorer pattern.
+    // work - "more info" is one click away, matching the explorer pattern.
     const SERVICE_MAP = {
         'Electrical Installation':   'sec',
         'Switchgear & Distribution': 'sec',
@@ -102,7 +105,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         card.dataset.openDrawer = target;
         card.tabIndex = 0;
         card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', key + ' — more info');
+        card.setAttribute('aria-label', key + ' - more info');
     });
 
     // Anything tagged data-open-drawer opens the matching drawer: nav/footer
@@ -118,7 +121,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     });
 
     // ============================================================
-    // 2. SDG totem — the Shelby's wheels spin while hovered
+    // 2. SDG totem - the Shelby's wheels spin while hovered
     //    (reuses the truck WebP pair; sdg-truck.js is untouched)
     // ============================================================
     const sdgTotem = document.querySelector('.co-panel--sdg .co-totem');
@@ -131,7 +134,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
     }
 
     // ============================================================
-    // 3. ICE panel — live 3D control panel, slow turntable
+    // 3. ICE panel - live 3D control panel, slow turntable
     // ============================================================
     const canvas = document.getElementById('coIceCanvas');
     const icePanel = document.querySelector('.co-panel--ice');
@@ -145,7 +148,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         if (booted) return;
         booted = true;
         renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // small totem canvas — keep it crisp
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // small totem canvas - keep it crisp
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.15;
 
@@ -196,7 +199,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     const tick = (t) => {
         rafId = null;
-        // PERF: decorative turntable — 30fps is plenty
+        // PERF: decorative turntable - 30fps is plenty
         if (t - lastT < 31) {
             if (visible) rafId = requestAnimationFrame(tick);
             return;

@@ -1,5 +1,5 @@
 /* ============================================================
-   SEC TEAM — "Arc Select" crew selector styles (js/team-select.js)
+   SEC TEAM - "Arc Select" crew selector styles (js/team-select.js)
    ============================================================ */
 /* About-section placement */
 .about-team { margin-top: 4.5rem; padding-top: 3.5rem; border-top: 1px solid var(--border); }
@@ -100,7 +100,7 @@
     .ts-cell:hover:not(.is-active) .ts-cell-name { color: var(--text-soft); }
 }
 
-/* energized / selected — modest lift; the electricity now lives on the big splash portrait */
+/* energized / selected - modest lift; the electricity now lives on the big splash portrait */
 .ts-cell.is-active {
     border-color: var(--sec-red);
     transform: translateY(-3px) scale(1.035);
@@ -161,7 +161,7 @@
 }
 @keyframes tsChip { 0% { opacity: 0; transform: translateY(6px) scale(0.9); } 100% { opacity: 1; transform: none; } }
 
-/* mission statement — full-width footer at the bottom of the team panel */
+/* mission statement - full-width footer at the bottom of the team panel */
 .ts-mission {
     position: relative; z-index: 1;   /* above the blurred bg watermark */
     margin-top: 2.2rem; padding-top: 1.6rem; border-top: 1px solid var(--border);
@@ -176,7 +176,7 @@
 .ts-splash.is-pop { animation: tsPop 0.5s cubic-bezier(0.3, 1.3, 0.4, 1); }
 @keyframes tsPop {
     0%   { transform: scale(1);     opacity: 1; }
-    30%  { transform: scale(0.8);   opacity: 0.3; }   /* fizzle out — content swaps here */
+    30%  { transform: scale(0.8);   opacity: 0.3; }   /* fizzle out - content swaps here */
     62%  { transform: scale(1.045); opacity: 1; }      /* pop overshoot */
     100% { transform: scale(1);     opacity: 1; }
 }

@@ -18,14 +18,14 @@
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Roster source of truth: docs/team-roster.txt — edit names/positions/bios there, mirror here.
+    // Roster source of truth: docs/team-roster.txt - edit names/positions/bios there, mirror here.
     const DIVISIONS = [
         {
             key: 'SEC', name: 'Southern Electric',
             members: [
-                // PLACEHOLDER bio/skills — confirm with Kevin. Owns all three divisions; lives in SEC.
+                // PLACEHOLDER bio/skills - confirm with Kevin. Owns all three divisions; lives in SEC.
                 { name: 'Kevin Hatcher', title: 'Owner', photo: 'assets/images/team/kevin-hatcher.webp', epithet: 'President/Owner', bio: 'Owner of Southern Electric & Controls · SEC, ICE, and SDG all run under him, with the field side as home base. He sets the direction and the standard the whole team builds to.', focus: ['Leadership', 'Operations', 'Client Relations', 'Business Development'] },
-                // Crew — names + silhouettes (guy/girl). Positions/bios TBD; real photos to replace silhouettes once permission is given.
+                // Crew - names + silhouettes (guy/girl). Positions/bios TBD; real photos to replace silhouettes once permission is given.
                 { name: 'Cary Prince', title: 'General Superintendent', sil: 'male', bio: 'Part of the Southern Electric crew.' },
                 { name: 'Rhyan McGhee', title: 'Vice President/Project Manager', sil: 'male', bio: 'Part of the Southern Electric crew.' },
                 { name: 'David Hatcher', title: 'Partner', sil: 'male', bio: 'Part of the Southern Electric crew.' },
@@ -56,7 +56,7 @@
         },
         {
             key: 'SDG', name: 'Southern Design Group',
-            // PLACEHOLDER titles/bios/skills — confirm with Mason & Eriana. Eriana needs a photo.
+            // PLACEHOLDER titles/bios/skills - confirm with Mason & Eriana. Eriana needs a photo.
             members: [
                 {
                     name: 'Mason Walton', title: 'Multi-field Designer', photo: 'assets/images/team/mason-walton.webp',
@@ -122,7 +122,7 @@
     const canvas = root.querySelector('.ts-fx');
     const ctx    = canvas.getContext('2d');
     // pre-baked WHITE ghost of each division logo (RGB forced white, alpha kept) so it reads as a
-    // watermark on the dark panel. Plain background-image — reliable, unlike CSS mask of an external img.
+    // watermark on the dark panel. Plain background-image - reliable, unlike CSS mask of an external img.
     const DIV_LOGOS = {
         sec: 'assets/images/logos/ghost-sec.webp',
         ice: 'assets/images/logos/ghost-ice.webp',
@@ -130,7 +130,7 @@
     };
 
     /* ---------- electricity circling the selected card ---------- */
-    // per-division strand colours: [primary, secondary] — saturated so the arc reads;
+    // per-division strand colours: [primary, secondary] - saturated so the arc reads;
     // "white" identity comes from the thin hot core, not the glow colour
     const DIV_COLORS = [
         ['#ff2b33', '#ff7a80'],   // SEC: red (bright + light red); white hot core
@@ -138,7 +138,7 @@
         ['#ff5b62', '#d81e26'],   // SDG: red (already reads great)
     ];
     const MARGIN = 48;   // canvas bleeds past the component so edge glow isn't clipped
-    // PERF: the glow is built from cheap wide additive ('lighter') strokes inside the canvas —
+    // PERF: the glow is built from cheap wide additive ('lighter') strokes inside the canvas -
     // NO ctx.shadowBlur and NO CSS filter on the element. Both re-blur the whole surface every
     // frame and tanked this to ~40fps; without them the effect holds 160+fps.
     // precomputed crackle so jagPath never calls Math.random() per-vertex per-frame (no GC churn)
@@ -154,7 +154,7 @@
         canvas.style.width = fw + 'px'; canvas.style.height = fh + 'px';
         ctx.setTransform(DPR, 0, 0, DPR, MARGIN * DPR, MARGIN * DPR);   // (0,0) = component top-left
     }
-    // clear the WHOLE canvas bitmap (over-clears) — not just the current root rect, which leaves a
+    // clear the WHOLE canvas bitmap (over-clears) - not just the current root rect, which leaves a
     // stale ring at the bottom when switching to a shorter roster (e.g. ICE -> SDG).
     const clearAll = () => ctx.clearRect(-MARGIN, -MARGIN, canvas.width + MARGIN * 2, canvas.height + MARGIN * 2);
     const box = el => { const c = el.getBoundingClientRect(), r = root.getBoundingClientRect(); return { x: c.left - r.left, y: c.top - r.top, w: c.width, h: c.height }; };
@@ -164,7 +164,7 @@
         edge(x + w, y + h, x, y + h, 0, 1); edge(x, y + h, x, y, -1, 0);
         return pts;
     }
-    // trace a jagged filament loop into the current path (one strand) — sharp, crackling zigzag
+    // trace a jagged filament loop into the current path (one strand) - sharp, crackling zigzag
     function jagPath(pts, amp, t, seed) {
         ctx.beginPath();
         for (let i = 0; i <= pts.length; i++) {
@@ -274,7 +274,7 @@
         grid.style.gridTemplateColumns = `repeat(${gridCols}, 1fr)`;
         cells = [...grid.querySelectorAll('.ts-cell')];
         sizeCanvas();   // roster size changed the panel height: resize (and clear) the fx canvas to match
-        // selection only changes on an explicit pick (click / keyboard) — not on hover
+        // selection only changes on an explicit pick (click / keyboard) - not on hover
         cells.forEach((c, i) => c.addEventListener('click', () => { select(i, true); c.focus({ preventScroll: true }); }));
         if (fx && !reduce) { grid.classList.remove('powering'); void grid.offsetWidth; grid.classList.add('powering'); }
         select(Math.min(keep, d.members.length - 1), fx);
@@ -326,6 +326,6 @@
         io.observe(root);
     } else { start(); }
     // Keep the fx canvas matched to the panel as its content reflows (e.g. a long bio wrapping tall
-    // on mobile) — otherwise the bottom of the electric ring gets clipped by a too-short canvas.
+    // on mobile) - otherwise the bottom of the electric ring gets clipped by a too-short canvas.
     if ('ResizeObserver' in window) new ResizeObserver(() => sizeCanvas()).observe(root);
 })();
