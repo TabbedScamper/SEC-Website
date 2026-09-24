@@ -30,3 +30,5 @@ brevo.key
 
 # Contact form submissions - contains customer data, never commit
 submissions.log
+applications.log
+applications/

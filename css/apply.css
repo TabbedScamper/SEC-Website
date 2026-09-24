@@ -1,0 +1,493 @@
+/* ==========================================================================
+   SEC EMPLOYMENT APPLICATION
+   One question at a time, in the site's dark theme and chamfered shapes.
+   Built mobile-first: a billboard sends people here on their phone.
+   ========================================================================== */
+
+.apply-page { background: var(--bg); color: var(--text); }
+.apply-page .header { background: rgba(255,255,255,0.97); }
+
+.apply-shell {
+    width: 100%;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 1.4rem;
+}
+.apply-shell--center { text-align: center; }
+
+.apply-main { padding-top: calc(var(--header-h) + 2.2rem); padding-bottom: 5rem; min-height: 70vh; }
+
+/* header extras --------------------------------------------------------- */
+.apply-back, .apply-help {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.86rem; letter-spacing: 0.05em; text-transform: uppercase;
+    color: #2b2b2b;
+    transition: color var(--t-fast);
+}
+.apply-back:hover, .apply-help:hover { color: var(--sec-red); }
+.apply-page .header-inner > .logo { margin: 0 auto; }
+
+/* intro ----------------------------------------------------------------- */
+.apply-intro h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.9rem, 6vw, 3rem);
+    line-height: 1.05; text-transform: uppercase; margin: 0.4rem 0 1.1rem;
+}
+.apply-lead { color: var(--text-soft); font-size: 1.02rem; line-height: 1.6; max-width: 58ch; }
+.apply-points { list-style: none; margin: 1.8rem 0 2.2rem; display: grid; gap: 0.9rem; }
+.apply-points li {
+    color: var(--text-soft); line-height: 1.5;
+    padding-left: 1.5rem; position: relative;
+}
+.apply-points li::before {
+    content: ''; position: absolute; left: 0; top: 0.55em;
+    width: 8px; height: 8px; background: var(--sec-red);
+}
+.apply-points strong { color: var(--text); }
+
+.apply-start { font-size: 1.05rem; }
+.apply-resume { margin-top: 1.4rem; display: flex; gap: 1.2rem; flex-wrap: wrap; }
+.apply-linkbtn {
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--sec-red-soft); border-bottom: 1px solid transparent;
+}
+.apply-linkbtn:hover { border-bottom-color: var(--sec-red-soft); }
+.apply-linkbtn--muted { color: var(--text-muted); }
+.apply-linkbtn--muted:hover { border-bottom-color: var(--text-muted); }
+
+/* progress -------------------------------------------------------------- */
+.apply-progress {
+    position: fixed; top: var(--header-h); left: 0; right: 0;
+    height: 12px; background: rgba(255,255,255,0.07); z-index: 900;
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+}
+.apply-progress-bar {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--sec-red), var(--sec-red-soft));
+    /* the leading edge gets a glow so the fill reads at a glance */
+    box-shadow: 0 0 14px var(--sec-red-glow), 2px 0 6px rgba(255,107,114,0.7);
+    transition: width var(--t-smooth);
+}
+
+.apply-step-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'Oswald', sans-serif; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: 0.78rem;
+    color: var(--text-muted); margin-bottom: 1.1rem;
+}
+.apply-section-name { color: var(--sec-red-soft); }
+
+/* jump menu ------------------------------------------------------------- */
+/* 35 cards is too many to walk back through one at a time, so the section
+   name doubles as a menu. Sections not yet reached stay disabled: jumping
+   forward past required questions would only bounce the applicant back. */
+.apply-jump-toggle {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit;
+}
+.apply-jump-caret {
+    width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent;
+    border-top: 5px solid var(--sec-red-soft); transition: transform var(--t-fast);
+}
+.apply-jump-toggle.is-open .apply-jump-caret { transform: rotate(180deg); }
+.apply-jump-toggle:hover .apply-section-name { color: #fff; }
+
+.apply-jump-panel {
+    background: var(--bg-card); border: 1px solid var(--border);
+    clip-path: var(--cut-sm);
+    margin-bottom: 1rem; max-height: 46vh; overflow-y: auto;
+}
+.apply-jump-item {
+    display: flex; align-items: center; gap: 0.7rem; width: 100%;
+    background: none; border: 0; border-bottom: 1px solid var(--border);
+    padding: 0.8rem 1rem; cursor: pointer; text-align: left;
+    color: var(--text-soft); font-family: 'Inter', sans-serif; font-size: 0.92rem;
+    transition: background var(--t-fast), color var(--t-fast);
+}
+.apply-jump-item:last-child { border-bottom: 0; }
+.apply-jump-item:hover:not([disabled]) { background: var(--bg-card-hover); color: #fff; }
+.apply-jump-item[disabled] { opacity: 0.4; cursor: default; }
+.apply-jump-item.is-here { color: #fff; box-shadow: inset 3px 0 0 var(--sec-red); }
+.apply-jump-mark {
+    width: 20px; height: 20px; flex: 0 0 auto;
+    display: grid; place-items: center; font-size: 0.75rem;
+    border: 1px solid var(--border); color: #fff;
+}
+.apply-jump-item.is-done .apply-jump-mark { background: var(--sec-red); border-color: var(--sec-red); }
+.apply-jump-item.is-part .apply-jump-mark { border-color: var(--sec-red-soft); }
+.apply-jump-label { flex: 1 1 auto; }
+.apply-jump-count {
+    font-family: 'Oswald', sans-serif; font-size: 0.72rem;
+    letter-spacing: 0.05em; color: var(--text-muted); flex: 0 0 auto;
+}
+
+.apply-btn--review { background: transparent; color: var(--sec-red-soft); border-color: var(--sec-red-soft); }
+.apply-btn--review:hover { background: rgba(216,30,38,0.12); }
+
+/* the card -------------------------------------------------------------- */
+.apply-card-stage { position: relative; min-height: 260px; }
+.apply-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    clip-path: var(--cut-md);
+    padding: 1.7rem 1.5rem 1.9rem;
+}
+.apply-card h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: clamp(1.25rem, 4.4vw, 1.75rem); line-height: 1.2;
+    text-transform: none; margin-bottom: 0.5rem;
+}
+.apply-card-hint { color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.2rem; }
+
+/* card entrance / exit - the "one box at a time" movement */
+@keyframes applyCardIn  { from { opacity: 0; transform: translateX(34px); } to { opacity: 1; transform: none; } }
+@keyframes applyCardOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-34px); } }
+.apply-card.is-in   { animation: applyCardIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.apply-card.is-out  { animation: applyCardOut 0.22s ease both; }
+.apply-card.is-in--back  { animation-name: applyCardInBack; }
+.apply-card.is-out--back { animation-name: applyCardOutBack; }
+@keyframes applyCardInBack  { from { opacity: 0; transform: translateX(-34px); } to { opacity: 1; transform: none; } }
+@keyframes applyCardOutBack { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(34px); } }
+
+/* fields ---------------------------------------------------------------- */
+.apply-fields { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+.apply-field { display: flex; flex-direction: column; gap: 0.35rem; flex: 1 1 100%; }
+.apply-field--half  { flex: 1 1 calc(50% - 0.45rem); min-width: 150px; }
+.apply-field--third { flex: 1 1 calc(33.333% - 0.6rem); min-width: 120px; }
+.apply-field--sixth { flex: 0 1 calc(16.666% - 0.75rem); min-width: 78px; }
+.apply-field label {
+    font-family: 'Oswald', sans-serif; font-size: 0.78rem;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-soft);
+}
+.apply-field .req { color: var(--sec-red-soft); }
+.apply-field input, .apply-field textarea {
+    font-family: 'Inter', sans-serif; font-size: 1rem;
+    color: var(--text); background: #0d0d12;
+    border: 1px solid var(--border); border-bottom: 2px solid var(--border);
+    padding: 0.78rem 0.85rem; width: 100%;
+    transition: border-color var(--t-fast), background var(--t-fast);
+}
+.apply-field input:focus, .apply-field textarea:focus {
+    outline: none; border-color: var(--sec-red); background: #101018;
+}
+.apply-field textarea { min-height: 110px; resize: vertical; }
+.apply-field.is-invalid input, .apply-field.is-invalid textarea { border-color: var(--sec-red); }
+.apply-field-error { color: var(--sec-red-soft); font-size: 0.82rem; }
+.apply-field-hint  { color: var(--text-muted); font-size: 0.82rem; }
+
+/* A follow-up field appearing after an answer: it slides in on its own, the
+   card around it stays put. */
+@keyframes applyFieldIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+}
+.apply-field.is-appearing { animation: applyFieldIn 0.24s ease both; }
+
+/* yes / no + choices ---------------------------------------------------- */
+.apply-choices { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.apply-choice {
+    font-family: 'Oswald', sans-serif; font-size: 0.95rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text-soft); background: #0d0d12;
+    border: 1px solid var(--border); clip-path: var(--cut-sm);
+    padding: 0.7rem 1.3rem; cursor: pointer;
+    transition: color var(--t-fast), background var(--t-fast), border-color var(--t-fast);
+}
+.apply-choice:hover { border-color: var(--sec-red-soft); color: var(--text); }
+.apply-choice.is-on {
+    background: var(--sec-red); border-color: var(--sec-red); color: #fff;
+}
+.apply-choice.is-on::before { content: '\2713\00a0'; }   /* tick once chosen */
+
+/* single checkbox (the authorization) */
+.apply-check { display: flex; gap: 0.7rem; align-items: flex-start; cursor: pointer; }
+.apply-check input { width: 22px; height: 22px; accent-color: var(--sec-red); flex: 0 0 auto; margin-top: 2px; }
+.apply-check span { color: var(--text-soft); line-height: 1.45; }
+
+/* authorization statement */
+.apply-statement {
+    border-left: 3px solid var(--sec-red);
+    padding: 0.2rem 0 0.2rem 1rem; margin-bottom: 1.2rem;
+    display: grid; gap: 0.8rem;
+}
+.apply-statement p { color: var(--text-muted); font-size: 0.86rem; line-height: 1.55; }
+
+/* signature ------------------------------------------------------------- */
+.apply-sig-wrap { position: relative; }
+.apply-sig {
+    width: 100%; height: 170px; display: block;
+    background: #fdfdfd; border: 1px solid var(--border);
+    touch-action: none; cursor: crosshair;
+}
+.apply-sig-line {
+    position: absolute; left: 6%; right: 6%; bottom: 46px;
+    border-bottom: 1px dashed #b9b9c4; pointer-events: none;
+}
+.apply-sig-clear { margin-top: 0.5rem; }
+
+/* controls -------------------------------------------------------------- */
+.apply-controls { display: flex; gap: 0.7rem; align-items: center; margin-top: 1.5rem; }
+.apply-btn {
+    font-family: 'Oswald', sans-serif; font-size: 1rem;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 0.85rem 1.7rem; cursor: pointer; border: 1px solid transparent;
+    clip-path: var(--cut-sm);
+    transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.apply-btn--next { background: var(--sec-red); color: #fff; margin-left: auto; min-width: 140px; }
+.apply-btn--next:hover { background: var(--sec-red-hover); }
+.apply-btn--back { background: transparent; color: var(--text-muted); border-color: var(--border); }
+.apply-btn--back:hover { color: var(--text); border-color: var(--text-muted); }
+.apply-btn--skip { background: transparent; color: var(--sec-red-soft); border-color: var(--border); }
+.apply-btn--skip:hover { border-color: var(--sec-red-soft); }
+.apply-tip { color: var(--text-muted); font-size: 0.78rem; margin-top: 0.9rem; }
+.apply-tip kbd {
+    font-family: inherit; border: 1px solid var(--border);
+    padding: 0.05rem 0.4rem; border-radius: 3px;
+}
+
+/* review ---------------------------------------------------------------- */
+.apply-review h2, .apply-done h2 {
+    font-family: 'Oswald', sans-serif; text-transform: uppercase;
+    font-size: clamp(1.6rem, 5vw, 2.4rem); margin: 0.3rem 0 0.8rem;
+}
+.apply-review-doc { margin: 1.8rem 0 2rem; display: grid; gap: 1rem; }
+.apply-doc-section {
+    background: var(--bg-card); border: 1px solid var(--border);
+    clip-path: var(--cut-md); padding: 1.2rem 1.3rem 1.4rem;
+}
+.apply-doc-section h3 {
+    font-family: 'Oswald', sans-serif; font-size: 0.95rem;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--sec-red-soft); margin-bottom: 0.9rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+}
+.apply-doc-edit {
+    background: none; border: 0; cursor: pointer;
+    font-family: 'Oswald', sans-serif; font-size: 0.78rem;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted);
+}
+.apply-doc-edit:hover { color: var(--text); }
+.apply-doc-rows { display: grid; gap: 0.5rem; }
+.apply-doc-row { display: grid; grid-template-columns: minmax(130px, 34%) 1fr; gap: 0.8rem; align-items: baseline; }
+.apply-doc-row dt { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.apply-doc-row dd { color: var(--text); font-size: 0.95rem; word-break: break-word; }
+.apply-doc-row dd.is-empty { color: var(--text-muted); font-style: italic; }
+.apply-doc-sig { max-height: 90px; background: #fff; padding: 4px; }
+
+.apply-send-row { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+.apply-sending { color: var(--sec-red-soft); margin-top: 1rem; }
+.apply-error {
+    margin-top: 1rem; color: #fff; background: rgba(216,30,38,0.14);
+    border-left: 3px solid var(--sec-red); padding: 0.9rem 1rem; line-height: 1.5;
+}
+
+/* done ------------------------------------------------------------------ */
+.apply-done { padding-top: 2rem; }
+.apply-done-mark {
+    width: 84px; height: 84px; margin: 0 auto 1.4rem;
+    display: grid; place-items: center;
+    font-size: 2.4rem; color: #fff; background: var(--sec-red);
+    clip-path: var(--cut-md);
+}
+.apply-done .apply-lead { margin: 0 auto 1.8rem; }
+
+/* footer ---------------------------------------------------------------- */
+.apply-footer {
+    border-top: 1px solid var(--border); padding: 2rem 0 3rem;
+    color: var(--text-muted); font-size: 0.86rem; text-align: center;
+}
+.apply-footer a { color: var(--text-soft); }
+.apply-eeo { margin-top: 0.4rem; font-size: 0.8rem; }
+/* style.css caps every paragraph at 65ch. In a centred block that cap leaves
+   the paragraph box hugging the left edge, so the text only looks centred
+   inside its own narrow box. Auto margins put the box itself in the middle. */
+.apply-footer p, .apply-shell--center p { margin-left: auto; margin-right: auto; }
+
+/* phones ---------------------------------------------------------------- */
+@media (max-width: 720px) {
+    .apply-main { padding-top: calc(var(--header-h) + 1.4rem); }
+    .apply-help span, .apply-back span { display: none; }
+    .apply-help { font-size: 0.8rem; }
+    .apply-card { padding: 1.3rem 1.1rem 1.5rem; }
+    .apply-field--third, .apply-field--half { flex: 1 1 100%; }
+    .apply-field--sixth { flex: 1 1 calc(50% - 0.45rem); }
+    .apply-controls { position: sticky; bottom: 0; background: var(--bg);
+                      padding: 0.9rem 0 1rem; margin-top: 1.2rem; z-index: 5; }
+    .apply-btn { padding: 0.9rem 1.2rem; font-size: 0.95rem; }
+    .apply-btn--next { min-width: 120px; }
+    .apply-tip { display: none; }
+    .apply-doc-row { grid-template-columns: 1fr; gap: 0.15rem; }
+    .apply-progress { height: 14px; }
+    .apply-jump-panel { max-height: 54vh; }
+    .apply-jump-item { padding: 0.95rem 0.9rem; }
+    .apply-btn--review { padding: 0.9rem 0.8rem; font-size: 0.82rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .apply-card.is-in, .apply-card.is-out,
+    .apply-card.is-in--back, .apply-card.is-out--back,
+    .apply-field.is-appearing { animation: none; }
+    .apply-progress-bar { transition: none; }
+}
+
+/* ==========================================================================
+   THE FILLED FORM (review screen)
+   A white, printable replica of SEC's paper application, built by
+   js/apply-doc.js. White on purpose: this is what gets printed and filed.
+   ========================================================================== */
+.apply-paper-wrap { margin: 1.8rem 0 2rem; }
+.doc {
+    background: #fff;
+    color: #111;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.35;
+    padding: 26px 26px 30px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.55);
+    max-width: 8.5in;
+    margin: 0 auto;
+}
+.doc * { color: inherit; }
+
+/* header */
+.doc-head {
+    display: flex; align-items: center; gap: 16px;
+    border-bottom: 3px solid var(--sec-red); padding-bottom: 12px; margin-bottom: 18px;
+}
+.doc-logo { width: 92px; height: auto; flex: 0 0 auto; }
+.doc-head-text { flex: 1 1 auto; }
+.doc-head-text h2 {
+    font-family: 'Oswald', sans-serif; font-weight: 600;
+    font-size: 20px; text-transform: uppercase; letter-spacing: 0.02em; margin: 0;
+}
+.doc-head-text p { font-size: 11px; color: #555; margin: 2px 0 0; max-width: none; }
+.doc-head-meta { text-align: right; font-size: 10.5px; color: #555; display: grid; gap: 2px; }
+
+/* section heading: the red bar from the site */
+.doc-heading {
+    font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    background: var(--sec-red); color: #fff;
+    padding: 5px 9px; margin: 16px 0 0;
+}
+.doc-note { font-size: 10.5px; color: #555; margin: 5px 0 6px; max-width: none; }
+.doc-note--small { font-size: 9.5px; font-style: italic; }
+
+/* the boxed grid */
+.doc-grid { border: 1px solid #111; border-bottom: 0; }
+.doc-grid--tight { margin-top: 10px; }
+.doc-row { display: grid; grid-template-columns: repeat(6, 1fr); border-bottom: 1px solid #111; }
+.doc-cell {
+    border-right: 1px solid #111; padding: 4px 7px 5px; min-height: 38px;
+    display: flex; flex-direction: column; justify-content: flex-start; gap: 2px;
+}
+.doc-cell:last-child { border-right: 0; }
+.doc-cell--tall { min-height: 58px; }
+.doc-span-1 { grid-column: span 1; } .doc-span-2 { grid-column: span 2; }
+.doc-span-3 { grid-column: span 3; } .doc-span-4 { grid-column: span 4; }
+.doc-span-5 { grid-column: span 5; } .doc-span-6 { grid-column: span 6; }
+.doc-label {
+    font-size: 8px; text-transform: uppercase; letter-spacing: 0.05em;
+    color: #666; line-height: 1.25;
+}
+.doc-value { font-size: 12px; font-weight: 500; word-break: break-word; white-space: pre-wrap; }
+.doc-cell.is-blank .doc-value::after { content: '\2014'; color: #bbb; }
+
+/* yes / no ticks */
+.doc-ticks { font-size: 10.5px; display: flex; align-items: center; gap: 5px; margin-top: 1px; }
+.doc-tick {
+    display: inline-grid; place-items: center;
+    width: 13px; height: 13px; border: 1px solid #111; font-size: 10px; line-height: 1;
+}
+.doc-tick.is-on { background: var(--sec-red); border-color: var(--sec-red); color: #fff; }
+.doc-checkgrid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 10px; margin-top: 3px;
+}
+.doc-check { display: flex; align-items: center; gap: 5px; font-size: 10.5px; }
+
+/* tables (education, references) */
+.doc-table { width: 100%; border-collapse: collapse; margin-top: 0; }
+.doc-table th, .doc-table td {
+    border: 1px solid #111; padding: 5px 7px; text-align: left; vertical-align: top;
+    font-size: 11px;
+}
+.doc-table thead th {
+    background: #111; color: #fff; font-family: 'Oswald', sans-serif;
+    font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
+}
+.doc-table tbody th {
+    font-size: 10px; font-weight: 600; background: #f4f4f6; width: 20%;
+}
+.doc-table .doc-mid { text-align: center; width: 9%; }
+.doc-table .doc-num { width: 26px; text-align: center; font-weight: 600; }
+
+/* authorization + signature */
+.doc-statement { border: 1px solid #111; padding: 9px 11px; margin-top: 0; }
+.doc-statement p { font-size: 10px; color: #333; margin: 0 0 6px; max-width: none; }
+.doc-statement p:last-child { margin-bottom: 0; }
+.doc-sign-row { display: flex; gap: 28px; margin-top: 22px; }
+.doc-sign { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: flex-end; }
+.doc-sign--date { flex: 0 0 34%; }
+.doc-sig-img { max-height: 54px; width: auto; align-self: flex-start; }
+.doc-sign-value { font-size: 12px; padding-bottom: 6px; }
+.doc-sign-line { border-bottom: 1px solid #111; margin-bottom: 3px; }
+.doc-foot {
+    margin-top: 18px; text-align: center; font-size: 9px; color: #777; max-width: none;
+}
+
+/* review screen chrome around the paper */
+.apply-doc-tools {
+    display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+.apply-doc-tools .apply-linkbtn { font-size: 0.85rem; }
+.apply-doc-hint { color: var(--text-muted); font-size: 0.82rem; }
+
+/* headings on the paper double as "edit this bit" buttons */
+.doc-heading.is-linked { cursor: pointer; position: relative; }
+.doc-heading.is-linked::after {
+    content: 'Edit';
+    position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+    font-size: 9px; letter-spacing: 0.08em; opacity: 0;
+    transition: opacity var(--t-fast);
+}
+.doc-heading.is-linked:hover::after,
+.doc-heading.is-linked:focus-visible::after { opacity: 0.85; }
+.doc-heading.is-linked:hover { background: var(--sec-red-hover); }
+
+@media (max-width: 720px) {
+    .doc { padding: 16px 14px 20px; font-size: 11.5px; }
+    .doc-head { flex-wrap: wrap; gap: 10px; }
+    .doc-head-meta { text-align: left; }
+    .doc-row { grid-template-columns: repeat(2, 1fr); }
+    .doc-span-1, .doc-span-2, .doc-span-3,
+    .doc-span-4, .doc-span-5, .doc-span-6 { grid-column: span 2; }
+    .doc-cell { border-right: 0; }
+    .doc-checkgrid { grid-template-columns: repeat(2, 1fr); }
+    .doc-table { display: block; overflow-x: auto; }
+}
+
+/* printing: just the paper, nothing else */
+@media print {
+    .header, .apply-progress, .apply-intro, .apply-wizard, .apply-footer,
+    .apply-send-row, .apply-doc-tools, .apply-review h2, .apply-review .section-eyebrow,
+    .apply-review .apply-lead, .apply-sending, .apply-error { display: none !important; }
+    .apply-main { padding: 0 !important; }
+    .apply-shell { max-width: none; padding: 0; }
+    body, .apply-page { background: #fff !important; }
+    .doc { box-shadow: none; max-width: none; padding: 0; font-size: 10.5px; }
+    .doc-break { break-before: page; }
+    .doc-grid, .doc-table, .doc-statement, .doc-sign-row { break-inside: avoid; }
+    .doc-heading.is-linked::after, .doc-resign { display: none; }
+    .doc-value {
+        border-bottom: 0 !important; background: transparent !important;
+        box-shadow: none !important; min-height: 0;
+    }
+    button.doc-tick { border: 1px solid #111; }
+    .doc-heading { break-after: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .doc-tick.is-on, .doc-table thead th, .doc-head { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
