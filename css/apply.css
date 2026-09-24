@@ -55,6 +55,12 @@
 }
 .apply-linkbtn:hover { border-bottom-color: var(--sec-red-soft); }
 .apply-linkbtn--muted { color: var(--text-muted); }
+.apply-paper-note {
+    margin-top: 1.6rem; color: var(--text-muted); font-size: 0.9rem;
+    display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;
+}
+.apply-paper-note a { border-bottom: 1px solid transparent; }
+.apply-paper-or { color: var(--text-muted); }
 .apply-linkbtn--muted:hover { border-bottom-color: var(--text-muted); }
 
 /* progress -------------------------------------------------------------- */
@@ -308,7 +314,7 @@
 .apply-footer p, .apply-shell--center p { margin-left: auto; margin-right: auto; }
 
 /* phones ---------------------------------------------------------------- */
-@media (max-width: 720px) {
+@media screen and (max-width: 720px) {
     .apply-main { padding-top: calc(var(--header-h) + 1.4rem); }
     .apply-help span, .apply-back span { display: none; }
     .apply-help { font-size: 0.8rem; }
@@ -439,6 +445,18 @@
     margin-top: 18px; text-align: center; font-size: 9px; color: #777; max-width: none;
 }
 
+/* a blank copy for filling in by hand: room to write, and solid rules */
+.doc.is-blank-form .doc-cell { min-height: 40px; }
+.doc.is-blank-form .doc-cell--tall { min-height: 58px; }
+.doc.is-blank-form .doc-value--write {
+    border-bottom: 1px solid #111; min-height: 17px; margin-top: auto;
+}
+.doc.is-blank-form .doc-value--multi { min-height: 38px; }
+.doc.is-blank-form .doc-table td { height: 30px; }
+.doc.is-blank-form .doc-table td .doc-value--write { border-bottom: 0; }
+.doc.is-blank-form .doc-pair { gap: 6px; }
+.doc.is-blank-form .doc-pair .doc-value--write { flex: 1 1 60px; }
+
 /* review screen chrome around the paper */
 .apply-doc-tools {
     display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;
@@ -459,7 +477,7 @@
 .doc-heading.is-linked:focus-visible::after { opacity: 0.85; }
 .doc-heading.is-linked:hover { background: var(--sec-red-hover); }
 
-@media (max-width: 720px) {
+@media screen and (max-width: 720px) {
     .doc { padding: 16px 14px 20px; font-size: 11.5px; }
     .doc-head { flex-wrap: wrap; gap: 10px; }
     .doc-head-meta { text-align: left; }
@@ -474,14 +492,17 @@
 /* printing: just the paper, nothing else */
 @media print {
     .header, .apply-progress, .apply-intro, .apply-wizard, .apply-footer,
-    .apply-send-row, .apply-doc-tools, .apply-review h2, .apply-review .section-eyebrow,
-    .apply-review .apply-lead, .apply-sending, .apply-error { display: none !important; }
+    .apply-send-row, .apply-doc-tools, .apply-review > .apply-shell > h2,
+    .apply-review .section-eyebrow, .apply-review > .apply-shell > .apply-lead,
+    .apply-sending, .apply-error { display: none !important; }
     .apply-main { padding: 0 !important; }
     .apply-shell { max-width: none; padding: 0; }
     body, .apply-page { background: #fff !important; }
     .doc { box-shadow: none; max-width: none; padding: 0; font-size: 10.5px; }
     .doc-break { break-before: page; }
-    .doc-grid, .doc-table, .doc-statement, .doc-sign-row { break-inside: avoid; }
+    .doc-statement, .doc-sign-row { break-inside: avoid; }
+    .doc-row, .doc-table tr { break-inside: avoid; }   /* never split a row */
+    .doc-table thead { display: table-header-group; }  /* repeat table headers */
     .doc-heading.is-linked::after, .doc-resign { display: none; }
     .doc-value {
         border-bottom: 0 !important; background: transparent !important;

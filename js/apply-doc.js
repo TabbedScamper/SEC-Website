@@ -14,11 +14,18 @@ window.SEC_APPLY_DOC = (function () {
     const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g,
         c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
+    // Set while building a blank paper copy: values become writing lines and
+    // nothing is editable, since it is filled in with a pen.
+    let BLANK = false;
+
     // An editable value. Everything written here goes straight back into the
     // answers object (see wireDoc in apply.js), so a correction made on the
     // finished form updates the wizard, the email and the PDF alike.
     const val = (name, value, opts = {}) => {
         const v = Array.isArray(value) ? value.join(', ') : (value == null ? '' : value);
+        if (BLANK) {
+            return `<span class="doc-value doc-value--write${opts.multi ? ' doc-value--multi' : ''}"></span>`;
+        }
         return `<span class="doc-value${opts.multi ? ' doc-value--multi' : ''}"
                       data-name="${esc(name)}"
                       contenteditable="plaintext-only"
@@ -41,8 +48,9 @@ window.SEC_APPLY_DOC = (function () {
     const cellPair = (label, names, a, span = 1, sep = ' ') => `
         <div class="doc-cell doc-span-${span}">
             <span class="doc-label">${esc(label)}</span>
-            <span class="doc-pair">${names.map((n, i) =>
-                (i ? `<span class="doc-sep">${esc(sep)}</span>` : '') + val(n, a[n])).join('')}</span>
+            ${BLANK ? '<span class="doc-value doc-value--write"></span>'
+                    : `<span class="doc-pair">${names.map((n, i) =>
+                        (i ? `<span class="doc-sep">${esc(sep)}</span>` : '') + val(n, a[n])).join('')}</span>`}
         </div>`;
 
     // YES / NO pair, both clickable, as on the paper form
@@ -79,9 +87,9 @@ window.SEC_APPLY_DOC = (function () {
     const heading = (t) => `<h3 class="doc-heading">${esc(t)}</h3>`;
 
     // a former-employer block, repeated up to three times
-    function employerBlock(a, i, label) {
+    function employerBlock(a, i, label, blank) {
         const n = (k) => `emp${i}_${k}`;
-        if (!a[n('name')]) return '';
+        if (!blank && !a[n('name')]) return '';
         return heading(label) +
             `<div class="doc-grid">
                 ${row(cell('Name of employer', n('name'), a, 4) + cell('Job title', n('title'), a, 2))}
@@ -98,11 +106,11 @@ window.SEC_APPLY_DOC = (function () {
             </div>`;
     }
 
-    function referenceRows(a) {
+    function referenceRows(a, blank) {
         let rows = '';
         for (let i = 1; i <= 4; i++) {
             const n = a[`ref${i}_name`] || '';
-            if (!n && i > 2) continue;
+            if (!blank && !n && i > 2) continue;
             rows += `<tr>
                         <td class="doc-num">${i}</td>
                         <td>${val(`ref${i}_name`, n)}</td>
@@ -125,13 +133,14 @@ window.SEC_APPLY_DOC = (function () {
     /** Build the whole filled form. `a` is the answers object. */
     function build(a, opts) {
         opts = opts || {};
+        BLANK = !!opts.blank;
         const howFoundOptions = ['Employment agency', 'State employment office', 'Newspaper advertising',
                                  'College placement', 'Friend', 'Walk in', 'Online ad', 'Other'];
-        const signedOn = opts.signedOn || new Date().toLocaleDateString('en-US',
-                            { year: 'numeric', month: 'long', day: 'numeric' });
+        const signedOn = opts.blank ? '' : (opts.signedOn || new Date().toLocaleDateString('en-US',
+                            { year: 'numeric', month: 'long', day: 'numeric' }));
 
         return `
-<article class="doc" id="applyDocPaper">
+<article class="doc${opts.blank ? ' is-blank-form' : ''}" id="applyDocPaper">
     <header class="doc-head">
         <img class="doc-logo" src="assets/images/logos/sec-logo-pdf.png" alt="Southern Electric &amp; Controls">
         <div class="doc-head-text">
@@ -199,15 +208,15 @@ window.SEC_APPLY_DOC = (function () {
     <div class="doc-break"></div>
     ${heading('Former employers')}
     <p class="doc-note">Last three employers, starting with the most recent.</p>
-    ${employerBlock(a, 1, 'Present or last employer')}
-    ${employerBlock(a, 2, 'Previous employer')}
-    ${employerBlock(a, 3, 'Previous employer')}
+    ${employerBlock(a, 1, 'Present or last employer', opts.blank)}
+    ${employerBlock(a, 2, 'Previous employer', opts.blank)}
+    ${employerBlock(a, 3, 'Previous employer', opts.blank)}
 
     ${heading('References')}
     <p class="doc-note">Professional references whom we may contact.</p>
     <table class="doc-table">
         <thead><tr><th class="doc-num">#</th><th>Name</th><th>Address</th><th>Business</th><th>Phone number</th></tr></thead>
-        <tbody>${referenceRows(a)}</tbody>
+        <tbody>${referenceRows(a, opts.blank)}</tbody>
     </table>
 
     ${heading('Service record')}
@@ -242,8 +251,8 @@ window.SEC_APPLY_DOC = (function () {
         <div class="doc-sign">
             ${a.signature ? `<img class="doc-sig-img" src="${a.signature}" alt="Signature">` : ''}
             <span class="doc-sign-line"></span>
-            <span class="doc-label">Signature
-                <button type="button" class="doc-resign" data-resign="1">re-sign</button></span>
+            <span class="doc-label">Signature${opts.blank ? '' :
+                ' <button type="button" class="doc-resign" data-resign="1">re-sign</button>'}</span>
         </div>
         <div class="doc-sign doc-sign--date">
             <span class="doc-sign-value">${esc(signedOn)}</span>

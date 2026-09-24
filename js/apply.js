@@ -684,6 +684,29 @@
     };
     el.start.addEventListener('click', () => { answers = {}; index = 0; stoppedGroups = {}; wipe(); begin(); });
 
+    // apply.html?blank=1 renders an empty copy of the form for printing, so
+    // walk-ins can fill one in by hand. Nothing else on the page runs.
+    if (/(?:^|[?&])blank=1(?:&|$)/.test(location.search)) {
+        el.intro.hidden = true;
+        el.wizard.hidden = true;
+        el.review.hidden = false;
+        document.querySelector('.apply-review .section-eyebrow').textContent = 'Paper copy';
+        document.querySelector('.apply-review h2').textContent = 'Application for employment';
+        document.querySelector('.apply-review .apply-lead').textContent =
+            'A blank form to print and fill in by hand.';
+        el.reviewDoc.innerHTML =
+            `<div class="apply-doc-tools">
+                <button type="button" class="apply-linkbtn" id="applyPrint">Print this form</button>
+                <a class="apply-linkbtn apply-linkbtn--muted" href="apply.html">Fill it in online instead</a>
+             </div>
+             <div class="apply-paper-wrap">${window.SEC_APPLY_DOC.build({}, { blank: true })}</div>`;
+        el.reviewDoc.addEventListener('click', (e) => {
+            if (e.target.closest('#applyPrint')) window.print();
+        });
+        document.querySelector('.apply-send-row').hidden = true;
+        return;
+    }
+
     const saved = load();
     if (saved) {
         el.resume.hidden = false;
