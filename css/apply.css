@@ -500,9 +500,15 @@
     body, .apply-page { background: #fff !important; }
     .doc { box-shadow: none; max-width: none; padding: 0; font-size: 10.5px; }
     .doc-break { break-before: page; }
-    .doc-statement, .doc-sign-row { break-inside: avoid; }
-    .doc-row, .doc-table tr { break-inside: avoid; }   /* never split a row */
-    .doc-table thead { display: table-header-group; }  /* repeat table headers */
+    /* Let long sections flow across sheets rather than forcing a new page,
+       which used to leave most of a sheet empty. Rows and whole blocks stay
+       together; a heading never prints as the last thing on a page. */
+    .doc-break { display: none; }
+    .doc-block, .doc-statement, .doc-sign-row { break-inside: avoid; }
+    .doc-row, .doc-table tr { break-inside: avoid; }
+    .doc-table thead { display: table-header-group; }
+    .doc-heading { break-after: avoid; }
+    .doc-grid { break-inside: auto; }
     .doc-heading.is-linked::after, .doc-resign { display: none; }
     .doc-value {
         border-bottom: 0 !important; background: transparent !important;

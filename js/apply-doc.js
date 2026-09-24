@@ -90,7 +90,7 @@ window.SEC_APPLY_DOC = (function () {
     function employerBlock(a, i, label, blank) {
         const n = (k) => `emp${i}_${k}`;
         if (!blank && !a[n('name')]) return '';
-        return heading(label) +
+        return `<section class="doc-block">` + heading(label) +
             `<div class="doc-grid">
                 ${row(cell('Name of employer', n('name'), a, 4) + cell('Job title', n('title'), a, 2))}
                 ${row(cell('Address', n('street'), a, 3) + cell('City', n('city'), a, 1) +
@@ -103,7 +103,7 @@ window.SEC_APPLY_DOC = (function () {
                       cell('Title', n('supervisorTitle'), a, 1) + cell('Phone', n('supervisorPhone'), a, 1))}
                 ${row(cell('Description of work', n('description'), a, 6, { tall: true, multi: true }))}
                 ${row(cell('Reason for leaving', n('reasonLeaving'), a, 6))}
-            </div>`;
+            </div></section>`;
     }
 
     function referenceRows(a, blank) {
@@ -205,7 +205,6 @@ window.SEC_APPLY_DOC = (function () {
         ${row(cell('Special skills, foreign languages, etc.', 'specialSkills', a, 6, { multi: true }))}
     </div>
 
-    <div class="doc-break"></div>
     ${heading('Former employers')}
     <p class="doc-note">Last three employers, starting with the most recent.</p>
     ${employerBlock(a, 1, 'Present or last employer', opts.blank)}
@@ -232,7 +231,7 @@ window.SEC_APPLY_DOC = (function () {
     <p class="doc-note doc-note--small">A conviction record will not necessarily exclude you from consideration.
        This information will be used only for job-related purposes and only to the extent permitted by law.</p>
 
-    <div class="doc-break"></div>
+    <section class="doc-block">
     ${heading('Authorization')}
     <div class="doc-statement">
         <p>I certify that the facts contained in this application are true and complete to the best of my knowledge
@@ -260,6 +259,7 @@ window.SEC_APPLY_DOC = (function () {
             <span class="doc-label">Date</span>
         </div>
     </div>
+    </section>
     <p class="doc-foot">Southern Electric &amp; Controls &middot; Application for employment &middot; An equal opportunity employer</p>
 </article>`;
     }
