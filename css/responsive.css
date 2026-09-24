@@ -1,5 +1,5 @@
 /* ============================================
-   SEC — responsive breakpoints
+   SEC - responsive breakpoints
    Tablet < 1024, mobile < 720, narrow mobile < 480
    ============================================ */
 
@@ -14,7 +14,7 @@
     .automation-badge { order: -1; }
 
     /* Stack the SDG section; visual goes back to in-flow positioning so it
-       can stack above the text.  Background vignette stays the same — it
+       can stack above the text.  Background vignette stays the same - it
        adapts to the taller stacked layout naturally. */
     .design-group-visual {
         position: relative;
@@ -50,7 +50,7 @@
     .contact-form-wrapper { padding: 1.75rem; }
     .company-grid { grid-template-columns: 1fr; gap: 1.4rem; }
 
-    /* Stack hero vertically — banner stays full-width on top (at its
+    /* Stack hero vertically - banner stays full-width on top (at its
        scaled aspect-ratio height), text falls into normal flow below.
        The text slide-in animation still triggers via `.is-revealed`. */
     .hero {
@@ -80,12 +80,11 @@
     .scroll-cue { display: none; }
 }
 
-@media (max-width: 720px) {
-    :root {
-        --header-h: 72px;
-        --section-pad: 70px;
-    }
-
+/* Nav folds into the hamburger at 1000px, not 720px: the APPLY NOW button
+   (css/apply-cta.css) now occupies the left of the bar, so the full nav stops
+   fitting well before phone width. Moved out of the 720 block verbatim - the
+   rest of that block is phone layout and stays at 720. */
+@media (max-width: 1000px) {
     /* Hide desktop nav, show hamburger */
     .nav { display: none; }
     .menu-toggle { display: flex; }
@@ -132,6 +131,14 @@
     .menu-toggle.is-open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle.is-open span:nth-child(2) { opacity: 0; }
     .menu-toggle.is-open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+}
+
+@media (max-width: 720px) {
+    :root {
+        --header-h: 72px;
+        --section-pad: 70px;
+    }
+
 
     .hero-content { padding: 3rem 0 4rem; }
     .hero-cta { flex-direction: column; align-items: flex-start; }
@@ -168,7 +175,7 @@
 
     /* The lower video fades to WHITE so the black paragraph reads and the area
        blends seamlessly into the white button band below.  Hidden during the
-       intro (so the truck isn't washed) — fades in with the reveal. */
+       intro (so the truck isn't washed) - fades in with the reveal. */
     .hero-strip::after {
         content: '';
         position: absolute; inset: 0;
@@ -181,7 +188,7 @@
     }
     .hero.is-revealed .hero-strip::after { opacity: 1; }
 
-    /* Bigger logo — only shrinks a little and rises, since just the paragraph
+    /* Bigger logo - only shrinks a little and rises, since just the paragraph
        sits inside the video now (the buttons moved below it). */
     .hero-logo-wrap {
         width: 76%;

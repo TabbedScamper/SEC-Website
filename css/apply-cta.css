@@ -1,0 +1,234 @@
+/* ==========================================================================
+   APPLY NOW header CTA
+   A red slab at the far left of the fixed top bar, with the Shelby parked
+   beside it flashing its headlights and bumper bar. The header is
+   position:fixed, so this rides along on every scroll - there is no second
+   floating button to keep in sync.
+
+   To remove: delete the .apply-cta block from index.html and the <link> to
+   this file. Everything it touches, including the logo shift, is scoped here.
+   ========================================================================== */
+
+:root {
+    --apply-truck-h: 78px;            /* header is 110px tall */
+}
+
+.apply-cta {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 0 0 auto;
+}
+
+/* Centre the logos in the gap between the APPLY button and the nav: equal
+   auto margins split the bar's free space evenly on both sides of the logo
+   block, instead of .header-inner's space-between shoving them against the
+   nav. Auto margins win over justify-content, which is what we want here. */
+.header-inner > .logo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ---- the red slab ------------------------------------------------------ */
+.apply-cta-slab {
+    position: relative;
+    isolation: isolate;              /* keeps the glimmer behind the lettering */
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    color: #fff;
+    background: var(--sec-red);
+    padding: 0.72rem 1.4rem;
+    /* Same chamfer language as the rest of the site. */
+    clip-path: var(--cut-sm);
+    /* Same 4.5s cadence as the lamps, so the slab lights up on each blink.
+       The glow is a drop-shadow filter, NOT box-shadow: clip-path crops a
+       box-shadow away, so a box-shadow glow would never be seen. */
+    animation: applySlabFlash 4.5s ease-in-out infinite;
+    transition: background var(--t-fast), transform var(--t-fast),
+                padding var(--t-smooth), font-size var(--t-smooth);
+}
+@keyframes applySlabFlash {
+    0%        { filter: drop-shadow(0 0 0 rgba(255, 176, 32, 0)) brightness(1) saturate(1); }
+    2%        { filter: drop-shadow(0 0 22px rgba(255, 186, 46, 1))
+                        drop-shadow(0 0 44px rgba(255, 140, 20, 0.6))
+                        brightness(1.42) saturate(1.25); }
+    7%        { filter: drop-shadow(0 0 0 rgba(255, 176, 32, 0)) brightness(1) saturate(1); }
+    10%       { filter: drop-shadow(0 0 22px rgba(255, 186, 46, 1))
+                        drop-shadow(0 0 44px rgba(255, 140, 20, 0.6))
+                        brightness(1.42) saturate(1.25); }
+    15%, 100% { filter: drop-shadow(0 0 0 rgba(255, 176, 32, 0)) brightness(1) saturate(1); }
+}
+/* White gloss sweeping left to right, fired just after the second blink so
+   the eye gets: blink, blink, shine. Sits at z-index -1 (under the isolate
+   above) so it passes BEHIND the white lettering and never washes it out.
+   The parent's clip-path keeps the sweep inside the chamfered shape. */
+.apply-cta-slab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: linear-gradient(105deg,
+                      transparent 38%,
+                      rgba(255, 255, 255, 0.92) 50%,
+                      transparent 62%);
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    background-position: 100% 0;     /* 100% = off the left, 0% = off the right */
+    animation: applyGlimmer 4.5s ease-in-out infinite;
+    pointer-events: none;
+}
+@keyframes applyGlimmer {
+    0%, 12%   { background-position: 100% 0; opacity: 0; }
+    14%       { opacity: 1; }
+    26%       { background-position: 0% 0;   opacity: 1; }
+    28%, 100% { background-position: 0% 0;   opacity: 0; }
+}
+
+/* Hover holds the glow on, matching the lamps that also stay lit. */
+.apply-cta:hover .apply-cta-slab,
+.apply-cta:focus-visible .apply-cta-slab {
+    background: var(--sec-red-hover);
+    transform: translateY(-1px);
+    animation: none;
+    filter: drop-shadow(0 0 18px rgba(255, 186, 46, 0.95))
+            drop-shadow(0 0 38px rgba(255, 150, 20, 0.55))
+            brightness(1.12);
+}
+.apply-cta:focus-visible { outline: 2px solid var(--sec-red); outline-offset: 4px; }
+
+/* ---- the truck --------------------------------------------------------- */
+/* Faces left, so it sits to the RIGHT of the slab and points at the words. */
+.apply-truck {
+    position: relative;
+    display: block;
+    height: var(--apply-truck-h);
+    aspect-ratio: 1000 / 562;        /* matches truck-still.webp */
+    flex: 0 0 auto;
+    z-index: 1;                      /* drives over the slab, not under it */
+    pointer-events: none;            /* the whole CTA is the link */
+    /* The source image carries 12% transparent margin on its left, so pull in
+       by 22% of the truck's width: ~12% closes that gap and ~10% is real
+       overlap. Tied to the truck height (width = height x 1.779), so the
+       overlap scales with every breakpoint instead of drifting.
+       Real overlap stays under the slab's right padding - the front bumper
+       laps the slab edge, the lettering stays clear. */
+    margin-left: calc(var(--apply-truck-h) * -0.39);
+    transition: height var(--t-smooth), transform var(--t-fast),
+                margin-left var(--t-smooth);
+}
+.apply-truck img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+}
+.apply-cta:hover .apply-truck { transform: translateX(-3px); }
+
+/* The header no longer resizes on scroll (see css/style.css), so the button
+   and truck hold their size all the way down the page. */
+
+/* ---- headlights -------------------------------------------------------- */
+/* The lights are painted into the WebP, so these are glows laid over the
+   exact clusters (positions measured off the 1000x562 source image).
+   screen blending keeps them reading as light rather than white paint. */
+.apply-lamp {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    /* NOT mix-blend-mode:screen - the header is near-white, and screen
+       blending would make a white headlight glow invisible against it.
+       A warm amber core with a gold halo reads as a lit lamp on white. */
+    filter: blur(1.5px) drop-shadow(0 0 7px rgba(255, 176, 32, 0.85));
+    background: radial-gradient(ellipse at center,
+                rgba(255, 255, 250, 1) 0%,
+                rgba(255, 226, 130, 0.95) 38%,
+                rgba(255, 176, 32, 0.55) 62%,
+                rgba(255, 160, 20, 0) 80%);
+    animation: applyFlash 4.5s ease-in-out infinite;
+}
+/* near-side cluster: centre 36.8% / 49.5% of the image */
+.apply-lamp--near { left: 27.8%; top: 36.5%; width: 18%;  height: 26%; }
+/* far-side sliver just visible past the grille */
+.apply-lamp--far  { left: 9.2%;  top: 39.4%; width: 10%;  height: 18%; }
+/* bumper LED bar - a wide, flat glow, blinking against the headlights */
+.apply-lamp--bar {
+    left: 8.8%; top: 52.1%; width: 26%; height: 10%;
+    border-radius: 3px;
+    animation-delay: 0.22s;
+}
+
+/* Two quick blinks, then a rest - a hazard flash, not a strobe. */
+@keyframes applyFlash {
+    0%   { opacity: 0; }
+    2%   { opacity: 1; }
+    7%   { opacity: 0; }
+    10%  { opacity: 1; }
+    15%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* Hovering holds the lights on. */
+.apply-cta:hover .apply-lamp { animation: none; opacity: 1; }
+
+/* ---- responsive -------------------------------------------------------- */
+/* The site keeps the full nav until 720px, so between here and there the CTA
+   has to give space back rather than shove CONTACT off the bar. Measured at
+   1440 / 1366 / 1280 / 1200 / 1024 / 880 / 768. */
+
+/* Slightly tighter bar: shrink the truck and the slab first. */
+@media (max-width: 1440px) {
+    :root { --apply-truck-h: 64px; }
+    .apply-cta-slab { font-size: 1.02rem; padding: 0.62rem 1.1rem; }
+    .nav-list { gap: 1.7rem; }
+}
+
+/* Not enough room for the truck AND the full nav - the nav wins, since
+   CONTACT running off the edge is worse than losing the truck. */
+@media (max-width: 1300px) {
+    .apply-truck { display: none; }
+    .nav-list { gap: 1.35rem; }
+}
+
+/* Below 1000 the nav becomes the hamburger (see css/responsive.css), which
+   frees the bar up again - so the truck comes back on tablets. */
+@media (max-width: 1000px) and (min-width: 701px) {
+    :root { --apply-truck-h: 58px; }
+    .apply-truck { display: block; }
+}
+
+/* Tighter still: bring the logos down to their scrolled size early. */
+/* 1001-1100: still a full nav, so keep squeezing. */
+@media (max-width: 1100px) {
+    .nav-list { gap: 1rem; }
+    .nav-link { font-size: 0.82rem; letter-spacing: 0.04em; }
+    .logo-img--sec { height: 52px; }
+    .logo-img--ice { height: 38px; }
+    .logo-divider  { height: 44px; }
+    .apply-cta-slab { font-size: 0.95rem; padding: 0.58rem 0.95rem; }
+}
+
+/* Phones: bar is APPLY NOW + logos + hamburger. Two logos plus the button
+   overflow a 390px screen, so below 640 the ICE mark steps aside and the SEC
+   mark carries the bar (ICE is one tap away in the menu). */
+@media (max-width: 640px) {
+    .logo-img--ice { display: none; }
+    .logo-divider  { display: none; }
+    .logo-img--sec { height: 42px; }
+}
+
+@media (max-width: 720px) {
+    .apply-cta-slab { font-size: 0.92rem; padding: 0.55rem 0.9rem; letter-spacing: 0.04em; }
+}
+@media (max-width: 380px) {
+    .apply-cta-slab { font-size: 0.82rem; padding: 0.5rem 0.7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .apply-lamp { animation: none; opacity: 0.55; }
+    .apply-cta-slab { animation: none; filter: none; }
+    .apply-cta-slab::before { animation: none; opacity: 0; }
+    .apply-truck, .apply-cta-slab { transition: none; }
+}
