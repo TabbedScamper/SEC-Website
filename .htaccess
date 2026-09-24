@@ -17,9 +17,9 @@ RedirectMatch 404 /\.git(/|$)
 
 # Completed employment applications are written here by apply.php.
 # They contain applicant personal data - never serve them over the web.
-<IfModule mod_rewrite.c>
-    RewriteRule ^applications/ - [F,L]
-</IfModule>
+# RedirectMatch, not a RewriteRule: this sits above "RewriteEngine On" below,
+# and RedirectMatch needs no engine, so the block cannot be order-dependent.
+RedirectMatch 403 ^/applications(/|$)
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
