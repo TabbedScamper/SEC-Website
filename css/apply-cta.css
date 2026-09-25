@@ -218,15 +218,20 @@
    place it appears above the fold. Measured to fit a 360px screen alongside
    the APPLY button and the hamburger. */
 @media screen and (max-width: 640px) {
-    .logo { gap: 7px; }
-    .logo-img--sec { height: 34px; }
-    .logo-img--ice { height: 26px; }
+    /* Reclaim the bar's side padding on phones and spend it on the logos,
+       rather than leaving them small with empty margins either side. */
+    .header-inner { padding: 0 1rem; }
+    .logo { gap: 8px; }
+    .logo-img--sec { height: 46px; }
+    .logo-img--ice { height: 36px; }
     .logo-divider  { display: none; }
 }
 @media screen and (max-width: 400px) {
-    .logo { gap: 5px; }
-    .logo-img--sec { height: 29px; }
-    .logo-img--ice { height: 22px; }
+    .header-inner { padding: 0 0.7rem; }
+    .logo { gap: 6px; }
+    .logo-img--sec { height: 45px; }
+    .logo-img--ice { height: 35px; }
+    .apply-cta-slab { font-size: 0.78rem; padding: 0.48rem 0.62rem; letter-spacing: 0.02em; }
 }
 
 @media (max-width: 720px) {
