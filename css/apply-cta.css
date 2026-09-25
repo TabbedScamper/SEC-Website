@@ -213,10 +213,20 @@
 /* Phones: bar is APPLY NOW + logos + hamburger. Two logos plus the button
    overflow a 390px screen, so below 640 the ICE mark steps aside and the SEC
    mark carries the bar (ICE is one tap away in the menu). */
-@media (max-width: 640px) {
-    .logo-img--ice { display: none; }
+/* Phones: both company marks stay on the bar. They shrink instead of one
+   being dropped, since ICE is half the business and the bar is the only
+   place it appears above the fold. Measured to fit a 360px screen alongside
+   the APPLY button and the hamburger. */
+@media screen and (max-width: 640px) {
+    .logo { gap: 7px; }
+    .logo-img--sec { height: 34px; }
+    .logo-img--ice { height: 26px; }
     .logo-divider  { display: none; }
-    .logo-img--sec { height: 42px; }
+}
+@media screen and (max-width: 400px) {
+    .logo { gap: 5px; }
+    .logo-img--sec { height: 29px; }
+    .logo-img--ice { height: 22px; }
 }
 
 @media (max-width: 720px) {
