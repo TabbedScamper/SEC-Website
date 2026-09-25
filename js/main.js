@@ -303,6 +303,62 @@
         });
     }
 
+    // ---- 6c. Collapse the services list on phones ----
+    // Ten cards is a long thumb-scroll on a phone. Show four, then let people
+    // open the rest. Desktop is untouched, and the cards are only hidden when
+    // the button is actually in play, so nothing is unreachable without JS.
+    // Show the first few, with a button for the rest. Desktop is untouched,
+    // and nothing is hidden unless the button is actually in place, so the
+    // full list is always reachable.
+    //
+    // The cards are re-queried every time rather than captured once: the
+    // project grid is rebuilt by js/projects.js whenever a filter is used,
+    // so a captured list would go stale and the collapse would quietly stop
+    // working (it did, on the first attempt).
+    const collapseOnPhone = (container, cardSelector, keep, btnClass, noun) => {
+        if (!container) return;
+        const phone = window.matchMedia('(max-width: 720px)');
+        let moreBtn = null;
+        let expanded = false;
+
+        const cards = () => [...container.querySelectorAll(cardSelector)];
+        const label = () => expanded ? `Show fewer ${noun}` : `See all ${cards().length} ${noun}`;
+
+        const paint = () => {
+            const list = cards();
+            if (!phone.matches || list.length <= keep) {
+                list.forEach(c => c.classList.remove('is-collapsed'));
+                if (moreBtn) moreBtn.hidden = true;
+                return;
+            }
+            list.forEach((c, i) => c.classList.toggle('is-collapsed', !expanded && i >= keep));
+            if (!moreBtn) {
+                moreBtn = document.createElement('button');
+                moreBtn.type = 'button';
+                moreBtn.className = btnClass;
+                moreBtn.addEventListener('click', () => {
+                    expanded = !expanded;
+                    paint();
+                    if (!expanded) container.scrollIntoView({ block: 'start', behavior: 'smooth' });
+                });
+                container.insertAdjacentElement('afterend', moreBtn);
+            }
+            moreBtn.hidden = false;
+            moreBtn.textContent = label();
+        };
+
+        paint();
+        phone.addEventListener('change', paint);
+        // Re-apply whenever the list is rebuilt (project filters do this).
+        new MutationObserver(() => paint()).observe(container, { childList: true });
+    };
+
+    collapseOnPhone(document.querySelector('.service-grid'), '.service-card', 4, 'services-more', 'services');
+    // There are two project grids on the page (the showcase and the SDG set),
+    // so collapse each of them rather than just the first one found.
+    document.querySelectorAll('.pf-grid').forEach(grid =>
+        collapseOnPhone(grid, '.pf-card', 4, 'projects-more', 'projects'));
+
     // ---- 7. Smooth-scroll offset for fixed header ----
     // Several sections use content-visibility:auto with an ESTIMATED height
     // (contain-intrinsic-size: auto 700px). Until a section has rendered once,

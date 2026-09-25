@@ -258,3 +258,88 @@
     }
     [data-reveal] { opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   PHONE DENSITY PASS
+   The page ran to nearly twenty phone screens. Nobody thumbs through
+   that. These rules tighten the two worst offenders and stop the page
+   sliding sideways.
+   ============================================================ */
+
+/* --- the sideways slide ---
+   The mobile menu sits off to the right (translated out of view), which
+   makes the document ~22px wider than the screen and lets the whole page
+   be dragged left, showing a black strip at the edge. "clip" stops the
+   overflow without turning the page into a scroll container, so sticky
+   positioning inside still works; "hidden" is the fallback for older
+   browsers. */
+@media screen and (max-width: 1000px) {
+    html { overflow-x: hidden; }
+}
+@supports (overflow: clip) {
+    @media screen and (max-width: 1000px) {
+        html { overflow-x: clip; }
+    }
+}
+
+@media screen and (max-width: 720px) {
+    /* --- Services: 10 cards at ~320px each was 4.6 screens on its own.
+           Tighter cards, and js/main.js collapses the list to the first
+           four behind a "show all" button. --- */
+    .service-card { padding: 1.2rem 1.1rem 1.3rem; }
+    .service-icon { width: 40px; height: 40px; margin-bottom: 0.8rem; }
+    .service-icon svg { width: 20px; height: 20px; }
+    .service-card h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+    .service-card p { font-size: 0.88rem; line-height: 1.45; }
+    .service-grid { gap: 0.9rem; }
+
+    .service-card.is-collapsed { display: none; }
+    .services-more {
+        display: block; width: 100%; margin-top: 1.1rem;
+        font-family: 'Oswald', sans-serif; font-size: 0.95rem;
+        text-transform: uppercase; letter-spacing: 0.06em;
+        color: var(--text); background: transparent;
+        border: 1px solid var(--border); clip-path: var(--cut-sm);
+        padding: 0.9rem 1rem; cursor: pointer;
+    }
+    .services-more:hover { border-color: var(--sec-red); color: #fff; }
+
+    /* --- Companies: three 480px panels. The face and the totem strip both
+           shrink; the panels stay tappable and keep their animation. --- */
+    .co-panel { min-height: 0; height: 300px; }
+    .co-face { inset: 0 0 96px 0; padding: 1.1rem; }
+    .co-totem { width: 130px; height: 84px; bottom: 0.8rem; }
+    .co-face img, .co-face .co-logo { max-height: 120px; }
+
+    /* --- General: the gap between sections was set for a desktop. --- */
+    :root { --section-pad: 56px; }
+    .section-title { margin-bottom: 1.6rem; }
+}
+
+@media screen and (max-width: 720px) {
+    /* --- Projects: nine cards at ~330px was the longest stretch on the page.
+           Same treatment as the services list. --- */
+    .pf-card.is-collapsed, .sec-list-row.is-collapsed { display: none; }
+    .projects-more {
+        display: block; width: 100%; margin-top: 1.1rem;
+        font-family: 'Oswald', sans-serif; font-size: 0.95rem;
+        text-transform: uppercase; letter-spacing: 0.06em;
+        color: var(--text); background: transparent;
+        border: 1px solid var(--border); clip-path: var(--cut-sm);
+        padding: 0.9rem 1rem; cursor: pointer;
+    }
+    .projects-more:hover { border-color: var(--sec-red); color: #fff; }
+
+    /* --- Headings: a four-line title eats half a screen before any content.
+           Smaller type and tighter leading across every section. --- */
+    .section-title { font-size: 1.5rem; line-height: 1.15; max-width: 100%; }
+    h2 { line-height: 1.15; }
+    .section-eyebrow { margin-bottom: 0.6rem; }
+    .portfolio-head { margin-bottom: 1.2rem; }
+}
+
+@media screen and (max-width: 420px) {
+    .co-panel { height: 268px; }
+    .co-face { inset: 0 0 86px 0; }
+    .section-title { font-size: 1.35rem; }
+}
