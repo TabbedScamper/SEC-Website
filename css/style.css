@@ -1692,3 +1692,12 @@ html.is-nav-scrolling .footer, html.is-nav-scrolling .industries,
 html.is-nav-scrolling .design-group, html.is-nav-scrolling .service-area {
     content-visibility: visible;
 }
+
+/* Sets expectations before a solicitor types: contact.php scores and refuses
+   sales pitches, and this keeps the honest ones from bothering. */
+.form-nosolicit {
+    margin-top: 0.9rem;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}

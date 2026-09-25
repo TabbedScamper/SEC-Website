@@ -98,13 +98,54 @@ if ($elapsed < MIN_FILL_SECONDS || $elapsed > 43200) {
     swallow('timing:' . $elapsed);
 }
 
-// 4. Content that reads like link spam rather than an enquiry.
+// 4. Work out what the message actually contains, once, for the two checks
+//    below: how many links it carries and whether it is written in Cyrillic.
 $blob = strtolower(implode(' ', [
     (string)($_POST['name'] ?? ''), (string)($_POST['subject'] ?? ''),
     (string)($_POST['message'] ?? ''), (string)($_POST['phone'] ?? ''),
 ]));
 $links = preg_match_all('~https?://|www\.|\[url|\]\(http~i', $blob);
 $cyrillic = preg_match('/\p{Cyrillic}/u', $blob);
+
+// 4. Sales pitches. Scored rather than a straight keyword block, because one
+//    word means nothing: a real customer might say "we are a marketing firm
+//    that needs an electrician". Two or three of these together is a pitch.
+//    Tune by watching spam.log, which records the score and the hits.
+const SOLICIT_STRONG = [
+    'seo', 'search engine optimi', 'backlink', 'link building', 'guest post',
+    'web design', 'website design', 'redesign your website', 'website audit',
+    'digital marketing', 'social media marketing', 'smm panel', 'ppc campaign',
+    'lead generation', 'b2b leads', 'email marketing', 'outsourcing',
+    'offshore develop', 'app development', 'software development team',
+    'crypto', 'bitcoin', 'forex', 'investment opportunity', 'loan offer',
+    'casino', 'viagra', 'escort', 'sell you', 'our pricing starts',
+];
+const SOLICIT_WEAK = [
+    'i came across your website', 'i visited your website', 'i was browsing your',
+    'your website could', 'first page of google', 'rank higher', 'more traffic',
+    'increase your sales', 'grow your business', 'boost your', 'we specialize in',
+    'we offer', 'our services include', 'free trial', 'no obligation',
+    'limited time offer', 'click here', 'unsubscribe', 'dear sir', 'dear madam',
+    'reply stop', 'let me know if you are interested', 'schedule a call',
+    'partnership opportunity', 'special discount',
+];
+$score = 0; $hits = [];
+foreach (SOLICIT_STRONG as $term) {
+    if (str_contains($blob, $term)) { $score += 2; $hits[] = $term; }
+}
+foreach (SOLICIT_WEAK as $term) {
+    if (str_contains($blob, $term)) { $score += 1; $hits[] = $term; }
+}
+// A link plus any sales language at all is a pitch.
+if ($links >= 1 && $score >= 1) { $score += 2; }
+if ($score >= 3) {
+    logSpam('solicitation:score=' . $score . ',hits=' . implode('|', array_slice($hits, 0, 6)), $_POST);
+    respond(422, ['ok' => false, 'error' =>
+        'This form is for customer and project enquiries only, and it does not accept sales or marketing offers. '
+      . 'If you are a customer and this was blocked by mistake, please call (731) 660-5980.']);
+}
+
+// 5. Content that reads like link spam rather than an enquiry.
 $namedLink = preg_match('~https?://|www\.~i', (string)($_POST['name'] ?? ''));
 if ($links >= 2 || $cyrillic || $namedLink) {
     logSpam('content:links=' . $links . ',cyrillic=' . (int)$cyrillic . ',namelink=' . (int)$namedLink, $_POST);
