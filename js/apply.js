@@ -197,8 +197,11 @@
                 ? `${card.section}: ${card.title.split(':')[0]}` : card.section;
             el.stepCount.textContent = `${index + 1} of ${list.length}`;
             el.bar.style.width = `${((index) / list.length) * 100}%`;
+            // On the first card Back is removed from the row entirely rather than
+            // just made invisible: leaving it in place held an empty gap and
+            // pushed Skip off to the right for no reason.
             el.back.disabled = index === 0;
-            el.back.style.visibility = index === 0 ? 'hidden' : 'visible';
+            el.back.hidden = index === 0;
             el.skip.hidden = !card.skippable;
             el.skip.textContent = card.skipLabel;
             el.next.textContent = (index === list.length - 1) ? 'Review' : 'Next';
