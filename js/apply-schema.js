@@ -9,6 +9,20 @@
    Field types: text, tel, email, date, textarea, yesno, choice, checks, sig
    ============================================================ */
 window.SEC_APPLY_SCHEMA = [
+    // ---------------------------------------------------- resume
+    // First card on purpose: most people have one ready and want it off their
+    // chest. It is optional and only travels with a completed application -
+    // a resume on its own would be an open door for junk.
+    {
+        section: 'Resume',
+        cards: [
+            { id: 'resume', title: 'Have a resume? Attach it now.',
+              hint: 'Optional. It is sent with your finished application, and you can also add it at the end. PDF, Word document or a clear photo, up to 4 MB.',
+              skippable: true, skipLabel: 'No resume', fields: [
+                { name: 'resume', label: 'Resume', type: 'file' },
+            ]},
+        ]
+    },
     // ---------------------------------------------------- personal
     {
         section: 'Personal information',
@@ -67,11 +81,6 @@ window.SEC_APPLY_SCHEMA = [
                 { name: 'position',    label: 'Position',      type: 'text', required: true, w: 'full' },
                 { name: 'startDate',   label: 'Date you can start', type: 'date', required: true, w: 'half' },
                 { name: 'salaryDesired', label: 'Salary desired', type: 'text', required: false, w: 'half' },
-            ]},
-            { id: 'resume', title: 'Have a resume? Attach it now.',
-              hint: 'Optional, and you can also add it at the end. PDF, Word document or a clear photo, up to 4 MB.',
-              skippable: true, skipLabel: 'No resume', fields: [
-                { name: 'resume', label: 'Resume', type: 'file' },
             ]},
             { id: 'employedNow', title: 'Are you employed now?', fields: [
                 { name: 'employedNow', label: 'Employed now?', type: 'yesno', required: true },
