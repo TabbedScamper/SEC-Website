@@ -91,10 +91,12 @@ if ($origin === '' || !preg_match('~^https?://(www\.)?southernelectric\.net~i', 
     swallow('bad-origin:' . substr($origin, 0, 80));
 }
 
-// 3. The page stamps the form when it loads. Missing or instant means a script.
-$stamp = (int)($_POST['_ts'] ?? 0);
-$elapsed = $stamp > 0 ? (int)floor((microtime(true) * 1000 - $stamp) / 1000) : -1;
-if ($elapsed < MIN_FILL_SECONDS || $elapsed > 43200) {
+// 3. How long the visitor had the page open before submitting. The page
+//    measures this ITSELF and sends the number of seconds: comparing a
+//    browser clock against the server clock is unreliable, because plenty of
+//    computers are minutes out and their submissions would look instant.
+$elapsed = (int)($_POST['_elapsed'] ?? -1);
+if ($elapsed < MIN_FILL_SECONDS || $elapsed > 86400) {
     swallow('timing:' . $elapsed);
 }
 
@@ -130,11 +132,13 @@ const SOLICIT_WEAK = [
     'partnership opportunity', 'special discount',
 ];
 $score = 0; $hits = [];
+// strpos, not str_contains: this GoDaddy plan runs PHP 7.4 and str_contains
+// is 8.0+. It fataled with a 500 in production before this was caught.
 foreach (SOLICIT_STRONG as $term) {
-    if (str_contains($blob, $term)) { $score += 2; $hits[] = $term; }
+    if (strpos($blob, $term) !== false) { $score += 2; $hits[] = $term; }
 }
 foreach (SOLICIT_WEAK as $term) {
-    if (str_contains($blob, $term)) { $score += 1; $hits[] = $term; }
+    if (strpos($blob, $term) !== false) { $score += 1; $hits[] = $term; }
 }
 // A link plus any sales language at all is a pitch.
 if ($links >= 1 && $score >= 1) { $score += 2; }

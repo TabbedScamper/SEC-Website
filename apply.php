@@ -92,9 +92,10 @@ if ($origin === '' || !preg_match('~^https?://(www\.)?southernelectric\.net~i', 
     respond(200, ['ok' => true]);            // quietly accept, so a bot moves on
 }
 
-// apply.js stamps the page load. Nobody fills a 35-question form in seconds.
-$stamp   = (int) ($data['startedAt'] ?? 0);
-$elapsed = $stamp > 0 ? (int) floor((microtime(true) * 1000 - $stamp) / 1000) : -1;
+// The page times itself and sends the seconds it was open: nobody fills in a
+// 35-question form in seconds. Not a clock comparison, because a browser clock
+// that is minutes out would make a genuine application look instant.
+$elapsed = (int) ($data['elapsedSeconds'] ?? -1);
 if ($elapsed < 20 || $elapsed > 172800) {
     logSpam('timing:' . $elapsed, $data);
     respond(200, ['ok' => true]);

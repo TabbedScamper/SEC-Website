@@ -233,6 +233,19 @@
     //          the attribute is missing, the form submits the normal way.
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
+        // How long the form was open. contact.php refuses submissions with no
+        // timing or an impossibly quick one, which is what a bot posting
+        // straight to the script looks like. The page measures the seconds
+        // itself rather than sending a clock reading, so a visitor whose
+        // computer clock is wrong is not caught out.
+        const openedAt = Date.now();
+        const elapsedField = contactForm.querySelector('input[name="_elapsed"]');
+        const setElapsed = () => {
+            if (elapsedField) elapsedField.value = String(Math.round((Date.now() - openedAt) / 1000));
+        };
+        setElapsed();
+        contactForm.addEventListener('submit', setElapsed, true);
+
         contactForm.addEventListener('submit', (e) => {
             const submitBtn = contactForm.querySelector('.submit-btn');
             const feedback  = contactForm.querySelector('.form-feedback');
@@ -289,12 +302,6 @@
             });
         });
     }
-
-    // ---- 6b. Stamp the contact form when the page loads ----
-    // contact.php rejects submissions with no stamp or an impossibly quick
-    // one, which is what a bot posting straight to the script looks like.
-    const contactStamp = document.querySelector('.contact-form input[name="_ts"]');
-    if (contactStamp) contactStamp.value = String(Date.now());
 
     // ---- 7. Smooth-scroll offset for fixed header ----
     // Several sections use content-visibility:auto with an ESTIMATED height
