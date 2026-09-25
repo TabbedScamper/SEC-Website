@@ -912,6 +912,20 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
 .pf-card--reveal .pf-badge-logo { max-width: 168px; max-height: 80px; }
 .pf-card--reveal .pf-view { opacity: 0; }
 
+/* Touch devices have no hover, so the client logo (PepsiCo, Walmart and the
+   rest) would sit at opacity 0 until the card was tapped: the whole point of
+   the badge is to be seen at a glance, so show it straight away on phones. */
+@media (hover: none), (pointer: coarse) {
+    .pf-badge {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+        filter: none;
+    }
+    .pf-card--reveal .pf-badge {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
 @media (hover: hover) and (pointer: fine) {
     /* default: client logo sits over a muted, greyed photo */
     .pf-card--reveal .pf-thumb:not(.pf-thumb--logo) {

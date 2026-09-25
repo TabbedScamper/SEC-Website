@@ -306,10 +306,18 @@
 
     /* --- Companies: three 480px panels. The face and the totem strip both
            shrink; the panels stay tappable and keep their animation. --- */
-    .co-panel { min-height: 0; height: 300px; }
-    .co-face { inset: 0 0 96px 0; padding: 1.1rem; }
+    /* The face content (label, name, blurb, prompt) has to FIT the panel:
+       when it does not, it centres itself and the top label is clipped by the
+       panel's hidden overflow. Clamping the blurb is what buys the room. */
+    .co-panel { min-height: 0; height: 320px; }
+    .co-face { inset: 0 0 92px 0; padding: 1rem 1.1rem; }
     .co-totem { width: 130px; height: 84px; bottom: 0.8rem; }
-    .co-face img, .co-face .co-logo { max-height: 120px; }
+    .co-face img, .co-face .co-logo { max-height: 110px; }
+    .co-tag {
+        display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+        overflow: hidden; font-size: 0.86rem; line-height: 1.4;
+    }
+    .co-cta { margin-top: 0.5rem; }
 
     /* --- General: the gap between sections was set for a desktop. --- */
     :root { --section-pad: 56px; }
@@ -339,7 +347,9 @@
 }
 
 @media screen and (max-width: 420px) {
-    .co-panel { height: 268px; }
+    /* Three lines, not two: two chopped the blurb mid-sentence. */
+    .co-panel { height: 322px; }
     .co-face { inset: 0 0 86px 0; }
+    .co-tag { -webkit-line-clamp: 3; font-size: 0.83rem; }
     .section-title { font-size: 1.35rem; }
 }
