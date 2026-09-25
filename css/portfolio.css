@@ -1130,3 +1130,12 @@ body.page-shake > *:not(#sdgStudioOverlay):not(.nav-overlay):not(.mobile-nav):no
     }
     .pf-card { opacity: 1; transform: none; }
 }
+
+/* Copy that depends on whether the visitor has a mouse. The project badges
+   reveal on hover with a pointer, and show by default on touch, so the
+   instruction has to match what the visitor actually sees. */
+.touch-only { display: none; }
+@media (hover: none), (pointer: coarse) {
+    .hover-only { display: none; }
+    .touch-only { display: inline; }
+}

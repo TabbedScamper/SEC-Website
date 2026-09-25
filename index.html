@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css?v=3">
-    <link rel="stylesheet" href="css/portfolio.css?v=2">
+    <link rel="stylesheet" href="css/portfolio.css?v=3">
     <link rel="stylesheet" href="css/animations.css?v=1">
     <link rel="stylesheet" href="css/responsive.css?v=6">
     <link rel="stylesheet" href="css/team-select.css?v=1">
@@ -604,8 +604,12 @@
             </div>
             <p class="portfolio-head-lead">
                 Electrical installation and Honeywell building automation for distribution
-                centers, plants, and retail across the Mid-South. Hover a project to reveal
-                the client. Tap to see photos and details.
+                centers, plants, and retail across the Mid-South.
+                <!-- The client logo is revealed on hover with a mouse, but shows straight
+                     away on a phone (see css/portfolio.css), so the instruction differs. -->
+                <span class="hover-only">Hover a project to reveal the client. Tap to see
+                photos and details.</span>
+                <span class="touch-only">Tap a project to see photos and details.</span>
             </p>
         </div>
 
