@@ -779,7 +779,13 @@
                     </div>
 
                     <!-- Honeypot for spam prevention -->
-                    <input type="text" name="_gotcha" style="display:none">
+                    <!-- Spam traps. Hidden from people, irresistible to bots; _ts is stamped by
+                         js/main.js when the page loads, so a script that POSTs straight to
+                         contact.php cannot produce a believable fill time. -->
+                    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
+                    <input type="text" name="_hp_url" tabindex="-1" autocomplete="off" aria-hidden="true"
+                           style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+                    <input type="hidden" name="_ts" value="">
 
                     <button type="submit" class="submit-btn">
                         <span class="btn-text">Send Message</span>

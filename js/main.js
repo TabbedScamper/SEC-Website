@@ -290,6 +290,12 @@
         });
     }
 
+    // ---- 6b. Stamp the contact form when the page loads ----
+    // contact.php rejects submissions with no stamp or an impossibly quick
+    // one, which is what a bot posting straight to the script looks like.
+    const contactStamp = document.querySelector('.contact-form input[name="_ts"]');
+    if (contactStamp) contactStamp.value = String(Date.now());
+
     // ---- 7. Smooth-scroll offset for fixed header ----
     // Several sections use content-visibility:auto with an ESTIMATED height
     // (contain-intrinsic-size: auto 700px). Until a section has rendered once,

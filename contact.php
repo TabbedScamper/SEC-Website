@@ -36,7 +36,9 @@ const SUBMISSION_LOG = __DIR__ . '/submissions.log';  // gitignored + htaccess-d
 //   * denied in .htaccess, so it cannot be fetched over HTTP
 const BREVO_KEY_FILE = __DIR__ . '/brevo.key';
 const SITE_NAME = 'Southern Electric & Controls';
-const MAX_PER_HOUR = 8;                              // per IP
+const MAX_PER_HOUR = 4;                              // per IP
+const SPAM_LOG     = __DIR__ . '/spam.log';          // gitignored + htaccess-denied
+const MIN_FILL_SECONDS = 4;                          // nobody types a real enquiry faster
 
 // ---------------------------------------------------------------- helpers
 function respond(int $code, array $body): void {
@@ -56,9 +58,58 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     respond(405, ['ok' => false, 'error' => 'Method not allowed']);
 }
 
-// Honeypot: bots fill hidden fields. Report success so they don't retry.
-if (trim((string)($_POST['_gotcha'] ?? '')) !== '') {
+// ---------------------------------------------------------------- spam gate
+// Added 2026-09-25 after a run of Russian link spam. A bot that POSTs straight
+// to this script never sees the page, so it never fills the honeypot and never
+// gets a timestamp: the checks below catch exactly that. Anything rejected is
+// written to spam.log first, so a false positive can still be recovered.
+function logSpam(string $reason, array $post): void {
+    @file_put_contents(SPAM_LOG, json_encode([
+        'at'      => date('c'),
+        'reason'  => $reason,
+        'ip'      => preg_replace('/[^0-9a-f:.]/i', '', $_SERVER['REMOTE_ADDR'] ?? ''),
+        'agent'   => substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200),
+        'referer' => substr((string)($_SERVER['HTTP_REFERER'] ?? ''), 0, 200),
+        'post'    => array_map(static fn($v) => is_string($v) ? substr($v, 0, 800) : $v, $post),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
+}
+/** Quietly accept, so the bot marks it delivered and moves on. */
+function swallow(string $reason): void {
+    logSpam($reason, $_POST);
     respond(200, ['ok' => true]);
+}
+
+// 1. Honeypots. Real people never see these fields. Note the odd names:
+//    a field called "website" or "url" can be filled by a browser's autofill,
+//    which would silently swallow a genuine enquiry.
+if (trim((string)($_POST['_gotcha'] ?? '')) !== '')  { swallow('honeypot:_gotcha'); }
+if (trim((string)($_POST['_hp_url'] ?? '')) !== '')  { swallow('honeypot:_hp_url'); }
+
+// 2. The submission has to come from our own page.
+$origin = (string)($_SERVER['HTTP_ORIGIN'] ?? $_SERVER['HTTP_REFERER'] ?? '');
+if ($origin === '' || !preg_match('~^https?://(www\.)?southernelectric\.net~i', $origin)) {
+    swallow('bad-origin:' . substr($origin, 0, 80));
+}
+
+// 3. The page stamps the form when it loads. Missing or instant means a script.
+$stamp = (int)($_POST['_ts'] ?? 0);
+$elapsed = $stamp > 0 ? (int)floor((microtime(true) * 1000 - $stamp) / 1000) : -1;
+if ($elapsed < MIN_FILL_SECONDS || $elapsed > 43200) {
+    swallow('timing:' . $elapsed);
+}
+
+// 4. Content that reads like link spam rather than an enquiry.
+$blob = strtolower(implode(' ', [
+    (string)($_POST['name'] ?? ''), (string)($_POST['subject'] ?? ''),
+    (string)($_POST['message'] ?? ''), (string)($_POST['phone'] ?? ''),
+]));
+$links = preg_match_all('~https?://|www\.|\[url|\]\(http~i', $blob);
+$cyrillic = preg_match('/\p{Cyrillic}/u', $blob);
+$namedLink = preg_match('~https?://|www\.~i', (string)($_POST['name'] ?? ''));
+if ($links >= 2 || $cyrillic || $namedLink) {
+    logSpam('content:links=' . $links . ',cyrillic=' . (int)$cyrillic . ',namelink=' . (int)$namedLink, $_POST);
+    respond(422, ['ok' => false, 'error' =>
+        'Our spam filter blocked that message. If it was genuine, please call (731) 660-5980 and we will take the details.']);
 }
 
 // Crude per-IP rate limit. Keeps a burst from turning into an inbox flood.

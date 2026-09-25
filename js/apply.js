@@ -8,6 +8,7 @@
     'use strict';
 
     const SCHEMA  = window.SEC_APPLY_SCHEMA || [];
+    const STARTED = Date.now();      // apply.php refuses impossibly quick submissions
     const STORAGE = 'sec-application-v1';
     const $ = (id) => document.getElementById(id);
 
@@ -639,7 +640,7 @@
         el.sending.hidden = false;
 
         // Build a tidy, ordered payload the server can turn into the PDF.
-        const payload = { fields: [], answers, signature: answers.signature || '' };
+        const payload = { fields: [], answers, signature: answers.signature || '', startedAt: STARTED };
         liveCards().forEach(card => {
             card.fields.filter(fieldIsVisible).forEach(f => {
                 if (f.type === 'sig') return;

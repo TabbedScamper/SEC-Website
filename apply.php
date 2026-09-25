@@ -30,6 +30,7 @@ const BREVO_KEY_FILE = __DIR__ . '/brevo.key';
 const APPLICATION_LOG = __DIR__ . '/applications.log';   // .htaccess-denied
 const APPLICATION_DIR = __DIR__ . '/applications';       // .htaccess-denied
 const MAX_PER_HOUR   = 5;                                // per IP
+const SPAM_LOG       = __DIR__ . '/spam.log';            // shared with contact.php
 const MAX_BODY       = 900000;                           // ~900 KB incl. signature
 
 // ---------------------------------------------------------------- helpers
@@ -67,6 +68,45 @@ if ($raw === false || strlen($raw) > MAX_BODY) {
 $data = json_decode($raw, true);
 if (!is_array($data) || empty($data['fields']) || !is_array($data['fields'])) {
     respond(422, ['ok' => false, 'error' => 'Something went wrong with the form. Please call us.']);
+}
+
+// ---------------------------------------------------------------- spam gate
+// The contact form was hit by link spam in Sept 2026, so this endpoint gets
+// the same treatment before it ever goes public. Anything refused is written
+// to spam.log, so a real application is never silently lost.
+function logSpam(string $reason, array $payload): void {
+    @file_put_contents(SPAM_LOG, json_encode([
+        'at'     => date('c'),
+        'form'   => 'application',
+        'reason' => $reason,
+        'ip'     => preg_replace('/[^0-9a-f:.]/i', '', $_SERVER['REMOTE_ADDR'] ?? ''),
+        'agent'  => substr((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 200),
+        'sample' => substr(json_encode($payload['answers'] ?? []), 0, 900),
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
+}
+
+// It has to be submitted from our own page.
+$origin = (string)($_SERVER['HTTP_ORIGIN'] ?? $_SERVER['HTTP_REFERER'] ?? '');
+if ($origin === '' || !preg_match('~^https?://(www\.)?southernelectric\.net~i', $origin)) {
+    logSpam('bad-origin:' . substr($origin, 0, 80), $data);
+    respond(200, ['ok' => true]);            // quietly accept, so a bot moves on
+}
+
+// apply.js stamps the page load. Nobody fills a 35-question form in seconds.
+$stamp   = (int) ($data['startedAt'] ?? 0);
+$elapsed = $stamp > 0 ? (int) floor((microtime(true) * 1000 - $stamp) / 1000) : -1;
+if ($elapsed < 20 || $elapsed > 172800) {
+    logSpam('timing:' . $elapsed, $data);
+    respond(200, ['ok' => true]);
+}
+
+// An employment application has no reason to carry links.
+$blob  = strtolower(json_encode($data['answers'] ?? []));
+$links = preg_match_all('~https?://|www\.|\[url~i', $blob);
+if ($links >= 2) {
+    logSpam('content:links=' . $links, $data);
+    respond(422, ['ok' => false, 'error' =>
+        'Our spam filter blocked that. If this is a genuine application, please call (731) 660-5980.']);
 }
 
 // Crude per-IP rate limit.
