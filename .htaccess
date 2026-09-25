@@ -32,6 +32,14 @@ RedirectMatch 403 ^/applications(/|$)
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://southernelectric.net/$1 [R=301,L]
 
+    # --- Clean URL for the employment application ---
+    # southernelectric.net/apply serves apply.html. The old path redirects, so
+    # only one address is ever in circulation: handy for a billboard or a sign.
+    # QSA keeps ?blank=1 working for the printable copy.
+    RewriteCond %{THE_REQUEST} \s/+apply\.html[\s?] [NC]
+    RewriteRule ^ /apply [R=301,L]
+    RewriteRule ^apply/?$ apply.html [L,QSA]
+
     # --- Outlook autodiscover ---
     # Outlook checks the ROOT domain first:
     #   https://southernelectric.net/autodiscover/autodiscover.xml

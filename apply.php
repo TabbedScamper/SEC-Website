@@ -31,7 +31,8 @@ const APPLICATION_LOG = __DIR__ . '/applications.log';   // .htaccess-denied
 const APPLICATION_DIR = __DIR__ . '/applications';       // .htaccess-denied
 const MAX_PER_HOUR   = 5;                                // per IP
 const SPAM_LOG       = __DIR__ . '/spam.log';            // shared with contact.php
-const MAX_BODY       = 900000;                           // ~900 KB incl. signature
+const MAX_BODY       = 7500000;                          // ~7.5 MB: application + signature + a 4 MB resume
+const MAX_RESUME     = 4194304;                          // 4 MB before base64
 
 // ---------------------------------------------------------------- helpers
 function respond(int $code, array $body): void {
@@ -152,6 +153,50 @@ $stamp     = date('Y-m-d_His');
 $slug      = preg_replace('/[^A-Za-z0-9]+/', '-', $applicant) ?: 'applicant';
 $pdfName   = "SEC-Application_{$slug}_{$stamp}.pdf";
 
+// ---------------------------------------------------------------- resume
+// Optional. Checked by extension AND by what the bytes actually start with,
+// so a script cannot post something executable with a .pdf name on the end.
+$resumeAttachment = null;
+$resumeNote       = 'No resume attached.';
+$resume = is_array($data['resume'] ?? null) ? $data['resume'] : null;
+if ($resume && !empty($resume['data'])) {
+    $allowed = ['pdf', 'doc', 'docx', 'rtf', 'txt', 'jpg', 'jpeg', 'png', 'heic'];
+    $origName = preg_replace('/[^\w.\- ]+/u', '_', (string)($resume['name'] ?? 'resume'));
+    $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
+    $raw = (string)($resume['data'] ?? '');
+    $comma = strpos($raw, ',');
+    $bin = $comma !== false ? base64_decode(substr($raw, $comma + 1), true) : false;
+
+    if (!in_array($ext, $allowed, true)) {
+        respond(422, ['ok' => false, 'error' => 'That resume file type is not accepted. Use a PDF, a Word document or a photo.']);
+    }
+    if ($bin === false || $bin === '') {
+        respond(422, ['ok' => false, 'error' => 'That resume could not be read. Please attach it again.']);
+    }
+    if (strlen($bin) > MAX_RESUME) {
+        respond(413, ['ok' => false, 'error' => 'That resume is larger than 4 MB. Please send a smaller copy or email it to info@southernelectric.net.']);
+    }
+    // magic bytes: what the file really is
+    $head = substr($bin, 0, 8);
+    $looksOk =
+        ($ext === 'pdf'  && strncmp($head, '%PDF', 4) === 0) ||
+        (in_array($ext, ['docx'], true) && strncmp($head, "PK\x03\x04", 4) === 0) ||
+        (in_array($ext, ['doc'], true)  && strncmp($head, "\xD0\xCF\x11\xE0", 4) === 0) ||
+        (in_array($ext, ['jpg', 'jpeg'], true) && strncmp($head, "\xFF\xD8\xFF", 3) === 0) ||
+        ($ext === 'png'  && strncmp($head, "\x89PNG", 4) === 0) ||
+        (in_array($ext, ['rtf', 'txt', 'heic'], true));   // plain or camera formats: no reliable magic here
+    if (!$looksOk) {
+        logSpam('resume-mismatch:' . $ext, $data);
+        respond(422, ['ok' => false, 'error' => 'That file did not look like the type its name says. Please attach the original.']);
+    }
+
+    $resumeName = 'Resume_' . $slug . '_' . $stamp . '.' . $ext;
+    $resumeAttachment = ['content' => base64_encode($bin), 'name' => $resumeName];
+    $resumeNote = 'Resume attached: ' . $resumeName . ' (' . round(strlen($bin) / 1024) . ' KB)';
+    if (!is_dir(APPLICATION_DIR)) { @mkdir(APPLICATION_DIR, 0700); }
+    @file_put_contents(APPLICATION_DIR . '/' . $resumeName, $bin);
+}
+
 // ---------------------------------------------------------------- record it
 // Written BEFORE sending, so a filtered email is an inconvenience rather than
 // a lost applicant. The signature image is left out to keep the log readable.
@@ -163,6 +208,7 @@ $pdfName   = "SEC-Application_{$slug}_{$stamp}.pdf";
     'position'  => $position,
     'ip'        => $ip,
     'pdf'       => $pdfName,
+    'resume'    => $resumeAttachment['name'] ?? null,
     'answers'   => array_diff_key($answers, ['signature' => 1]),
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND | LOCK_EX);
 
@@ -255,6 +301,7 @@ $pdf->SetFont('Helvetica', '', 9.5);
 $pdf->SetTextColor(90, 90, 96);
 $pdf->Cell(0, 5, pdfText(($position !== '' ? 'Applying for: ' . $position . '   |   ' : '')
     . 'Received ' . date('M j, Y \a\t g:i a')), 0, 1);
+$pdf->Cell(0, 5, pdfText($resumeNote), 0, 1);
 $pdf->SetTextColor(0, 0, 0);
 $pdf->Ln(1);
 
@@ -329,6 +376,7 @@ $summary = "New employment application from the website\n"
          . "Email:     {$email}\n"
          . "Phone:     " . ($phone !== '' ? $phone : '(not given)') . "\n\n"
          . "The completed application is attached as a PDF.\n"
+         . $resumeNote . "\n"
          . "Reply to this email to answer the applicant directly.\n\n"
          . str_repeat('-', 52) . "\n"
          . 'Received: ' . date('Y-m-d H:i:s T') . "\nIP: {$ip}\n";
@@ -339,10 +387,10 @@ $payload = [
     'replyTo'     => ['email' => $email, 'name' => $applicant],
     'subject'     => '[Application] ' . $applicant . ($position !== '' ? ' - ' . $position : ''),
     'textContent' => $summary,
-    'attachment'  => [[
-        'content' => base64_encode($pdfBytes),
-        'name'    => $pdfName,
-    ]],
+    'attachment'  => array_values(array_filter([
+        ['content' => base64_encode($pdfBytes), 'name' => $pdfName],
+        $resumeAttachment,
+    ])),
 ];
 
 $ch = curl_init('https://api.brevo.com/v3/smtp/email');

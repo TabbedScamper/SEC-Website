@@ -60,6 +60,11 @@
 
     let answers = {};
     let index = 0;
+    // The resume lives in memory only. localStorage tops out around 5 MB and
+    // base64 inflates a file by a third, so saving it would risk evicting the
+    // answers themselves. If someone comes back to a saved draft they are
+    // asked for the file again, which the card and the review both make clear.
+    let resume = null;              // { name, type, size, data }
     let stoppedGroups = {};      // { emp: 2 } = employers from round 2 on are skipped
     let maxReached = 0;          // furthest card seen, so the jump menu cannot skip ahead
     let returnToReview = false;  // came here from the review screen via Edit
@@ -126,6 +131,18 @@
                             <input type="checkbox" id="f_${esc(f.name)}" data-name="${esc(f.name)}" ${val ? 'checked' : ''}>
                             <span>${esc(f.label)}${req}</span>
                         </label>${hint}
+                        <span class="apply-field-error" hidden></span></div>`;
+        }
+        if (f.type === 'file') {
+            return `<div class="apply-field${wide}" data-field="${esc(f.name)}">${lab}
+                        <div class="apply-file">
+                            <input type="file" id="f_${esc(f.name)}" class="apply-file-input"
+                                   accept=".pdf,.doc,.docx,.rtf,.txt,.jpg,.jpeg,.png,.heic"
+                                   data-file="${esc(f.name)}">
+                            <label class="apply-file-btn" for="f_${esc(f.name)}">Choose a file</label>
+                            <span class="apply-file-name">${resume ? esc(resume.name) + ' (' + fileSize(resume.size) + ')' : 'No file chosen'}</span>
+                            ${resume ? '<button type="button" class="apply-linkbtn apply-linkbtn--muted" data-file-clear="1">Remove</button>' : ''}
+                        </div>${hint}
                         <span class="apply-field-error" hidden></span></div>`;
         }
         if (f.type === 'sig') {
@@ -342,6 +359,7 @@
             return;
         }
         if (e.target.id === 'applySigClear') { clearSignature(); }
+        if (e.target.closest('[data-file-clear]')) { resume = null; render(); }
     });
 
     function clearError(fieldEl) {
@@ -401,6 +419,7 @@
     el.skip.addEventListener('click', () => {
         const list = liveCards();
         const card = list[index];
+        if (card.fields.some(f => f.type === 'file')) resume = null;
         card.fields.forEach(f => { delete answers[f.name]; });
         if (card.terminates && card.group) {
             // "No more employers" - drop this round and everything after it
@@ -417,6 +436,41 @@
         if (index >= liveCards().length - 1) { showReview(); return; }
         index++; render('fwd');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ---------------------------------------------------------------- resume
+    const MAX_RESUME_BYTES = 4 * 1024 * 1024;
+    const RESUME_TYPES = ['pdf', 'doc', 'docx', 'rtf', 'txt', 'jpg', 'jpeg', 'png', 'heic'];
+    const fileSize = (n) => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB'
+                                        : Math.max(1, Math.round(n / 1024)) + ' KB';
+
+    function takeResume(file, onDone) {
+        const ext = (file.name.split('.').pop() || '').toLowerCase();
+        if (!RESUME_TYPES.includes(ext)) {
+            onDone('That file type is not accepted. Use a PDF, a Word document or a photo.');
+            return;
+        }
+        if (file.size > MAX_RESUME_BYTES) {
+            onDone('That file is ' + fileSize(file.size) + '. The limit is 4 MB, so please send a smaller copy or email it to info@southernelectric.net.');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onerror = () => onDone('That file could not be read. Try another copy.');
+        reader.onload = () => {
+            resume = { name: file.name.replace(/[^\w.\- ]+/g, '_').slice(0, 120),
+                       type: file.type || ext, size: file.size, data: String(reader.result) };
+            onDone(null);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    el.stage.addEventListener('change', (e) => {
+        const input = e.target.closest('[data-file]');
+        if (!input || !input.files || !input.files[0]) return;
+        takeResume(input.files[0], (err) => {
+            if (err) { setError(input.dataset.file, err); return; }
+            render();
+        });
     });
 
     // ---------------------------------------------------------------- signature
@@ -491,6 +545,16 @@
             `<div class="apply-doc-tools">
                 <button type="button" class="apply-linkbtn" id="applyPrint">Print or save a copy</button>
                 <span class="apply-doc-hint">Tap a red section heading to change an answer</span>
+             </div>
+             <div class="apply-resume-row">
+                <input type="file" id="applyResumeFile" class="apply-file-input"
+                       accept=".pdf,.doc,.docx,.rtf,.txt,.jpg,.jpeg,.png,.heic">
+                <label class="apply-file-btn" for="applyResumeFile">${resume ? 'Replace resume' : 'Attach a resume'}</label>
+                <span class="apply-file-name">${resume
+                    ? 'Attached: ' + esc(resume.name) + ' (' + fileSize(resume.size) + ')'
+                    : 'No resume attached. Optional, but it helps.'}</span>
+                ${resume ? '<button type="button" class="apply-linkbtn apply-linkbtn--muted" id="applyResumeClear">Remove</button>' : ''}
+                <span class="apply-field-error apply-resume-error" hidden></span>
              </div>
              <div class="apply-paper-wrap">${window.SEC_APPLY_DOC.build(answers, {})}</div>`;
 
@@ -609,8 +673,19 @@
         window.scrollTo({ top: y });
     }
 
+    el.reviewDoc.addEventListener('change', (e) => {
+        const input = e.target.closest('#applyResumeFile');
+        if (!input || !input.files || !input.files[0]) return;
+        takeResume(input.files[0], (err) => {
+            const msg = el.reviewDoc.querySelector('.apply-resume-error');
+            if (err) { if (msg) { msg.textContent = err; msg.hidden = false; } return; }
+            showReview();
+        });
+    });
+
     el.reviewDoc.addEventListener('click', (e) => {
         if (e.target.closest('#applyPrint')) { window.print(); return; }
+        if (e.target.closest('#applyResumeClear')) { resume = null; showReview(); return; }
         const btn = e.target.closest('[data-goto]');
         if (!btn) return;
         index = parseInt(btn.dataset.goto, 10) || 0;
@@ -641,7 +716,9 @@
 
         // Build a tidy, ordered payload the server can turn into the PDF.
         const payload = { fields: [], answers, signature: answers.signature || '',
-                                elapsedSeconds: Math.round((Date.now() - OPENED_AT) / 1000) };
+                                elapsedSeconds: Math.round((Date.now() - OPENED_AT) / 1000),
+                                resume: resume ? { name: resume.name, type: resume.type,
+                                                   size: resume.size, data: resume.data } : null };
         liveCards().forEach(card => {
             card.fields.filter(fieldIsVisible).forEach(f => {
                 if (f.type === 'sig') return;
@@ -699,7 +776,7 @@
         el.reviewDoc.innerHTML =
             `<div class="apply-doc-tools">
                 <button type="button" class="apply-linkbtn" id="applyPrint">Print this form</button>
-                <a class="apply-linkbtn apply-linkbtn--muted" href="apply.html">Fill it in online instead</a>
+                <a class="apply-linkbtn apply-linkbtn--muted" href="/apply">Fill it in online instead</a>
              </div>
              <div class="apply-paper-wrap">${window.SEC_APPLY_DOC.build({}, { blank: true })}</div>`;
         el.reviewDoc.addEventListener('click', (e) => {

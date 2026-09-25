@@ -221,6 +221,32 @@
 }
 .apply-statement p { color: var(--text-muted); font-size: 0.86rem; line-height: 1.55; }
 
+/* resume upload -------------------------------------------------------- */
+.apply-file, .apply-resume-row {
+    display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;
+}
+.apply-resume-row {
+    margin-bottom: 1.2rem; padding: 0.9rem 1rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    clip-path: var(--cut-sm);
+}
+.apply-file-input {
+    position: absolute; width: 1px; height: 1px; opacity: 0;   /* the label is the button */
+    overflow: hidden; clip: rect(0 0 0 0);
+}
+.apply-file-btn {
+    font-family: 'Oswald', sans-serif; font-size: 0.9rem;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--text); background: #0d0d12;
+    border: 1px solid var(--border); clip-path: var(--cut-sm);
+    padding: 0.7rem 1.2rem; cursor: pointer;
+    transition: border-color var(--t-fast), color var(--t-fast);
+}
+.apply-file-btn:hover { border-color: var(--sec-red-soft); color: #fff; }
+.apply-file-input:focus-visible + .apply-file-btn { outline: 2px solid var(--sec-red); outline-offset: 3px; }
+.apply-file-name { color: var(--text-soft); font-size: 0.9rem; word-break: break-word; }
+.apply-resume-error { flex: 1 1 100%; }
+
 /* signature ------------------------------------------------------------- */
 .apply-sig-wrap { position: relative; }
 .apply-sig {

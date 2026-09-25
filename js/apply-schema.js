@@ -68,6 +68,11 @@ window.SEC_APPLY_SCHEMA = [
                 { name: 'startDate',   label: 'Date you can start', type: 'date', required: true, w: 'half' },
                 { name: 'salaryDesired', label: 'Salary desired', type: 'text', required: false, w: 'half' },
             ]},
+            { id: 'resume', title: 'Have a resume? Attach it now.',
+              hint: 'Optional, and you can also add it at the end. PDF, Word document or a clear photo, up to 4 MB.',
+              skippable: true, skipLabel: 'No resume', fields: [
+                { name: 'resume', label: 'Resume', type: 'file' },
+            ]},
             { id: 'employedNow', title: 'Are you employed now?', fields: [
                 { name: 'employedNow', label: 'Employed now?', type: 'yesno', required: true },
                 { name: 'mayInquire',  label: 'If so, may we contact your present employer?',
