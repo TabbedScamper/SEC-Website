@@ -23,6 +23,7 @@ const MAIL_TO = [
     'kevin@southernelectric.net',
     'clint@ice-electric.com',
     'info@southernelectric.net',
+    'jenny@southernelectric.net',
 ];
 // Sent from a real, monitored mailbox rather than noreply@. No-reply
 // addresses are weighted heavily as bulk mail by filters like Proofpoint,

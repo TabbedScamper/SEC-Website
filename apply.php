@@ -24,6 +24,7 @@ const MAIL_TO = [
     'kevin@southernelectric.net',
     'clint@ice-electric.com',
     'info@southernelectric.net',
+    'jenny@southernelectric.net',
 ];
 const MAIL_FROM      = 'info@southernelectric.net';   // verified sender in Brevo
 const BREVO_KEY_FILE = __DIR__ . '/brevo.key';
