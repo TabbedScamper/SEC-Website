@@ -46,17 +46,6 @@ function clean(string $v, int $max = 2000): string {
     $v = str_replace(["\r", "\n"], ' ', $v);
     return trim(mb_substr($v, 0, $max));
 }
-/** FPDF core fonts are Latin-1 only; keep the text readable if someone
- *  types a curly quote or an accent. */
-function pdfText(string $s): string {
-    $s = str_replace(
-        ["\u{2018}", "\u{2019}", "\u{201C}", "\u{201D}", "\u{2013}", "\u{2014}", "\u{2026}"],
-        ["'", "'", '"', '"', '-', '-', '...'],
-        $s
-    );
-    $out = @iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $s);
-    return $out === false ? $s : $out;
-}
 
 // ---------------------------------------------------------------- guards
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -225,136 +214,20 @@ if (preg_match('#^data:image/png;base64,#', $sig)) {
 }
 
 // ---------------------------------------------------------------- the PDF
-require __DIR__ . '/vendor/fpdf/fpdf.php';
+// Rendered by apply-pdf.php from the answers map, so the attachment is the
+// same form the applicant reviewed and signed off on screen. The first version
+// walked a flat list of fields instead, which printed the three addresses as
+// six identical rows of "Street address / Apt no. / City / State / ZIP".
+require __DIR__ . '/apply-pdf.php';
 
-class ApplicationPDF extends FPDF {
-    public string $applicantName = '';
-    function Header() {
-        $logo = __DIR__ . '/assets/images/logos/sec-logo-pdf.png';
-        if (is_readable($logo)) { $this->Image($logo, 15, 11, 34); }
-        $this->SetFont('Helvetica', 'B', 15);
-        $this->SetXY(54, 13);
-        $this->Cell(0, 6, 'APPLICATION FOR EMPLOYMENT', 0, 1, 'L');
-        $this->SetFont('Helvetica', '', 8.5);
-        $this->SetXY(54, 20);
-        $this->SetTextColor(90, 90, 96);
-        $this->Cell(0, 5, 'Southern Electric & Controls  |  86 Volunteer Blvd, Jackson, TN 38305  |  (731) 660-5980', 0, 1, 'L');
-        $this->SetTextColor(0, 0, 0);
-        $this->SetDrawColor(216, 30, 38);
-        $this->SetLineWidth(0.9);
-        $this->Line(15, 30, 195, 30);
-        $this->SetLineWidth(0.2);
-        $this->SetY(36);
-    }
-    function Footer() {
-        $this->SetY(-14);
-        $this->SetFont('Helvetica', '', 7.5);
-        $this->SetTextColor(120, 120, 128);
-        $this->Cell(0, 5, pdfText($this->applicantName) . '  |  An equal opportunity employer', 0, 0, 'L');
-        $this->Cell(0, 5, 'Page ' . $this->PageNo() . '/{nb}', 0, 0, 'R');
-        $this->SetTextColor(0, 0, 0);
-    }
-    function SectionTitle(string $t): void {
-        if ($this->GetY() > 250) { $this->AddPage(); }
-        $this->Ln(3);
-        $this->SetFont('Helvetica', 'B', 10);
-        $this->SetFillColor(216, 30, 38);
-        $this->SetTextColor(255, 255, 255);
-        $this->Cell(0, 7, '  ' . pdfText(strtoupper($t)), 0, 1, 'L', true);
-        $this->SetTextColor(0, 0, 0);
-        $this->Ln(1.5);
-    }
-    function Row(string $label, string $value): void {
-        $label = pdfText($label);
-        $value = pdfText($value !== '' ? $value : '-');
-        $this->SetFont('Helvetica', '', 8);
-        $this->SetTextColor(105, 105, 112);
-        $lines = max(1, (int) ceil($this->GetStringWidth($value) / 118));
-        $h = 5 * $lines;
-        if ($this->GetY() + $h > 268) { $this->AddPage(); }
-        $y = $this->GetY();
-        $this->SetXY(15, $y);
-        $this->MultiCell(58, 5, $label, 0, 'L');
-        $endLabel = $this->GetY();
-        $this->SetTextColor(0, 0, 0);
-        $this->SetFont('Helvetica', '', 9.5);
-        $this->SetXY(73, $y);
-        $this->MultiCell(122, 5, $value, 0, 'L');
-        $this->SetY(max($endLabel, $this->GetY()) + 0.8);
-        $this->SetDrawColor(224, 224, 230);
-        $this->Line(15, $this->GetY(), 195, $this->GetY());
-        $this->Ln(1.2);
-    }
-}
+$pdfBytes = sec_build_application_pdf($answers, [
+    'received'      => date('M j, Y 	 g:i a'),
+    'signedOn'      => date('F j, Y'),
+    'ip'            => $ip,
+    'resume'        => $resumeAttachment['name'] ?? '',
+    'signaturePath' => $sigPath,
+]);
 
-$pdf = new ApplicationPDF('P', 'mm', 'Letter');
-$pdf->applicantName = $applicant;
-$pdf->AliasNbPages();
-$pdf->SetAutoPageBreak(true, 18);
-$pdf->SetTitle('SEC Application - ' . $applicant);
-$pdf->AddPage();
-
-// summary strip
-$pdf->SetFont('Helvetica', 'B', 12);
-$pdf->Cell(0, 6, pdfText($applicant), 0, 1);
-$pdf->SetFont('Helvetica', '', 9.5);
-$pdf->SetTextColor(90, 90, 96);
-$pdf->Cell(0, 5, pdfText(($position !== '' ? 'Applying for: ' . $position . '   |   ' : '')
-    . 'Received ' . date('M j, Y \a\t g:i a')), 0, 1);
-$pdf->Cell(0, 5, pdfText($resumeNote), 0, 1);
-$pdf->SetTextColor(0, 0, 0);
-$pdf->Ln(1);
-
-// every answer, in the order the applicant saw them
-$currentSection = '';
-$currentGroup   = '';
-foreach ($data['fields'] as $f) {
-    if (!is_array($f)) continue;
-    $section = clean((string) ($f['section'] ?? ''), 80);
-    $group   = clean((string) ($f['group'] ?? ''), 80);
-    $label   = clean((string) ($f['label'] ?? ''), 120);
-    $value   = clean((string) ($f['value'] ?? ''), 2000);
-    if ($label === '') $label = 'Answer';
-    $heading = $group !== '' ? ($section . ' - ' . $group) : $section;
-    if ($heading !== $currentSection . $currentGroup) {
-        $pdf->SectionTitle($heading);
-        $currentSection = $section;
-        $currentGroup   = $group;
-    }
-    $pdf->Row($label, $value);
-}
-
-// authorization + signature
-$pdf->SectionTitle('Authorization');
-$pdf->SetFont('Helvetica', '', 8);
-$pdf->MultiCell(180, 4.2, pdfText(
-    'I certify that the facts contained in this application are true and complete to the best of my knowledge '
-  . 'and understand that, if employed, falsified statements on this application shall be grounds for dismissal. '
-  . 'I authorize investigation of all statements contained herein and the references and employers listed above '
-  . 'to give any and all information concerning my previous employment and any pertinent information they may '
-  . 'have, and release the company from all liability for any damage that may result. I understand that no '
-  . 'representative of the company has authority to enter into any agreement for employment for any specified '
-  . 'period of time unless in writing and signed by an authorized company representative. This waiver does not '
-  . 'permit the release or use of disability-related or medical information in a manner prohibited by the '
-  . 'Americans with Disabilities Act (ADA) and other relevant federal and state laws.'), 0, 'L');
-$pdf->Ln(3);
-$pdf->SetFont('Helvetica', 'B', 9);
-$pdf->Cell(0, 5, 'Agreed and signed electronically: ' . pdfText($applicant), 0, 1);
-$pdf->SetFont('Helvetica', '', 8.5);
-$pdf->SetTextColor(105, 105, 112);
-$pdf->Cell(0, 5, 'Signed ' . date('M j, Y \a\t g:i a') . '  |  IP ' . $ip, 0, 1);
-$pdf->SetTextColor(0, 0, 0);
-if ($sigPath && is_readable($sigPath)) {
-    $pdf->Ln(1);
-    $pdf->Image($sigPath, 15, $pdf->GetY(), 70);
-    $pdf->Ln(26);
-    $pdf->SetDrawColor(120, 120, 128);
-    $pdf->Line(15, $pdf->GetY(), 95, $pdf->GetY());
-    $pdf->SetFont('Helvetica', '', 7.5);
-    $pdf->Cell(0, 5, 'Applicant signature', 0, 1);
-}
-
-$pdfBytes = $pdf->Output('S');
 if ($sigPath) { @unlink($sigPath); }
 
 // keep a server-side copy alongside the log
